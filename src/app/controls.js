@@ -1,6 +1,7 @@
 import { catalogControlServices } from './catalog.js';
 import { StyleManager } from '../ui/composition.js';
-import { flyToAustin } from '../camera.js';
+// Mission Control: home city first (src/missionControl/home.js)
+import { flyToHomeCity, HOME_CITY } from '../missionControl/home.js';
 import { initCockpitCloudEffects } from '../cockpitCloudEffects.js';
 import { t } from '../i18n/index.js';
 
@@ -47,10 +48,10 @@ export function createApplicationControls({
   });
   defer(() => cockpitCloudEffects?.destroy());
 
-  // If no share link state, do default fly-to Austin
+  // Mission Control: no share link → open on the home city, not Austin.
   if (!styleManager.hasShareState) {
-    loaderStatus.textContent = t('Flying to Austin, TX...');
-    defer(flyToAustin(viewer));
+    loaderStatus.textContent = `Flying to ${HOME_CITY.name}...`;
+    defer(flyToHomeCity(viewer));
   } else {
     loaderStatus.textContent = t('Restoring shared view...');
   }
