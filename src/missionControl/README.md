@@ -22,6 +22,9 @@ edits, each marked with a "Mission Control" comment.
    without a token; data attributions stay visible).
 4. CARTO key support — CARTO_API_KEY in .env → Dark Matter; else Esri dark.
    Upstream edits: build/vite.js, server/standalone/vite.config.js.
+5. Data Layers / Scenes no longer overlap the Mission Brief — #mc-brief added
+   to upstream's left-rail obstacle list, so their layout code pushes the
+   stack below it. Upstream edit: src/ui/panelLayoutController.js (one line).
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

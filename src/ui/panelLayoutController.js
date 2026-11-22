@@ -9,6 +9,7 @@ const COCKPIT_LAYOUT_SETTLE_MS = 240;
  * intersect it at the current viewport size.
  */
 const LEFT_STACK_OBSTACLE_SELECTOR = [
+  '#mc-brief', // Mission Control: keep data layers below the Mission Brief
   '#cockpit-hud .cockpit-topline',
   '#cockpit-hud .cockpit-topline > div',
   '#title-bar',
