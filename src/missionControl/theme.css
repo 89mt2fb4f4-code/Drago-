@@ -244,8 +244,31 @@ html.mc #loading-screen .loader-status { font: 400 11px/1.4 var(--mc-mono) !impo
   .mc-status { gap: 10px; }
 }
 @media (max-width: 760px) {
-  #mc-left, .mc-views, .mc-sources, .mc-place, .mc-place + i { display: none; }
-  /* Map buttons stack just above the full-width command bar */
-  html.mc #top-center-actions { right: 12px !important; bottom: 84px !important; }
+  #mc-left, .mc-views, .mc-sources { display: none; }
+  #mc-topbar { grid-template-columns: auto 1fr; }
+  /* Stamp + LIVE move to a thin strip under the bar (too wide for one row) */
+  .mc-status .mc-sep { display: none; }
+  .mc-stamp, .mc-live { position: absolute; top: 100%; height: 26px; }
+  .mc-stamp { left: 0; right: 0; justify-content: center;
+    background: rgba(5, 7, 15, 0.85); border-bottom: 1px solid var(--mc-line); }
+  .mc-live { right: 16px; }
+  /* Bottom, from the screen edge up: command bar → credits | map buttons */
   #mc-command { left: 12px; right: 12px; }
+  html.mc #top-center-actions { right: 12px !important; bottom: 84px !important; }
+}
+
+/* Phone shell (upstream's tab bar is showing): stack everything above it,
+   using upstream's own --mobile-tab-space for the bar's height. */
+html.mc body.mobile-shell #mc-command { bottom: calc(var(--mobile-tab-space) + 10px); }
+html.mc body.mobile-shell #top-center-actions {
+  bottom: calc(var(--mobile-tab-space) + 66px) !important;
+}
+html.mc body.mobile-shell:not([data-mobile-sheet]):not(.recording-mode):not(.cockpit-mode):not(.ui-clean-view)
+  #cesium-credits {
+  left: 12px !important; bottom: calc(var(--mobile-tab-space) + 62px) !important;
+  scale: 1;
+}
+/* Wrap the credit line beside the map-button column instead of off-screen */
+html.mc body.mobile-shell #cesium-credits .cesium-widget-credits {
+  width: calc(100vw - 24px - 46px); white-space: normal;
 }
