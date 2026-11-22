@@ -160,9 +160,11 @@ html.mc .cesium-credit-logoContainer { display: none !important; }
 .mc-signals time { font: 400 11px var(--mc-mono); color: var(--mc-text-3); margin-right: 10px; }
 
 /* ── Bottom command bar ─────────────────────────────────────────── */
+/* Centered on screen; never wider than the gap between the two rails */
 #mc-command {
-  position: fixed; left: calc(20px + var(--mc-rail) + 20px); right: calc(20px + var(--mc-rail) + 20px); bottom: 20px;
-  z-index: 90; display: flex; align-items: center; gap: 16px;
+  position: fixed; left: 0; right: 0; margin-inline: auto; bottom: 28px;
+  width: min(560px, calc(100vw - 2 * (20px + var(--mc-rail) + 24px)));
+  z-index: 90; display: flex; align-items: center;
 }
 .mc-input { flex: 1; display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 14px;
   background: var(--mc-panel); border: 1px solid var(--mc-line-2); backdrop-filter: blur(14px); }
@@ -170,7 +172,9 @@ html.mc .cesium-credit-logoContainer { display: none !important; }
 .mc-input input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0;
   color: var(--mc-text); font: 400 13px var(--mc-mono); }
 .mc-input input::placeholder { color: var(--mc-text-3); }
-.mc-sources { font: 400 10px var(--mc-mono); letter-spacing: 0.12em; color: var(--mc-text-3); white-space: nowrap; }
+/* Bottom-right corner, mirroring the map credits bottom-left */
+.mc-sources { position: fixed; right: 20px; bottom: 6px;
+  font: 400 9px var(--mc-mono); letter-spacing: 0.12em; color: var(--mc-text-3); white-space: nowrap; }
 
 /* ── Upstream panels restyled to match ──────────────────────────── */
 html.mc .panel-collapsible, html.mc .panel-inner, html.mc #pp-toggles, html.mc #right-context-rail > * {
@@ -228,7 +232,9 @@ html.mc #loading-screen .loader-status { font: 400 11px/1.4 var(--mc-mono) !impo
 /* Small screens: rails collapse, map first */
 @media (max-width: 1100px) {
   #mc-right { display: none; }
-  #mc-command { right: 20px; }
+  /* Only the left rail is left: fill the space to its right */
+  #mc-command { left: calc(20px + var(--mc-rail) + 20px); right: 20px; width: auto; margin: 0; }
+  .mc-sources { display: none; } /* would collide with the map credits */
   /* Compact top bar: logo only, short month, LIVE as a dot */
   .mc-brand > div, #mc-day { display: none; }
   #mc-day-short { display: inline; }
