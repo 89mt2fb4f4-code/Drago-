@@ -206,10 +206,11 @@ html.mc:not([data-mc-tools='open']) #command-dock,
 html.mc:not([data-mc-tools='open']) #corner-actions { display: none !important; }
 html.mc[data-mc-tools='open'] #mc-command { display: none; }
 
-/* Map controls → slim column bottom-right, above the right rail's edge */
+/* Map controls → slim column in the right rail's lane, flush with its right
+   edge, bottom level with the command bar */
 html.mc #top-center-actions {
-  top: auto !important; left: auto !important; right: calc(20px + var(--mc-rail) + 16px) !important;
-  bottom: 84px !important; transform: none !important; flex-direction: column !important; gap: 6px !important;
+  top: auto !important; left: auto !important; right: 20px !important;
+  bottom: 28px !important; transform: none !important; flex-direction: column !important; gap: 6px !important;
 }
 html.mc #top-center-actions button {
   width: 34px !important; height: 34px !important; border-radius: 2px !important;
@@ -233,7 +234,8 @@ html.mc #loading-screen .loader-status { font: 400 11px/1.4 var(--mc-mono) !impo
 @media (max-width: 1100px) {
   #mc-right { display: none; }
   /* Only the left rail is left: fill the space to its right */
-  #mc-command { left: calc(20px + var(--mc-rail) + 20px); right: 20px; width: auto; margin: 0; }
+  /* …and stop short of the map-button column (34px wide + 12px gap) */
+  #mc-command { left: calc(20px + var(--mc-rail) + 20px); right: 66px; width: auto; margin: 0; }
   .mc-sources { display: none; } /* would collide with the map credits */
   /* Compact top bar: logo only, short month, LIVE as a dot */
   .mc-brand > div, #mc-day { display: none; }
@@ -243,5 +245,7 @@ html.mc #loading-screen .loader-status { font: 400 11px/1.4 var(--mc-mono) !impo
 }
 @media (max-width: 760px) {
   #mc-left, .mc-views, .mc-sources, .mc-place, .mc-place + i { display: none; }
+  /* Map buttons stack just above the full-width command bar */
+  html.mc #top-center-actions { right: 12px !important; bottom: 84px !important; }
   #mc-command { left: 12px; right: 12px; }
 }
