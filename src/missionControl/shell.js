@@ -25,9 +25,10 @@ const fmt = (opts, d = new Date()) =>
 
 function stamp() {
   const day = fmt({ month: 'long', day: 'numeric' }).toUpperCase();
+  const dayShort = fmt({ month: 'short', day: 'numeric' }).toUpperCase();
   const time = fmt({ hour: '2-digit', minute: '2-digit', hour12: false });
   const tz = fmt({ timeZoneName: 'short' }).split(' ').pop();
-  return { day, time, tz };
+  return { day, dayShort, time, tz };
 }
 
 // ── persistent toggles (View = upstream display panels, Tools = dock) ──
@@ -73,8 +74,7 @@ function build() {
       <button type="button" class="mc-chip" data-mc-toggle="view" title="Display options (V)">VIEW</button>
       <button type="button" class="mc-chip" data-mc-toggle="tools" title="Search · presets · voice (T)">TOOLS</button>
       <span class="mc-sep"></span>
-      <span class="mc-place">${HOME_CITY.name.toUpperCase().replace(', ', ' · ')}</span>
-      <span class="mc-clock"><span id="mc-day"></span> <b id="mc-time"></b> <span id="mc-tz"></span></span>
+      <span class="mc-stamp"><span class="mc-place">${HOME_CITY.name.toUpperCase()}</span><i>·</i><span id="mc-day"></span><span id="mc-day-short"></span><i>·</i><span class="mc-clock"><b id="mc-time"></b> <span id="mc-tz"></span></span></span>
       <span class="mc-live"><i></i>LIVE</span>
     </div></header>`);
 
@@ -123,6 +123,7 @@ function build() {
   const tick = () => {
     const s = stamp();
     top.querySelector('#mc-day').textContent = s.day;
+    top.querySelector('#mc-day-short').textContent = s.dayShort;
     top.querySelector('#mc-time').textContent = s.time;
     top.querySelector('#mc-tz').textContent = s.tz;
   };

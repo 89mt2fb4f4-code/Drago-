@@ -101,6 +101,10 @@ html.mc .cesium-credit-logoContainer { display: none !important; }
 .mc-chip { height: 28px; padding: 0 12px; border: 1px solid var(--mc-line); }
 .mc-chip[aria-pressed='true'] { color: #fff; border-color: var(--mc-purple); background: rgba(155, 135, 255, 0.16); }
 .mc-sep { width: 1px; height: 22px; background: var(--mc-line); }
+/* Stamp: PLACE · DATE · TIME TZ, always one line */
+.mc-stamp { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.mc-stamp i { font-style: normal; color: var(--mc-text-3); }
+#mc-day-short { display: none; }
 .mc-clock b { color: var(--mc-text); font-weight: 500; }
 .mc-live { display: flex; align-items: center; gap: 7px; color: var(--mc-text); }
 .mc-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--mc-purple);
@@ -225,8 +229,13 @@ html.mc #loading-screen .loader-status { font: 400 11px/1.4 var(--mc-mono) !impo
 @media (max-width: 1100px) {
   #mc-right { display: none; }
   #mc-command { right: 20px; }
+  /* Compact top bar: logo only, short month, LIVE as a dot */
+  .mc-brand > div, #mc-day { display: none; }
+  #mc-day-short { display: inline; }
+  .mc-live { font-size: 0; gap: 0; }
+  .mc-status { gap: 10px; }
 }
 @media (max-width: 760px) {
-  #mc-left, .mc-views, .mc-sources, .mc-place { display: none; }
+  #mc-left, .mc-views, .mc-sources, .mc-place, .mc-place + i { display: none; }
   #mc-command { left: 12px; right: 12px; }
 }
