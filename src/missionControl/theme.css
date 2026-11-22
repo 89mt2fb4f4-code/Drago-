@@ -1,0 +1,232 @@
+/* ═══════════════════════════════════════════════════════════════
+   MISSION CONTROL — Drago theme (spec §8.7) · dark blue + purple
+   Built from the Mission Control mockup: thin lines, square frames
+   with corner brackets, Space Grotesk headings, JetBrains Mono data.
+   Loaded LAST (style.css) so it wins over upstream God's Eye styles.
+   ═══════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+html.mc {
+  --mc-bg: #05070f;
+  --mc-panel: rgba(9, 12, 28, 0.82);
+  --mc-panel-solid: #0a0d1f;
+  --mc-line: rgba(150, 140, 255, 0.16);
+  --mc-line-2: rgba(150, 140, 255, 0.34);
+  --mc-purple: #9b87ff;
+  --mc-violet: #6d4dff;
+  --mc-blue: #3f7bff;
+  --mc-cyan-ish: #7fb2ff;
+  --mc-text: #eceefa;
+  --mc-text-2: #a9adc6;
+  --mc-text-3: #6b7090;
+  --mc-alert: #ffb547; /* alerts only */
+  --mc-grad: linear-gradient(135deg, var(--mc-blue), var(--mc-violet));
+  --mc-head: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --mc-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --mc-rail: 300px;
+  --mc-top: 64px;
+
+  /* Upstream tokens → Mission Control palette */
+  --bg-dark: var(--mc-bg);
+  --glass-bg: var(--mc-panel);
+  --glass-border: var(--mc-line);
+  --glass-border-hover: var(--mc-line-2);
+  --accent: var(--mc-purple);
+  --accent-dim: rgba(155, 135, 255, 0.14);
+  --accent-glow: rgba(155, 135, 255, 0.35);
+  --text-primary: var(--mc-text);
+  --text-secondary: var(--mc-text-2);
+  --text-dim: var(--mc-text-3);
+  --menu-bg: var(--mc-panel-solid);
+  --panel-radius: 2px;
+  --btn-radius: 2px;
+  --left-stack-x: 20px;
+  --left-stack-top: 300px;
+  --left-stack-gap: 44px;
+}
+html.mc body { background: var(--mc-bg); }
+
+/* ── Removed for good ───────────────────────────────────────────── */
+html.mc #title-bar,
+html.mc #style-indicator,
+html.mc #intel-hud,
+html.mc #first-run-launcher,
+html.mc #share-btn,
+html.mc #clear-selected-layers,
+html.mc #cesium-credits .cesium-credit-logoContainer,
+html.mc .cesium-credit-logoContainer { display: none !important; }
+
+/* ── Screen frame: corner brackets + faint vignette ─────────────── */
+#mc-frame { position: fixed; inset: 0; pointer-events: none; z-index: 5;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(5, 7, 15, 0.7) 100%); }
+#mc-frame i { position: absolute; width: 22px; height: 22px; border-color: var(--mc-line-2); border-style: solid; }
+#mc-frame i:nth-child(1) { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+#mc-frame i:nth-child(2) { top: 10px; right: 10px; border-width: 1px 1px 0 0; }
+#mc-frame i:nth-child(3) { bottom: 10px; left: 10px; border-width: 0 0 1px 1px; }
+#mc-frame i:nth-child(4) { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+/* ── Top bar ────────────────────────────────────────────────────── */
+#mc-topbar {
+  position: fixed; inset: 0 0 auto 0; height: var(--mc-top); z-index: 1000;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+  padding: 0 24px; color: var(--mc-text);
+  background: linear-gradient(to bottom, rgba(5, 7, 15, 0.96), rgba(5, 7, 15, 0.6));
+  border-bottom: 1px solid var(--mc-line);
+  backdrop-filter: blur(10px);
+}
+#mc-topbar::after { /* thin glowing underline */
+  content: ''; position: absolute; left: 24px; right: 24px; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mc-purple), transparent); opacity: 0.55;
+}
+.mc-brand { display: flex; align-items: center; gap: 12px; }
+.mc-brand > div { display: flex; flex-direction: column; line-height: 1.1; }
+.mc-logo { color: var(--mc-text); filter: drop-shadow(0 0 6px rgba(155, 135, 255, 0.45)); }
+.mc-kicker { font: 500 10px/1 var(--mc-mono); letter-spacing: 0.22em; color: var(--mc-text-3); }
+.mc-title { font: 700 19px/1.2 var(--mc-head); letter-spacing: 0.06em; }
+
+.mc-views { display: flex; border: 1px solid var(--mc-line); }
+.mc-views button, .mc-chip {
+  font: 500 11px/1 var(--mc-mono); letter-spacing: 0.16em; color: var(--mc-text-2);
+  background: transparent; border: 0; padding: 0 18px; height: 34px; cursor: pointer;
+  transition: color 150ms, background 150ms;
+}
+.mc-views button + button { border-left: 1px solid var(--mc-line); }
+.mc-views button:hover, .mc-chip:hover { color: var(--mc-text); background: rgba(155, 135, 255, 0.08); }
+.mc-views button[aria-pressed='true'] {
+  color: #fff; background: var(--mc-grad);
+  box-shadow: 0 0 18px rgba(109, 77, 255, 0.45);
+}
+.mc-status { justify-self: end; display: flex; align-items: center; gap: 14px;
+  font: 400 11px/1 var(--mc-mono); letter-spacing: 0.12em; color: var(--mc-text-2); }
+.mc-chip { height: 28px; padding: 0 12px; border: 1px solid var(--mc-line); }
+.mc-chip[aria-pressed='true'] { color: #fff; border-color: var(--mc-purple); background: rgba(155, 135, 255, 0.16); }
+.mc-sep { width: 1px; height: 22px; background: var(--mc-line); }
+.mc-clock b { color: var(--mc-text); font-weight: 500; }
+.mc-live { display: flex; align-items: center; gap: 7px; color: var(--mc-text); }
+.mc-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--mc-purple);
+  box-shadow: 0 0 0 3px rgba(155, 135, 255, 0.22); animation: mc-pulse 2.4s ease-in-out infinite; }
+@keyframes mc-pulse { 50% { box-shadow: 0 0 0 6px rgba(155, 135, 255, 0); } }
+
+/* ── Panels (ours) ──────────────────────────────────────────────── */
+#mc-left, #mc-right {
+  position: fixed; top: calc(var(--mc-top) + 16px); width: var(--mc-rail); z-index: 90;
+  display: flex; flex-direction: column; gap: 14px;
+}
+#mc-left { left: 20px; }
+#mc-right { right: 20px; }
+.mc-panel {
+  position: relative; background: var(--mc-panel); border: 1px solid var(--mc-line);
+  backdrop-filter: blur(14px); color: var(--mc-text); padding: 14px 16px 16px;
+  font: 400 13px/1.45 var(--mc-head);
+}
+.mc-panel::before, .mc-panel::after { /* corner brackets */
+  content: ''; position: absolute; width: 10px; height: 10px; border: 0 solid var(--mc-purple);
+}
+.mc-panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.mc-panel::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+.mc-panel-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.mc-panel-head h2 { margin: 0; font: 700 13px/1 var(--mc-head); letter-spacing: 0.14em; }
+.mc-code { font: 500 10px/1 var(--mc-mono); color: var(--mc-purple); }
+.mc-meta { margin-left: auto; font: 400 10px/1 var(--mc-mono); letter-spacing: 0.12em; color: var(--mc-text-3); }
+.mc-note { margin: 0 0 10px; color: var(--mc-text-2); font-size: 12px; }
+.mc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mc-list li { display: flex; gap: 10px; color: var(--mc-text-2); }
+.mc-list li span { font: 500 11px/1.6 var(--mc-mono); color: var(--mc-purple); }
+
+.mc-drago { display: flex; align-items: center; gap: 16px; }
+.mc-drago > div { display: flex; flex-direction: column; gap: 4px; }
+.mc-drago strong { font: 600 15px/1.2 var(--mc-head); }
+.mc-quote { color: var(--mc-text-2); font-size: 12px; }
+.mc-orb { position: relative; width: 64px; height: 64px; flex: 0 0 64px; }
+.mc-orb i { position: absolute; border-radius: 50%; }
+.mc-orb i:nth-child(1) { inset: 0; border: 1px solid var(--mc-line-2); }
+.mc-orb i:nth-child(2) { inset: 8px; border: 1px dashed var(--mc-purple); animation: mc-spin 14s linear infinite; }
+.mc-orb i:nth-child(3) { inset: 20px; background: radial-gradient(circle, #fff 0%, var(--mc-purple) 45%, var(--mc-violet) 70%, transparent 100%);
+  box-shadow: 0 0 24px rgba(109, 77, 255, 0.6); animation: mc-breathe 4s ease-in-out infinite; }
+@keyframes mc-spin { to { transform: rotate(360deg); } }
+@keyframes mc-breathe { 50% { transform: scale(0.82); opacity: 0.75; } }
+
+.mc-focus-name { font: 700 19px/1.2 var(--mc-head); margin-bottom: 12px; }
+.mc-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mc-tiles div { border: 1px solid var(--mc-line); padding: 9px 10px; display: flex; flex-direction: column; gap: 5px;
+  background: rgba(63, 123, 255, 0.04); }
+.mc-tiles span { font: 400 9.5px/1 var(--mc-mono); letter-spacing: 0.16em; color: var(--mc-text-3); }
+.mc-tiles b { font: 500 13px/1 var(--mc-mono); color: var(--mc-text); }
+.mc-signals { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--mc-text-2); font-size: 12px; }
+.mc-signals time { font: 400 11px var(--mc-mono); color: var(--mc-text-3); margin-right: 10px; }
+
+/* ── Bottom command bar ─────────────────────────────────────────── */
+#mc-command {
+  position: fixed; left: calc(20px + var(--mc-rail) + 20px); right: calc(20px + var(--mc-rail) + 20px); bottom: 20px;
+  z-index: 90; display: flex; align-items: center; gap: 16px;
+}
+.mc-input { flex: 1; display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 14px;
+  background: var(--mc-panel); border: 1px solid var(--mc-line-2); backdrop-filter: blur(14px); }
+.mc-input span { font: 600 11px var(--mc-mono); letter-spacing: 0.18em; color: var(--mc-purple); }
+.mc-input input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0;
+  color: var(--mc-text); font: 400 13px var(--mc-mono); }
+.mc-input input::placeholder { color: var(--mc-text-3); }
+.mc-sources { font: 400 10px var(--mc-mono); letter-spacing: 0.12em; color: var(--mc-text-3); white-space: nowrap; }
+
+/* ── Upstream panels restyled to match ──────────────────────────── */
+html.mc .panel-collapsible, html.mc .panel-inner, html.mc #pp-toggles, html.mc #right-context-rail > * {
+  border-radius: 2px !important;
+}
+html.mc .panel-collapsible {
+  background: var(--mc-panel) !important; border: 1px solid var(--mc-line) !important;
+  box-shadow: none !important;
+}
+html.mc .panel-glow { display: none !important; }
+html.mc .panel-title {
+  font: 700 12px/1 var(--mc-head) !important; letter-spacing: 0.14em !important; color: var(--mc-text) !important;
+}
+html.mc #left-panel-stack *, html.mc #pp-toggles *, html.mc #right-context-rail *, html.mc #command-dock * {
+  text-shadow: none !important;
+}
+html.mc #left-panel-stack, html.mc #pp-toggles, html.mc #right-context-rail, html.mc #command-dock {
+  font-family: var(--mc-head);
+}
+
+/* View toggle: upstream display panels take over the right rail */
+html.mc:not([data-mc-view='open']) #pp-toggles,
+html.mc:not([data-mc-view='open']) #right-context-rail { display: none !important; }
+html.mc[data-mc-view='open'] #mc-right { display: none; }
+html.mc #pp-toggles, html.mc #right-context-rail { top: calc(var(--mc-top) + 16px) !important; right: 20px !important; }
+
+/* Tools toggle: upstream dock replaces the command bar */
+html.mc:not([data-mc-tools='open']) #command-dock,
+html.mc:not([data-mc-tools='open']) #corner-actions { display: none !important; }
+html.mc[data-mc-tools='open'] #mc-command { display: none; }
+
+/* Map controls → slim column bottom-right, above the right rail's edge */
+html.mc #top-center-actions {
+  top: auto !important; left: auto !important; right: calc(20px + var(--mc-rail) + 16px) !important;
+  bottom: 84px !important; transform: none !important; flex-direction: column !important; gap: 6px !important;
+}
+html.mc #top-center-actions button {
+  width: 34px !important; height: 34px !important; border-radius: 2px !important;
+  background: var(--mc-panel) !important; border: 1px solid var(--mc-line) !important; box-shadow: none !important;
+}
+
+/* Attribution (license-required): small, bottom-left, above the command bar line */
+html.mc #cesium-credits {
+  left: 20px !important; right: auto !important; bottom: 4px !important; top: auto !important;
+  opacity: 0.4; font: 400 9px var(--mc-mono) !important; transform: none !important;
+}
+html.mc #cesium-credits:hover { opacity: 0.9; }
+
+/* Loading screen */
+html.mc #loading-screen { background: var(--mc-bg) !important; }
+html.mc #loading-screen h2 { font: 700 15px/1 var(--mc-head) !important; letter-spacing: 0.42em !important;
+  color: var(--mc-text) !important; text-shadow: none !important; }
+html.mc #loading-screen .loader-status { font: 400 11px/1.4 var(--mc-mono) !important; color: var(--mc-text-3) !important; }
+
+/* Small screens: rails collapse, map first */
+@media (max-width: 1100px) {
+  #mc-right { display: none; }
+  #mc-command { right: 20px; }
+}
+@media (max-width: 760px) {
+  #mc-left, .mc-views, .mc-sources, .mc-place { display: none; }
+  #mc-command { left: 12px; right: 12px; }
+}

@@ -1,5 +1,13 @@
 import * as Cesium from 'cesium';
 export const MAP_STACKS = [
+  // Mission Control: dark grey default map (src/missionControl/darkMap.js)
+  {
+    id: 'dark',
+    label: 'Dark', // i18n-ignore: map name
+    shortLabel: 'DARK',
+    kind: 'dark',
+    requiresIon: false,
+  },
   {
     id: 'photoreal',
     label: 'Google 3D', // i18n-ignore: imagery product name

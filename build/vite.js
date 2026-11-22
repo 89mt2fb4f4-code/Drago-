@@ -143,6 +143,7 @@ export function createBrowserViteConfig({
   googleApiKey,
   cesiumToken,
   mapillaryToken,
+  cartoKey, // Mission Control
   host = 'localhost',
   port = 4173,
   allowedHosts = DEFAULT_ALLOWED_HOSTS,
@@ -215,6 +216,8 @@ export function createBrowserViteConfig({
       'import.meta.env.MAPILLARY_CLIENT_TOKEN': JSON.stringify(
         mapillaryToken ?? '',
       ),
+      // Mission Control: CARTO Dark Matter basemap key (public by design)
+      'import.meta.env.CARTO_API_KEY': JSON.stringify(cartoKey ?? ''),
     },
     build: { chunkSizeWarningLimit: 1500 },
   };

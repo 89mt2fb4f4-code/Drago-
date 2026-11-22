@@ -32,6 +32,7 @@ const STYLES_BY_URL_NAME = Object.freeze(
 export const VIEW_STYLES = Object.freeze(Object.keys(STYLE_URL_NAMES));
 
 export const VIEW_MAPS = Object.freeze([
+  'dark',
   'photoreal',
   'bing-aerial',
   'bing-labels',

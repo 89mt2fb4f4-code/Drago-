@@ -1,3 +1,4 @@
+import './missionControl/shell.js'; // Mission Control: clean shell (top bar + toggles)
 import { createStandaloneApplication } from './standalone/application.js';
 import { describeError } from './standalone/errors.js';
 import { t } from './i18n/index.js';

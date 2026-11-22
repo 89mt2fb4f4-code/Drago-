@@ -8,6 +8,10 @@ import {
   createIonImagery,
   ESRI_ATTRIBUTION_HTML,
 } from './imagery.js';
+import {
+  createDarkImagery,
+  DARK_MAP_ATTRIBUTION_HTML,
+} from '../missionControl/darkMap.js';
 import { createWorldTerrain, createKeylessTerrain } from './terrain.js';
 
 /** Select sources and setup guidance without putting provider branches in the controller. */
@@ -26,7 +30,7 @@ export function createDefaultMapSources({
       : createKeylessTerrain,
   };
   return {
-    defaultId: googleTileset ? 'photoreal' : 'esri-imagery',
+    defaultId: 'dark', // Mission Control: dark map first; 3D + satellite are toggles
     unknownId: 'photoreal',
     recoveryId: googleTileset ? 'photoreal' : null,
     state: { hasCesiumIonToken: hasIon },
@@ -50,13 +54,29 @@ export function createDefaultMapSources({
       const imagery =
         descriptor.kind === 'ion'
           ? () => createIonImagery(descriptor.style, ionToken)
-          : descriptor.id === 'osm'
-            ? createOsmImagery
-            : createEsriImagery;
+          : descriptor.id === 'dark'
+            ? createDarkImagery
+            : descriptor.id === 'osm'
+              ? createOsmImagery
+              : createEsriImagery;
       return {
         ...common,
         imagery,
         terrain,
+        ...(descriptor.id === 'dark'
+          ? {
+              credit: DARK_MAP_ATTRIBUTION_HTML,
+              constructionFallback: {
+                id: 'esri-imagery',
+                message: 'Dark map is unavailable; using Esri Satellite',
+              },
+              tileFailureFallback: {
+                id: 'esri-imagery',
+                threshold: 2,
+                message: 'Dark map tile requests failed; using Esri Satellite',
+              },
+            }
+          : {}),
         ...(descriptor.id === 'esri-imagery'
           ? {
               credit: ESRI_ATTRIBUTION_HTML,

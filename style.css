@@ -35,3 +35,5 @@
 @import './src/ui/styles/cjk.css';
 @import './src/ui/styles/mobile-shell.css';
 @import './src/ui/styles/cyber.css';
+/* Mission Control theme — must stay last */
+@import './src/missionControl/theme.css';

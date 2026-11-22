@@ -2,6 +2,7 @@ import { catalogControlServices } from './catalog.js';
 import { StyleManager } from '../ui/composition.js';
 // Mission Control: home city first (src/missionControl/home.js)
 import { flyToHomeCity, HOME_CITY } from '../missionControl/home.js';
+import { attachMissionControl } from '../missionControl/shell.js';
 import { initCockpitCloudEffects } from '../cockpitCloudEffects.js';
 import { t } from '../i18n/index.js';
 
@@ -56,5 +57,6 @@ export function createApplicationControls({
     loaderStatus.textContent = t('Restoring shared view...');
   }
 
+  attachMissionControl(viewer); // Mission Control: view chips + Focus panel
   return { styleManager, weatherEffects, cockpitCloudEffects };
 }
