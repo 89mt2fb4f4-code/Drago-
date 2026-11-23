@@ -35,7 +35,7 @@ export function createDefaultMapSources({
       : createKeylessTerrain,
   };
   return {
-    defaultId: 'dark', // Mission Control: dark map first; 3D + satellite are toggles
+    defaultId: 'vector', // Mission Control: Vector Dark first (falls back to Dark); 3D + satellite are toggles
     unknownId: 'photoreal',
     recoveryId: googleTileset ? 'photoreal' : null,
     state: { hasCesiumIonToken: hasIon },

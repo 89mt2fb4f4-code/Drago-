@@ -108,7 +108,7 @@ export async function createApplicationScene({
     ...mapOptions,
     googleTileset: tileset,
     cesiumToken,
-    initialStack: 'dark', // Mission Control: dark map first
+    initialStack: 'vector', // Mission Control: Vector Dark first (Dark is its fallback)
     // Task 5 (height-datum fix): rebroadcast stack changes as a window
     // CustomEvent so data layers (CCTV per-regime ground resolution) can
     // react without coupling MapStackController to layer modules. Fires on
@@ -122,7 +122,7 @@ export async function createApplicationScene({
     onError: (message) => console.warn('[MapStack]', message),
   });
   defer(() => mapStackController.destroy());
-  await mapStackController.setStack('dark', {
+  await mapStackController.setStack('vector', { // Mission Control: Vector Dark first
     silent: true,
   });
 

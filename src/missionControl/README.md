@@ -144,6 +144,10 @@ edits, each marked with a "Mission Control" comment.
      instead of running under it.
    pmtiles.js is a tiny PMTiles v3 reader (no library; gzip via the
    browser's DecompressionStream); tile ids checked against the spec.
+17. Vector Dark is the start map (Dark stays as its automatic fallback and
+   a MAP SOURCE choice). Upstream edits: app/scene.js (initialStack +
+   first setStack), maps/defaultSources.js (defaultId). Share-link codec
+   defaults unchanged (frozen by design).
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
