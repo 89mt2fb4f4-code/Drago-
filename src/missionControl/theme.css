@@ -164,9 +164,7 @@ html.mc .cesium-credit-logoContainer { display: none !important; }
    aside. !important only to beat upstream's own !important panel styles. */
 html.mc .mc-arwes.mc-arwes, /* doubled class: outranks the panel restyle below */
 html.mc .mc-arwes > [class$='-inner'] { /* upstream inner boxes cover the frame */
-  --arwes-frames-bg-color: var(--mc-panel);
-  --arwes-frames-line-color: rgba(155, 135, 255, 0.6);
-  --arwes-frames-line-filter: drop-shadow(0 0 3px rgba(155, 135, 255, 0.45));
+  /* frame colours are set on the frame itself in arwes.js */
   background: transparent !important; border-color: transparent !important;
   box-shadow: none !important;
 }
