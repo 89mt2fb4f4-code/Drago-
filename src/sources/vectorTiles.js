@@ -297,7 +297,12 @@ export function createVectorTileSource({
           const fetchStart = performance.now();
           const bytes = await request(url, ownedSignal, (res, requestSignal) =>
             readResponseBytesCapped(res, maxResponseBytes, requestSignal),
-          );
+          ).catch((error) => {
+            // Mission Control: a missing tile (404) is an empty tile, not an
+            // outage (e.g. the Canadian ALPR extract over Buffalo).
+            if (error?.status === 404) return new Uint8Array(0);
+            throw error;
+          });
           phaseTiming('tile-fetch', fetchStart, {
             source: allowedOrigin,
             key,

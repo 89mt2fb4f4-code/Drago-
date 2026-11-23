@@ -35,6 +35,12 @@ edits, each marked with a "Mission Control" comment.
    @arwes/frames 1.0.0-next.25020502, @arwes/bgs 1.0.0-next.25020502,
    motion 10.18.0).
 
+7. Missing map tiles (HTTP 404) count as empty, not as an outage. Fixes a
+   false "VECTOR TILES UNAVAILABLE (HTTP 404) ALPR CAMERAS" warning over
+   Buffalo: the Canadian ALPR extract has no tiles south of the border.
+   The tile index (.json) 404 is still an error. Shared by ALPR, TomTom
+   traffic and OpenFreeMap. Upstream edit: src/sources/vectorTiles.js.
+
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
 - src/share/viewCodec.test.mjs — "defaults ... match today's app defaults"
