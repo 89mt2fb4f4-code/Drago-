@@ -174,6 +174,13 @@ edits, each marked with a "Mission Control" comment.
    placed at real height) and return at 1×. A draw error switches Relief
    off and restarts the map. Upstream edit: src/maps/terrain.js
    (keyless terrain now requests vertex normals, needed for shading).
+20. TILT slider — tiltSlider.js. Slides out beside the map-button column
+   while the pointer is over it (or for 4 s after the tilt button), hides
+   1.2 s after leaving. 0° straight down … 85° near the horizon; orbits the
+   point in the middle of the screen (upstream's readCameraTargetFrame) and
+   keeps following a tracked object. Shows the current tilt after any other
+   move; greyed out in flat MAP view; arrow keys work, upstream one-letter
+   shortcuts are blocked while it has focus. No upstream edits.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
