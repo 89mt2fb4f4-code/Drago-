@@ -462,10 +462,5 @@ html.mc .gev-action-button:active, html.mc .scene-btn:active { transform: scale(
   html.mc .mc-panel, html.mc .panel-collapsible, html.mc #pp-toggles { box-shadow: inset 0 0 0 1px var(--mc-purple) !important; }
 }
 
-/* Map tint: shift the grey basemap toward violet (hue only, ~20%) so it sits
-   in the purple palette like the reference globe. Brightness is untouched,
-   and at this strength layer colours (fires, alerts) stay recognisable. */
-#mc-frame::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: #6c3dff; mix-blend-mode: color; opacity: 0.2;
-}
+/* (Map colours now come from darkMap.js recolouring: grey land, black
+   water, purple lines and names — no tint layer over the map.) */
