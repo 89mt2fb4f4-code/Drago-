@@ -26,14 +26,9 @@ edits, each marked with a "Mission Control" comment.
    to upstream's left-rail obstacle list, so their layout code pushes the
    stack below it. Upstream edit: src/ui/panelLayoutController.js (one line).
 
-6. Arwes accents (trial) — arwes.js: Arwes Nefrex frames on every panel
-   (ours, Data Layers/Scenes, the VIEW cards, the command bar), faint Arwes
-   cross grid over the map. Static (no animator), our
-   palette via --arwes-frames-* variables. Arwes is unmaintained upstream;
-   remove by deleting arwes.js, its import in shell.js and its theme.css block.
-   Upstream edits: package.json + package-lock.json (exact pins:
-   @arwes/frames 1.0.0-next.25020502, @arwes/bgs 1.0.0-next.25020502,
-   motion 10.18.0).
+6. Arwes accents — REMOVED in the restyle (item 11). Frames, grid, arwes.js
+   and the packages (@arwes/frames, @arwes/bgs, motion) are gone;
+   package.json/package-lock.json are back to upstream's dependency list.
 
 7. Missing map tiles (HTTP 404) count as empty, not as an outage. Fixes a
    false "VECTOR TILES UNAVAILABLE (HTTP 404) ALPR CAMERAS" warning over
@@ -49,6 +44,15 @@ edits, each marked with a "Mission Control" comment.
    PREV/NEXT/NEAREST stay within the chosen kind. Upstream edit:
    src/layers/cctv/navigation.js (AUTO HOP + nearest-camera skip the other
    kind, read from <html data-mc-cctv-kind>).
+
+11. Restyle v2 (purple reference + design skills) — theme.css "RESTYLE v2"
+   block, darkMap.js, shell.js. Purple glass panels (translucent, blurred,
+   no outlines or frames), title bars with a violet marker + fading rule,
+   pill controls, press feedback, reduced-motion/-transparency/contrast.
+   Map: CARTO tiles recoloured as they load (darkMap.js) — water black,
+   land/buildings dark slate grey, roads dim purple, borders and place
+   names purple→lavender. Globe ground-atmosphere haze off (shell.js) so
+   oceans stay black. Map credits unchanged.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

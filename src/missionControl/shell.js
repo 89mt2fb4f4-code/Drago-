@@ -9,7 +9,6 @@
 // later shows "—" or "awaiting Drago" until real data exists.
 import * as Cesium from 'cesium';
 import { HOME_CITY, flyToHomeCity } from './home.js';
-import { attachArwes } from './arwes.js';
 import { attachCctvSplit } from './cctvSplit.js';
 
 const TZ = 'America/New_York';
@@ -133,8 +132,6 @@ function build() {
   const frame = h(`<div id="mc-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`);
 
   document.body.append(frame, top, left, right, bottom);
-  // Restyle v2: glass panels, no Arwes frames ('not in a cube')
-  // attachArwes();
 
   // Clock
   const tick = () => {

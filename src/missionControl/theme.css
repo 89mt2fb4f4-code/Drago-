@@ -1,7 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
-   MISSION CONTROL — Drago theme (spec §8.7) · dark blue + purple
-   Built from the Mission Control mockup: thin lines, square frames
-   with corner brackets, Space Grotesk headings, JetBrains Mono data.
+   MISSION CONTROL — Drago theme (spec §8.7) · indigo + purple glass
+   Base layout from the Mission Control mockup; look from the purple
+   reference (see "RESTYLE v2" at the end, which overrides earlier rules).
+   Space Grotesk headings, JetBrains Mono data.
    Loaded LAST (style.css) so it wins over upstream God's Eye styles.
    ═══════════════════════════════════════════════════════════════ */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -158,21 +159,6 @@ html.mc .cesium-credit-logoContainer { display: none !important; }
 .mc-tiles b { font: 500 13px/1 var(--mc-mono); color: var(--mc-text); }
 .mc-signals { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--mc-text-2); font-size: 12px; }
 .mc-signals time { font: 400 11px var(--mc-mono); color: var(--mc-text-3); margin-right: 10px; }
-
-/* ── Arwes accents (arwes.js) ───────────────────────────────────── */
-/* Framed surfaces: Arwes draws the shape; square borders + our brackets step
-   aside. !important only to beat upstream's own !important panel styles. */
-html.mc .mc-arwes.mc-arwes, /* doubled class: outranks the panel restyle below */
-html.mc .mc-arwes > [class$='-inner'] { /* upstream inner boxes cover the frame */
-  /* frame colours are set on the frame itself in arwes.js */
-  background: transparent !important; border-color: transparent !important;
-  box-shadow: none !important;
-}
-html.mc .mc-input.mc-arwes { position: relative; }
-.mc-panel.mc-arwes::before, .mc-panel.mc-arwes::after { display: none; }
-.mc-arwes-frame { position: absolute; inset: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 0; overflow: visible; }
-.mc-arwes > :not(.mc-arwes-frame) { position: relative; z-index: 1; }
 
 /* ── Bottom command bar ─────────────────────────────────────────── */
 /* Centered on screen; never wider than the gap between the two rails */
