@@ -26,6 +26,15 @@ edits, each marked with a "Mission Control" comment.
    to upstream's left-rail obstacle list, so their layout code pushes the
    stack below it. Upstream edit: src/ui/panelLayoutController.js (one line).
 
+6. Arwes accents (trial) — arwes.js: Arwes Nefrex frames on every panel
+   (ours, Data Layers/Scenes, the VIEW cards, the command bar), faint Arwes
+   cross grid over the map. Static (no animator), our
+   palette via --arwes-frames-* variables. Arwes is unmaintained upstream;
+   remove by deleting arwes.js, its import in shell.js and its theme.css block.
+   Upstream edits: package.json + package-lock.json (exact pins:
+   @arwes/frames 1.0.0-next.25020502, @arwes/bgs 1.0.0-next.25020502,
+   motion 10.18.0).
+
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
 - src/share/viewCodec.test.mjs — "defaults ... match today's app defaults"

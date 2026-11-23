@@ -159,6 +159,26 @@ html.mc .cesium-credit-logoContainer { display: none !important; }
 .mc-signals { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--mc-text-2); font-size: 12px; }
 .mc-signals time { font: 400 11px var(--mc-mono); color: var(--mc-text-3); margin-right: 10px; }
 
+/* ── Arwes accents (arwes.js) ───────────────────────────────────── */
+/* Framed surfaces: Arwes draws the shape; square borders + our brackets step
+   aside. !important only to beat upstream's own !important panel styles. */
+html.mc .mc-arwes.mc-arwes, /* doubled class: outranks the panel restyle below */
+html.mc .mc-arwes > [class$='-inner'] { /* upstream inner boxes cover the frame */
+  --arwes-frames-bg-color: var(--mc-panel);
+  --arwes-frames-line-color: rgba(155, 135, 255, 0.6);
+  --arwes-frames-line-filter: drop-shadow(0 0 3px rgba(155, 135, 255, 0.45));
+  background: transparent !important; border-color: transparent !important;
+  box-shadow: none !important;
+}
+html.mc .mc-input.mc-arwes { position: relative; }
+.mc-panel.mc-arwes::before, .mc-panel.mc-arwes::after { display: none; }
+.mc-arwes-frame { position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0; overflow: visible; }
+.mc-arwes > :not(.mc-arwes-frame) { position: relative; z-index: 1; }
+/* Faint dot grid over the map, under the vignette and every panel */
+#mc-arwes-bg { position: fixed; inset: 0; width: 100vw; height: 100vh;
+  pointer-events: none; z-index: 4; }
+
 /* ── Bottom command bar ─────────────────────────────────────────── */
 /* Centered on screen; never wider than the gap between the two rails */
 #mc-command {
