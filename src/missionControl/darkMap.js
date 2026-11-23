@@ -24,13 +24,17 @@ export const DARK_MAP_ATTRIBUTION_HTML = CARTO_KEY ? CARTO_CREDIT : ESRI_CREDIT;
 //   roads (darker than land) → dim purple
 //   land + buildings (greys up to ~38) → dark slate grey
 //   lines + place names (clearly brighter) → purple, brightest → lavender.
+//   open water also gets a faint tactical grid.
 const LAND = [30, 31, 36];
 const ROAD = [52, 40, 104]; // streets (dim purple)
 const PURPLE = [124, 98, 255]; // borders, road edges
 const LAVENDER = [206, 192, 255]; // bright lines, place names
+const GRID = 128; // ocean grid cell, in tile pixels
+const GRID_MINOR = [46, 34, 96];
+const GRID_MAJOR = [92, 70, 190];
 const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
 
-function recolorTile(image) {
+function recolorTile(image, tileX = 0, tileY = 0) {
   const w = image.width;
   const h = image.height;
   const canvas = new OffscreenCanvas(w, h);
@@ -72,6 +76,22 @@ function recolorTile(image) {
     d[i] = R * keep;
     d[i + 1] = G * keep;
     d[i + 2] = B * keep;
+    // Tactical grid on open water (Ace Combat reference): 128px cells in
+    // world tile space, every 4th line brighter, minor lines dashed.
+    if (water > 0.6) {
+      const p = i >> 2;
+      const gx = tileX * w + (p % w);
+      const gy = tileY * h + ((p / w) | 0);
+      const onX = gx % GRID < 2, onY = gy % GRID < 2;
+      if (onX || onY) {
+        const major = (onX && gx % (GRID * 4) < 2) || (onY && gy % (GRID * 4) < 2);
+        const dash = onX ? (gy >> 3) & 1 : (gx >> 3) & 1;
+        if (major || dash) {
+          const c = major ? GRID_MAJOR : GRID_MINOR;
+          d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2];
+        }
+      }
+    }
   }
   ctx.putImageData(img, 0, 0);
   return canvas.transferToImageBitmap();
@@ -90,7 +110,7 @@ export function createDarkImagery() {
     provider.requestImage = (x, y, level, req) => {
       const pending = request(x, y, level, req);
       return pending && Promise.resolve(pending).then((image) =>
-        typeof OffscreenCanvas === 'function' ? recolorTile(image) : image,
+        typeof OffscreenCanvas === 'function' ? recolorTile(image, x, y) : image,
       );
     };
     return provider;

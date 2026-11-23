@@ -11,6 +11,7 @@ import * as Cesium from 'cesium';
 import { HOME_CITY, flyToHomeCity } from './home.js';
 import { attachCctvSplit } from './cctvSplit.js';
 import { attachMapToggle } from './mapToggle.js';
+import { attachCctvCard } from './cctvCard.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -78,17 +79,31 @@ function build() {
 
   // Top bar
   const top = h(`<header id="mc-topbar">
-    <div class="mc-brand">${LOGO}<div><span class="mc-kicker">DRAGO · HORUS</span><span class="mc-title">MISSION CONTROL</span></div></div>
-    <nav class="mc-views" aria-label="Map view">
-      <button type="button" data-mc-view="globe">GLOBE</button>
-      <button type="button" data-mc-view="city">CITY</button>
-      <button type="button" data-mc-view="map">MAP</button>
-    </nav>
+    <div class="mc-brand">${LOGO}<div><span class="mc-kicker">DRAGO · HORUS</span><span class="mc-sub">FIELD OPS</span></div></div>
+    <div class="mc-plate">
+      <svg class="mc-plate-edge" viewBox="0 0 640 84" aria-hidden="true">
+        <path class="mc-plate-fill" d="M48 0 L592 0 L562 34 L504 34 L476 80 L164 80 L136 34 L78 34 Z" />
+        <path class="mc-plate-line" d="M0 1 L48 1 L78 34 L136 34 L164 80 L476 80 L504 34 L562 34 L592 1 L640 1" />
+        <path class="mc-plate-glow" d="M200 80 L440 80" />
+        <path class="mc-plate-tick" d="M146 70 L154 70 M486 70 L494 70 M90 40 L124 40 M516 40 L550 40" />
+      </svg>
+      <div class="mc-wing mc-wing-l">
+        <button type="button" class="mc-chip" data-mc-toggle="view" title="Display options (V)">VIEW</button>
+      </div>
+      <div class="mc-plate-core">
+        <span class="mc-title">MISSION CONTROL</span>
+        <nav class="mc-views" aria-label="Map view">
+          <button type="button" data-mc-view="globe">GLOBE</button>
+          <button type="button" data-mc-view="city">CITY</button>
+          <button type="button" data-mc-view="map">MAP</button>
+        </nav>
+      </div>
+      <div class="mc-wing mc-wing-r">
+        <button type="button" class="mc-chip" data-mc-toggle="tools" title="Search · presets · voice (T)">TOOLS</button>
+        <button type="button" class="mc-chip mc-end-scene" title="Stop the scene that is playing">END SCENE</button>
+      </div>
+    </div>
     <div class="mc-status">
-      <button type="button" class="mc-chip mc-end-scene" title="Stop the scene that is playing">END SCENE</button>
-      <button type="button" class="mc-chip" data-mc-toggle="view" title="Display options (V)">VIEW</button>
-      <button type="button" class="mc-chip" data-mc-toggle="tools" title="Search · presets · voice (T)">TOOLS</button>
-      <span class="mc-sep"></span>
       <span class="mc-stamp"><span class="mc-place">${HOME_CITY.name.toUpperCase()}</span><i>·</i><span id="mc-day"></span><span id="mc-day-short"></span><i>·</i><span class="mc-clock"><b id="mc-time"></b> <span id="mc-tz"></span></span></span>
       <span class="mc-live"><i></i>LIVE</span>
     </div></header>`);
@@ -129,8 +144,9 @@ function build() {
     <span class="mc-sources">SOURCES · PUBLIC FEEDS · ATTRIBUTION IN-MAP</span>
   </footer>`);
 
-  // Frame decoration: faint corner brackets around the whole viewport
-  const frame = h(`<div id="mc-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`);
+  // Frame decoration: notched corner brackets around the whole viewport (sci-fi HUD)
+  const CORNER = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M2 44 V14 L14 2 H44" /><path class="mc-corner-tick" d="M2 52 V58 M52 2 H58" /></svg>';
+  const frame = h(`<div id="mc-frame" aria-hidden="true"><i>${CORNER}</i><i>${CORNER}</i><i>${CORNER}</i><i>${CORNER}</i></div>`);
 
   document.body.append(frame, top, left, right, bottom);
 
@@ -188,6 +204,7 @@ export function attachMissionControl(viewer) {
   viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
   attachMapToggle(); // one-click Dark ⇄ Satellite in the map-button column
+  attachCctvCard(); // CCTV as a flat floating card, not a ground projection
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
   setActive('city');

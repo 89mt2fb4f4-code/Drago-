@@ -500,3 +500,94 @@ html.mc #key-setup-chip { display: none !important; }
 /* Quick map switch (mapToggle.js) — same glass as the other map buttons */
 html.mc #mc-map-toggle .material-symbols-outlined { font-size: 18px; color: var(--mc-text-2); }
 html.mc #mc-map-toggle[aria-pressed='true'] .material-symbols-outlined { color: var(--mc-cyan); }
+
+/* ═══ SCI-FI LAYOUT (pins: CCTV dashboard, HUD frames, Tamiel frame) ═══ */
+/* Top bar: no strip — brand and stamp float; a notched HUD plate hangs from
+   the top centre with the title, GLOBE/CITY/MAP, and VIEW/TOOLS as wings. */
+#mc-topbar { background: linear-gradient(to bottom, rgba(7, 4, 28, 0.85), rgba(7, 4, 28, 0)); backdrop-filter: none; }
+#mc-topbar::after { display: none; }
+.mc-sub { font: 600 12px/1.2 var(--mc-head); letter-spacing: 0.22em; color: var(--mc-text); }
+.mc-plate { position: relative; width: 640px; height: 84px; align-self: start; }
+.mc-plate-edge { position: absolute; inset: 0; width: 640px; height: 84px; overflow: visible; pointer-events: none; }
+.mc-plate-fill { fill: rgba(28, 14, 78, 0.55); }
+.mc-plate-line { fill: none; stroke: var(--mc-purple); stroke-width: 1.2; filter: drop-shadow(0 0 4px rgba(160, 108, 255, 0.8)); }
+.mc-plate-glow { stroke: var(--mc-magenta); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(196, 107, 255, 0.9)); }
+.mc-plate-tick { stroke: rgba(160, 132, 255, 0.55); stroke-width: 1.5; }
+.mc-plate-core { position: absolute; left: 164px; width: 312px; top: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.mc-plate-core .mc-title { font: 700 15px/1 var(--mc-head); letter-spacing: 0.34em;
+  text-shadow: 0 0 12px rgba(160, 108, 255, 0.7); }
+.mc-plate .mc-views { padding: 2px; background: rgba(40, 22, 104, 0.25); }
+.mc-plate .mc-views button { height: 26px; padding: 0 16px; }
+.mc-wing { position: absolute; top: 6px; }
+.mc-wing-l { left: 70px; }
+.mc-wing-r { right: 70px; }
+.mc-wing .mc-chip { height: 22px; padding: 0 12px; font-size: 10px; background: rgba(16, 9, 48, 0.4); }
+/* END SCENE appears under the plate while a scene plays */
+.mc-wing-r .mc-end-scene { position: fixed; top: 92px; left: 50%; transform: translateX(-50%); }
+
+/* Screen frame: notched corner brackets */
+#mc-frame i { display: block; position: absolute; width: 64px; height: 64px; border: 0; }
+#mc-frame i svg { width: 64px; height: 64px; fill: none; stroke: var(--mc-purple); stroke-width: 1.4;
+  filter: drop-shadow(0 0 3px rgba(160, 108, 255, 0.7)); }
+#mc-frame i .mc-corner-tick { stroke: var(--mc-magenta); stroke-width: 2; }
+#mc-frame i:nth-child(1) { top: 6px; left: 6px; }
+#mc-frame i:nth-child(2) { top: 6px; right: 6px; transform: scaleX(-1); }
+#mc-frame i:nth-child(3) { bottom: 6px; left: 6px; transform: scaleY(-1); }
+#mc-frame i:nth-child(4) { bottom: 6px; right: 6px; transform: scale(-1, -1); }
+
+/* Panels: lighter, more see-through glass; title rows as angled gradient tabs */
+html.mc {
+  --mc-glass: linear-gradient(180deg, rgba(36, 20, 92, 0.26), rgba(12, 7, 40, 0.14));
+}
+html.mc .mc-panel, html.mc .panel-collapsible, html.mc #pp-toggles {
+  backdrop-filter: blur(10px) saturate(140%) !important; -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  box-shadow: inset 0 1px 0 var(--mc-glass-edge) !important;
+  border-radius: 2px !important;
+}
+.mc-panel-head, html.mc .panel-collapsible .panel-header {
+  margin: -14px -16px 12px !important; padding: 9px 16px 8px !important;
+  background: linear-gradient(90deg, rgba(108, 61, 255, 0.38), rgba(108, 61, 255, 0.08) 70%, transparent);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 100%, 0 100%);
+}
+html.mc .panel-collapsible .panel-header { margin: 0 !important; }
+.mc-panel-head::after, html.mc .panel-collapsible:not(.collapsed) .panel-header::after { opacity: 0.6; }
+
+/* Smaller screens: the plate folds back into the compact one-line header */
+@media (max-width: 1100px) {
+  .mc-plate { width: auto; height: auto; display: flex; align-items: center; gap: 10px; align-self: center; }
+  .mc-plate-edge, .mc-plate-core .mc-title { display: none; }
+  .mc-plate-core, .mc-wing { position: static; width: auto; }
+  .mc-plate-core { order: 0; } .mc-wing-l { order: 1; } .mc-wing-r { order: 2; }
+  .mc-wing .mc-chip { height: 28px; }
+  #mc-frame i { display: none; }
+}
+
+/* CCTV floating card (cctvCard.js) — flat, front-facing, below the HUD plate */
+#mc-cctv-card {
+  position: fixed; top: 104px; left: 50%; transform: translateX(-50%); z-index: 1100; /* above status chips */
+  width: min(440px, calc(100vw - 2 * (20px + var(--mc-rail) + 24px)));
+  padding: 8px; color: var(--mc-text);
+  background: linear-gradient(180deg, rgba(36, 20, 92, 0.45), rgba(12, 7, 40, 0.35));
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  box-shadow: inset 0 0 0 1px var(--mc-line-2);
+}
+#mc-cctv-card[hidden] { display: none; }
+#mc-cctv-card header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding: 0 4px; }
+.mc-cctv-kind { font: 700 9px/1 var(--mc-mono); letter-spacing: 0.16em; padding: 4px 7px; border-radius: 999px;
+  color: var(--mc-text-2); box-shadow: inset 0 0 0 1px var(--mc-line-2); }
+#mc-cctv-card[data-kind='live'] .mc-cctv-kind { color: #fff; background: var(--mc-grad); box-shadow: 0 0 10px rgba(138, 61, 255, 0.6); }
+.mc-cctv-name { font: 600 12px/1.2 var(--mc-head); letter-spacing: 0.04em; flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mc-cctv-close { background: none; border: 0; color: var(--mc-text-3); font-size: 18px; line-height: 1; cursor: pointer;
+  transition: transform 160ms var(--ease-out), color 150ms ease; }
+.mc-cctv-close:active { transform: scale(0.97); }
+.mc-cctv-media { position: relative; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+.mc-cctv-media img, .mc-cctv-media canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+#mc-cctv-card[data-kind='live'] .mc-cctv-media img, #mc-cctv-card[data-kind='still'] .mc-cctv-media canvas { display: none; }
+.mc-cctv-wait { position: absolute; inset: 0; display: grid; place-items: center;
+  font: 500 10px var(--mc-mono); letter-spacing: 0.2em; color: var(--mc-text-3); }
+.mc-cctv-wait[hidden] { display: none; }
+.mc-cctv-credit { margin-top: 6px; padding: 0 4px; font: 400 9px var(--mc-mono); letter-spacing: 0.1em; color: var(--mc-text-3); }
+@media (max-width: 1100px) { #mc-cctv-card { width: min(420px, calc(100vw - 2 * 20px - var(--mc-rail) - 40px)); left: calc(20px + var(--mc-rail) + 20px); transform: none; } }
