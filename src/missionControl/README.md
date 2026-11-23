@@ -156,4 +156,6 @@ edits, each marked with a "Mission Control" comment.
   default stack is photoreal / esri-imagery
 - src/layers/streetLevel/providers/mapillary/provider.test.mjs — the
   provider-contract test checks for Mapillary green #05cb63 (we use blue)
+- src/voice/gevActions.test.mjs — "every live basemap is reachable by its
+  own id": our `dark` and `vector` maps have no voice alias
 Re-check these when moving to a new upstream release.
