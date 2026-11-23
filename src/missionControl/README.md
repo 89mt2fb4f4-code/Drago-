@@ -112,6 +112,17 @@ edits, each marked with a "Mission Control" comment.
    OpenStreetMap. Upstream edits (one line each, like Dark): maps/catalog.js,
    maps/defaultSources.js, mapStackChips.js, view/index.js,
    share/viewCodec.js (appended), layers/submarineCables/policy.js.
+15. Names on Vector Dark — vectorLabels.js (started from shell.js). Only
+   while Vector Dark is chosen. Countries, states, cities, towns,
+   neighbourhoods, water, streets and landmarks from the same OpenFreeMap
+   tiles, as Cesium labels: upright, sharp, clamped to the ground. Kept
+   clean: each kind shows only within a camera distance (streets/landmarks
+   up close), bigger places win overlaps, no names under panels or the
+   screen's top/bottom edge, a name isn't repeated within 320 px, at most
+   16 street and 6 landmark names at once. Small amenities (benches, ATMs,
+   shops, cafés…) are skipped. Refreshes when the camera stops; every
+   handler is wrapped so a label error can't stop the map drawing.
+   No upstream edits.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

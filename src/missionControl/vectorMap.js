@@ -78,9 +78,9 @@ function tileUrlTemplate() {
 }
 
 // Small cache of decoded source tiles: deep zoom levels reuse one z14 tile.
-const CACHE_MAX = 96;
+const CACHE_MAX = 160;
 const cache = new Map();
-function loadSourceTile(z, x, y) {
+export function loadSourceTile(z, x, y) {
   const key = `${z}/${x}/${y}`;
   const hit = cache.get(key);
   if (hit) {
