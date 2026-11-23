@@ -228,7 +228,7 @@ export function attachMissionControl(viewer) {
   // violet like the reference globe (the haze washed the globe pale).
   viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
-  attachMapToggle(); // one-click Dark ⇄ Satellite in the map-button column
+  attachMapToggle(); // bottom-right layers button opens Visual Presets (looks + map source)
   attachCategoryToggles(); // one switch per Data Layers category
   attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');

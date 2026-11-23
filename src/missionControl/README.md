@@ -57,8 +57,8 @@ edits, each marked with a "Mission Control" comment.
 12. Overhaul — theme.css "OVERHAUL" block, mapToggle.js. Pill layer switches
    and glass panel buttons; status chips (*-sync-chip) as quiet pills; no
    "POWER UP · N KEYS WAITING" nag (#key-setup-chip; keys live in .env);
-   one-click Dark ⇄ Satellite button in the map-button column (presses
-   upstream's own map-source chip). VIEW keeps Drago + a compact Focus and
+   layers button in the map-button column (now opens Visual Presets, see
+   13). VIEW keeps Drago + a compact Focus and
    upstream stacks the VIEW cards below them. Upstream edit:
    src/ui/panelLayoutController.js ('#mc-right' in the right-rail obstacles).
 13. Sci-fi layout (Pinterest refs: CCTV dashboard, EASYV, Ace Combat,
@@ -70,7 +70,13 @@ edits, each marked with a "Mission Control" comment.
    • full-screen HUD outline; screen edges/corners darkened
    • panels fully transparent (no boxes), angled gradient title tabs
    • clean line icons replace upstream's colourful emoji (data-icon, pp-icon)
-   • Visual Presets dock tray and language picker hidden
+   • Visual Presets dock tray and language picker hidden. Visual Presets
+     now open from the bottom-right layers button (mapToggle.js): our own
+     panel beside the button column, holding upstream's look buttons
+     (#style-buttons, line icons) and MAP SOURCE chips, moved there so
+     upstream's handlers and 1-7 keys still work. Esc, × or a click
+     outside closes it. Picking a look still opens upstream's DISPLAY panel
+     with that look's settings (upstream behaviour)
    • CCTV: the side panel is the normal view (wider, calibration/projection/
      summary hidden; PREV/NEXT stay there). FULL SCREEN — button on the small
      screen, or click a camera on the map — opens a big centred card over a
