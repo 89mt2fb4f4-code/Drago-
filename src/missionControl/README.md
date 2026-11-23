@@ -75,7 +75,13 @@ edits, each marked with a "Mission Control" comment.
      summary hidden; PREV/NEXT stay there). FULL SCREEN — button on the small
      screen, or click a camera on the map — opens a big centred card over a
      darkened map. Upstream's ground projection and view-cone (COVERAGE) are
-     switched off (the COVERAGE button can turn the cone back on)
+     switched off (the COVERAGE button can turn the cone back on). Card is as
+     big as the screen allows (16:9 feed fits vertically); Esc, × or a click
+     on the dimmed map closes it (Esc is caught before upstream eats it)
+   • Data Layers always visible (it can still collapse with +/–). Upstream's
+     one-letter shortcuts (F hides layers, C, V, 1-7…) ignore modifier keys,
+     so ⌘⌃F (Mac full screen) used to hide Data Layers — shell.js now stops
+     ⌘/Ctrl/Alt + letter before upstream sees it
    • upstream panel headers keep their own layout (an earlier clip hid the
      +/– button, so collapsed panels couldn't reopen)
    • ocean: faint tactical grid on open water (darkMap.js)

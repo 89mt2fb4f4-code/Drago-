@@ -202,6 +202,13 @@ function build() {
     try { saved = localStorage.getItem(`mc.${key}`) ?? '0'; } catch {}
     setOpen(key, saved === '1');
   }
+  // Upstream's single-letter shortcuts (F layers, C cctv, H hud, 1-7 looks…)
+  // ignore modifier keys, so Mac shortcuts like ⌘⌃F (full screen) or ⌘C also
+  // fired them. Stop those before they reach upstream.
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey || e.altKey) && e.key.length === 1) e.stopImmediatePropagation();
+  }, true);
+
   window.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const el = e.target;

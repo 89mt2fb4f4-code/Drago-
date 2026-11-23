@@ -135,7 +135,9 @@ export function attachCctvCard(viewer) {
   });
   card.querySelector('.mc-cctv-close').addEventListener('click', dismiss);
   backdrop.addEventListener('click', dismiss);
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !card.hidden) dismiss(); });
+  // Capture phase: upstream handles Escape too and stops it before a normal
+  // listener would see it.
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !card.hidden) dismiss(); }, true);
 
   // Follow upstream: camera changes, frame refreshes, CCTV on/off, live/still.
   const watch = (el, opts) => el && new MutationObserver(sync).observe(el, opts);
