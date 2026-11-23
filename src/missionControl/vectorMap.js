@@ -52,7 +52,8 @@ const C = {
 
 // Road width in px at zoom 14, then scaled by zoom.
 const ROAD_W14 = { motorway: 3.4, trunk: 3, primary: 2.6, secondary: 2.1, tertiary: 1.8, minor: 1.2, service: 0.8 };
-const ROAD_MIN_Z = { motorway: 4, trunk: 5, primary: 7, secondary: 9, tertiary: 10, minor: 12, service: 14 };
+// Roads come in after borders as you zoom: highways from 6, streets from 12.
+const ROAD_MIN_Z = { motorway: 6, trunk: 7, primary: 8, secondary: 10, tertiary: 11, minor: 12, service: 14 };
 const zoomScale = (z) => Math.min(6, Math.max(0.35, 2 ** ((z - 14) * 0.6)));
 
 let tileUrlPromise = null;
@@ -242,11 +243,13 @@ function paint(ctx, tile, zoom, geo) {
   }
   ctx.setLineDash([]);
 
-  // Borders: countries, and states once zoomed in; never on the sea.
+  // Borders only once you're closer than the whole globe: countries from
+  // zoom 4 (a continent fills the screen), states from zoom 6. Never on the
+  // sea. Coastlines still show through the land/water colours.
   eachFeature(tile, 'boundary', (f, extent) => {
     if (f.type !== 2 || f.properties.maritime === 1) return;
     const level = f.properties.admin_level;
-    if (level !== 2 && !(level === 4 && zoom >= 4)) return;
+    if (!(level === 2 && zoom >= 4) && !(level === 4 && zoom >= 6)) return;
     ctx.strokeStyle = level === 2 ? C.border2 : C.border4;
     ctx.lineWidth = level === 2 ? 1.2 : 0.8;
     ctx.setLineDash(level === 2 ? [] : [4, 3]);

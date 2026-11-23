@@ -108,6 +108,9 @@ edits, each marked with a "Mission Control" comment.
    the z14 data, so streets stay sharp. No names painted in (they'd stretch
    when the 3D view tilts; screen-facing labels come next). Tiles go to
    Cesium upside down on purpose (Cesium uploads ImageBitmaps unflipped).
+   Reveals detail as you zoom (2026-11-23): no borders from the whole
+   globe; country borders from tile zoom 4, state borders from 6; highways
+   from 6, main roads 8, streets 12.
    Falls back to Dark if tiles fail. Credits: OpenFreeMap, OpenMapTiles,
    OpenStreetMap. Upstream edits (one line each, like Dark): maps/catalog.js,
    maps/defaultSources.js, mapStackChips.js, view/index.js,
@@ -123,6 +126,10 @@ edits, each marked with a "Mission Control" comment.
    shops, cafés…) are skipped. Refreshes when the camera stops; every
    handler is wrapped so a label error can't stop the map drawing.
    No upstream edits.
+   Ranges: no names from the whole globe or the whole flat map; countries
+   within 9,000 km, states 3,000 km, cities 1,500 km, towns 200 km,
+   neighbourhoods 16 km, streets/landmarks a few km. Each fades in over the
+   last 30% of its range (Cesium translucencyByDistance).
 16. Overture Maps on Vector Dark — overture.js, pmtiles.js. Read straight
    from Overture's public PMTiles (small HTTP range requests; the newest
    release is found from the bucket listing, falls back to older ones).
@@ -190,7 +197,8 @@ edits, each marked with a "Mission Control" comment.
      browser, on by default). Uses upstream's holdContinuousRender while
      turning (requestRenderMode would otherwise stop drawing).
    • Violet edge glow: Cesium sky atmosphere hue/brightness shifted.
-   • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km.
+   • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km and
+     only on the 3D globe (on the flat MAP it read as graph paper).
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

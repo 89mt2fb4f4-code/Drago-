@@ -17,10 +17,13 @@ const FONT = "'Space Grotesk', 'Inter', system-ui, sans-serif";
 const OUTLINE = Cesium.Color.fromCssColorString('#05070f');
 
 // kind → look, priority (higher wins a clash) and how close the camera must
-// be (metres) before it shows.
+// be (metres) before it shows. From the whole globe (or the whole flat map)
+// there are no names at all; zooming in reveals countries, then states,
+// cities, neighbourhoods, streets and landmarks. Each fades in over the
+// last part of its range (FADE_FROM).
 const KINDS = {
-  country: { font: `600 13px ${FONT}`, color: '#eceefa', upper: true, prio: 1000, near: Infinity },
-  state: { font: `500 11px ${FONT}`, color: '#9b87ff', upper: true, prio: 900, near: 4.5e6 },
+  country: { font: `600 13px ${FONT}`, color: '#eceefa', upper: true, prio: 1000, near: 9e6 },
+  state: { font: `500 11px ${FONT}`, color: '#9b87ff', upper: true, prio: 900, near: 3e6 },
   city: { font: `600 14px ${FONT}`, color: '#eceefa', prio: 800, near: 1.5e6 },
   town: { font: `500 12px ${FONT}`, color: '#d6d2f2', prio: 700, near: 2e5 },
   water: { font: `italic 500 12px ${FONT}`, color: '#6f97ff', prio: 650, near: 6e5 },
@@ -47,6 +50,7 @@ const POI_SKIP = new Set([
   'hairdresser', 'jewelry', 'alcohol_shop', 'mobile_phone', 'playground',
 ]);
 const SAME_NAME_GAP = 320; // px between two copies of the same name
+const FADE_FROM = 0.7; // full opacity until 70% of a kind's range, then fade
 const MAX_SHOWN = { street: 16, poi: 6, building: 5 }; // keep it calm
 const PAD_X = 12; // empty space kept around each name, px
 const PAD_Y = 7;
@@ -206,6 +210,9 @@ export function attachVectorLabels(viewer) {
         verticalOrigin: Cesium.VerticalOrigin.CENTER,
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        translucencyByDistance: Number.isFinite(name.near)
+          ? new Cesium.NearFarScalar(name.near * FADE_FROM, 1, name.near, 0)
+          : undefined,
         show: false,
       });
       items.set(name.key, { ...name, label, position, w: measureCtx.measureText(name.text).width, h: parseInt(style.font.match(/(\d+)px/)[1], 10) });

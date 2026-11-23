@@ -65,7 +65,8 @@ export function attachGlobeLook(viewer) {
   const grid = addGrid(scene);
   const height = () => camera.positionCartographic?.height ?? 0;
   const updateGrid = () => {
-    const show = height() > GRID_FROM_M && scene.mode !== Cesium.SceneMode.MORPHING;
+    // 3D globe only: on the flat MAP it reads as graph paper.
+    const show = height() > GRID_FROM_M && scene.mode === Cesium.SceneMode.SCENE3D;
     if (grid.show !== show) {
       grid.show = show;
       scene.requestRender();
