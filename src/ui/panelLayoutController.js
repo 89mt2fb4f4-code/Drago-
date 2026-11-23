@@ -40,6 +40,7 @@ const LEFT_STACK_OBSTACLE_SELECTOR = [
  * visible without tying the layout to one screen height.
  */
 const RIGHT_STACK_OBSTACLE_SELECTOR = [
+  '#mc-right', // Mission Control: VIEW cards stack below Drago + Focus
   '#cockpit-hud .cockpit-topline',
   '#cockpit-hud .cockpit-topline > div',
   '#title-bar',

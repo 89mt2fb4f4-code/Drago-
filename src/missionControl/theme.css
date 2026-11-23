@@ -199,10 +199,14 @@ html.mc #left-panel-stack, html.mc #pp-toggles, html.mc #right-context-rail, htm
 /* View toggle: upstream display panels take over the right rail */
 html.mc:not([data-mc-open-view='open']) #pp-toggles,
 html.mc:not([data-mc-open-view='open']) #right-context-rail { display: none !important; }
-html.mc[data-mc-open-view='open'] #mc-right { display: none; }
+/* VIEW mode: our column compacts (Drago + short Focus) and upstream's layout
+   stacks the VIEW cards below it (#mc-right is a right-rail obstacle). */
+html.mc[data-mc-open-view='open'] #mc-signals,
+html.mc[data-mc-open-view='open'] #mc-focus .mc-tiles { display: none; }
+html.mc[data-mc-open-view='open'] #mc-focus .mc-focus-name { margin-bottom: 0; }
 /* Only the rail is placed; #pp-toggles is a card inside it (offsetting it
    would shift it onto its neighbours) */
-html.mc #right-context-rail { top: calc(var(--mc-top) + 16px) !important; right: 20px !important; }
+html.mc #right-context-rail { right: 20px !important; }
 
 /* Tools toggle: upstream dock replaces the command bar */
 html.mc:not([data-mc-open-tools='open']) #command-dock,
@@ -450,3 +454,49 @@ html.mc .gev-action-button:active, html.mc .scene-btn:active { transform: scale(
 
 /* (Map colours now come from darkMap.js recolouring: grey land, black
    water, purple lines and names — no tint layer over the map.) */
+
+/* ═══ OVERHAUL (references + usability review) ═══════════════════ */
+/* Layer switches: pill toggles. OFF = quiet outline, ON = violet glow,
+   loading/error states keep upstream's text but in the same shape. */
+html.mc .data-toggle-btn {
+  min-width: 46px; height: 22px; padding: 0 10px !important; border-radius: 999px !important;
+  font: 600 9.5px/1 var(--mc-mono) !important; letter-spacing: 0.14em !important;
+  color: var(--mc-text-3) !important; background: transparent !important;
+  border: 1px solid var(--mc-line) !important; box-shadow: none !important;
+  transition: transform 160ms var(--ease-out), background-color 150ms ease, color 150ms ease, box-shadow 150ms ease !important;
+}
+html.mc .data-toggle-btn[data-feed-state]:not([data-feed-state='off']) {
+  color: #fff !important; border-color: transparent !important;
+  background: var(--mc-grad) !important; box-shadow: 0 0 12px rgba(138, 61, 255, 0.45) !important;
+}
+html.mc .data-toggle-btn:active { transform: scale(0.97) !important; }
+html.mc #data-panel .data-layer-row, html.mc #data-panel [class*='layer-row'] { border-color: var(--mc-line) !important; }
+
+/* Upstream action buttons inside panels (NEAREST, PREV, NEW, START…) */
+html.mc .gev-action-button, html.mc .scene-btn, html.mc .gev-segment {
+  border-radius: 999px !important; border: 1px solid var(--mc-line) !important;
+  background: rgba(160, 132, 255, 0.06) !important; color: var(--mc-text-2) !important; box-shadow: none !important;
+}
+html.mc .scene-btn.active, html.mc .gev-segment[aria-checked='true'], html.mc .gev-segment.active {
+  color: #fff !important; border-color: var(--mc-purple) !important; background: rgba(160, 132, 255, 0.2) !important;
+}
+html.mc .gev-field, html.mc select.gev-field {
+  border-radius: 999px !important; background: rgba(16, 9, 48, 0.6) !important;
+  border: 1px solid var(--mc-line) !important; color: var(--mc-text) !important;
+}
+
+/* Status chips over the map (LOADING FRAMES, REFRESHING LIVE DATA…):
+   small, quiet glass pills instead of boxes */
+html.mc [id$='-sync-chip'] {
+  border-radius: 999px !important; border: 0 !important; padding: 5px 12px !important;
+  background: rgba(16, 9, 48, 0.55) !important; box-shadow: inset 0 0 0 1px var(--mc-line) !important;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--mc-text-3) !important; font-size: 9px !important; opacity: 0.85;
+}
+
+/* No "POWER UP · N KEYS WAITING" nag — keys live in .env (CLAUDE.md rule 4) */
+html.mc #key-setup-chip { display: none !important; }
+
+/* Quick map switch (mapToggle.js) — same glass as the other map buttons */
+html.mc #mc-map-toggle .material-symbols-outlined { font-size: 18px; color: var(--mc-text-2); }
+html.mc #mc-map-toggle[aria-pressed='true'] .material-symbols-outlined { color: var(--mc-cyan); }

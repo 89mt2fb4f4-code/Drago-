@@ -10,6 +10,7 @@
 import * as Cesium from 'cesium';
 import { HOME_CITY, flyToHomeCity } from './home.js';
 import { attachCctvSplit } from './cctvSplit.js';
+import { attachMapToggle } from './mapToggle.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -186,6 +187,7 @@ export function attachMissionControl(viewer) {
   // violet like the reference globe (the haze washed the globe pale).
   viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
+  attachMapToggle(); // one-click Dark ⇄ Satellite in the map-button column
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
   setActive('city');
