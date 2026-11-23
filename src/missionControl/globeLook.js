@@ -6,6 +6,10 @@
 //     source, Vector Dark included. Switch in Visual Presets → GLOBE.
 //   • a violet glow around the globe's edge (Cesium's sky atmosphere, tinted)
 //   • a faint latitude / longitude grid, only when zoomed far out
+//   • on satellite maps (Esri, Bing, Google 3D): the "photo globe" look —
+//     lit from the upper right like a real sphere, a soft night side, and a
+//     natural blue atmosphere glow. Cesium fades the lighting and haze out as
+//     you zoom in, so up close it is the plain satellite photo again.
 import * as Cesium from 'cesium';
 import { holdContinuousRender, releaseContinuousRender } from '../renderGovernor.js';
 
@@ -17,6 +21,10 @@ const GRID_FROM_M = 3_000_000;
 const GRID_STEP_DEG = 15;
 const GRID_HEIGHT_M = 12_000; // just above the highest terrain
 const HOLD_ID = 'mc-globe-spin';
+const SATELLITE_STACKS = new Set(['esri-imagery', 'bing-aerial', 'bing-labels', 'photoreal']);
+// Lighting + haze are full from ~9,000 km out and gone below ~3,000 km.
+const LOOK_FULL_M = 9_000_000;
+const LOOK_GONE_M = 3_000_000;
 
 function loadSpin() {
   try { return localStorage.getItem(STORE) !== 'off'; } catch { return true; }
@@ -53,27 +61,73 @@ export function attachGlobeLook(viewer) {
   const scene = viewer.scene;
   const camera = scene.camera;
 
-  // ---- glow: Cesium's sky atmosphere, shifted from blue to violet ----
-  if (scene.skyAtmosphere) {
-    scene.skyAtmosphere.show = true;
-    scene.skyAtmosphere.hueShift = 0.12;
-    scene.skyAtmosphere.saturationShift = 0.05;
-    scene.skyAtmosphere.brightnessShift = -0.15;
-  }
+  const globe = scene.globe;
+  const sunLight = scene.light; // Cesium's default, restored on dark maps
+  // A light that sits up and to the right of the viewer, like the 21st.dev
+  // globe, re-aimed every frame so the lit side always faces Boss.
+  const viewLight = new Cesium.DirectionalLight({ direction: new Cesium.Cartesian3(1, 0, 0), intensity: 2.4 });
+  const tmp = new Cesium.Cartesian3();
+  const aimLight = () => {
+    const d = viewLight.direction;
+    Cesium.Cartesian3.multiplyByScalar(camera.rightWC, -0.5, d);
+    Cesium.Cartesian3.add(d, Cesium.Cartesian3.multiplyByScalar(camera.upWC, -0.35, tmp), d);
+    Cesium.Cartesian3.add(d, Cesium.Cartesian3.multiplyByScalar(camera.directionWC, 0.8, tmp), d);
+    Cesium.Cartesian3.normalize(d, d);
+  };
+  let satelliteLook = null;
 
-  // ---- grid ----
+  function setLook(satellite) {
+    if (satellite === satelliteLook) return;
+    satelliteLook = satellite;
+    const sky = scene.skyAtmosphere;
+    if (satellite) {
+      if (sky) Object.assign(sky, { show: true, hueShift: 0, saturationShift: 0.1, brightnessShift: 0.1 });
+      Object.assign(globe, {
+        showGroundAtmosphere: true,
+        enableLighting: true,
+        lightingFadeOutDistance: LOOK_GONE_M,
+        lightingFadeInDistance: LOOK_FULL_M,
+        nightFadeOutDistance: LOOK_GONE_M,
+        nightFadeInDistance: LOOK_FULL_M,
+      });
+      aimLight();
+      scene.light = viewLight;
+    } else {
+      // Dark maps: violet edge glow, black oceans, no day/night.
+      if (sky) Object.assign(sky, { show: true, hueShift: 0.12, saturationShift: 0.05, brightnessShift: -0.15 });
+      globe.showGroundAtmosphere = false;
+      globe.enableLighting = false;
+      scene.light = sunLight;
+    }
+    updateGrid();
+    scene.requestRender();
+  }
+  scene.preRender.addEventListener(() => {
+    if (satelliteLook && scene.light === viewLight) aimLight();
+  });
+
+  // ---- grid (dark maps only; on photos it reads as clutter) ----
   const grid = addGrid(scene);
   const height = () => camera.positionCartographic?.height ?? 0;
-  const updateGrid = () => {
-    const show = height() > GRID_FROM_M && scene.mode !== Cesium.SceneMode.MORPHING;
+  function updateGrid() {
+    const show = !satelliteLook && height() > GRID_FROM_M && scene.mode !== Cesium.SceneMode.MORPHING;
     if (grid.show !== show) {
       grid.show = show;
       scene.requestRender();
     }
-  };
+  }
   camera.changed.addEventListener(updateGrid);
   scene.morphComplete.addEventListener(updateGrid);
-  updateGrid();
+
+  // Follow the map source (chips re-render, so watch the whole row).
+  const activeStack = () => document.querySelector('.map-stack-chip.active')?.dataset.stackId;
+  const syncLook = () => {
+    try { setLook(SATELLITE_STACKS.has(activeStack())); } catch (err) { console.warn('[Mission Control] globe look skipped:', err); }
+  };
+  const chips = document.getElementById('map-stack-chips');
+  if (chips) new MutationObserver(syncLook).observe(chips, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+  syncLook();
+  setTimeout(syncLook, 3000);
 
   // ---- auto-spin ----
   let enabled = loadSpin();

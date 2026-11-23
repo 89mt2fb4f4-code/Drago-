@@ -190,7 +190,14 @@ edits, each marked with a "Mission Control" comment.
      browser, on by default). Uses upstream's holdContinuousRender while
      turning (requestRenderMode would otherwise stop drawing).
    • Violet edge glow: Cesium sky atmosphere hue/brightness shifted.
-   • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km.
+   • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km,
+     dark maps only.
+   • Satellite maps (esri-imagery, bing-aerial, bing-labels, photoreal) get
+     the "photo globe" look: a DirectionalLight up-right of the viewer
+     (re-aimed every frame), globe lighting + ground atmosphere on, natural
+     blue sky atmosphere. Lighting/night/haze fade from full at 9,000 km to
+     none at 3,000 km, so cities show the plain photo. Dark maps restore
+     Cesium's SunLight, lighting off, black oceans, violet glow.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
