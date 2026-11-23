@@ -50,13 +50,25 @@ function pack(url) {
   return packs.get(key);
 }
 
-async function unitAt(url, lat, lon) {
+async function unitRecordAt(url, lat, lon) {
   for (const u of await pack(url)) {
     const [w, s, e, n] = u.box;
     if (lon < w || lon > e || lat < s || lat > n) continue;
-    if (polygonsContain(u.polygons, lat, lon)) return u.f;
+    if (polygonsContain(u.polygons, lat, lon)) return u;
   }
   return null;
+}
+async function unitAt(url, lat, lon) {
+  return (await unitRecordAt(url, lat, lon))?.f ?? null;
+}
+
+/**
+ * The country ('country') or state/province ('state') under a point, with
+ * its shape: { f: Natural Earth record, polygons: [[outer, ...holes]] of
+ * [lon, lat], box: [w, s, e, n] } — or null (open sea).
+ */
+export function adminUnitAt(level, lat, lon) {
+  return unitRecordAt(level === 'state' ? ADMIN1_URL : COUNTRIES_URL, lat, lon);
 }
 
 const toRad = (d) => (d * Math.PI) / 180;

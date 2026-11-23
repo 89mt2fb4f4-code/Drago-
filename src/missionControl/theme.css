@@ -823,3 +823,28 @@ html.mc #mc-map-toggle[aria-expanded='true'] .material-symbols-outlined { color:
 #mc-tilt input[type='range']::-moz-range-thumb { width: 14px; height: 6px; border-radius: 0; background: #eceefa; border: 1px solid #6d4dff; }
 #mc-tilt input[type='range']:focus-visible { outline: 1px solid #9b87ff; outline-offset: 2px; }
 #mc-tilt input[type='range']:disabled { cursor: default; }
+
+/* ── REGION card (click a country/state), regionSelect.js ──────────── */
+#mc-region[hidden] { display: none !important; }
+#mc-region .mc-panel-head { position: relative; }
+.mc-region-close { margin-left: 8px; background: none; border: 0; color: rgba(236, 238, 250, 0.55);
+  font-size: 16px; line-height: 1; cursor: pointer; padding: 0 2px; }
+.mc-region-close:hover { color: #fff; }
+.mc-region-desc { margin: 4px 0 10px; font: 400 11px/1.45 var(--mc-head, 'Space Grotesk', sans-serif);
+  color: rgba(236, 238, 250, 0.62); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.mc-region-actions { display: flex; gap: 6px; margin-top: 10px; }
+.mc-region-actions button, .mc-region-actions a {
+  flex: 1; padding: 6px 8px; text-align: center; cursor: pointer; text-decoration: none; border-radius: 0;
+  background: rgba(155, 135, 255, 0.06); border: 1px solid rgba(155, 135, 255, 0.22);
+  color: rgba(236, 238, 250, 0.85); font: 500 9.5px/1 var(--mc-mono, 'JetBrains Mono', monospace); letter-spacing: 0.08em;
+  transition: border-color 140ms ease-out, background-color 140ms ease-out;
+}
+.mc-region-actions button:hover, .mc-region-actions a:hover { border-color: #9b87ff; color: #fff; }
+.mc-region-actions button:active, .mc-region-actions a:active { transform: scale(0.97); }
+.mc-region-actions a[hidden] { display: none; }
+.mc-region-src { margin-top: 8px; font: 400 8.5px/1 var(--mc-mono, 'JetBrains Mono', monospace); letter-spacing: 0.06em; color: rgba(236, 238, 250, 0.35); }
+/* Small screens hide the right rail; a selected region still shows its card. */
+@media (max-width: 1100px) {
+  #mc-right:has(#mc-region:not([hidden])) { display: block; }
+  #mc-right:has(#mc-region:not([hidden])) > :not(#mc-region) { display: none; }
+}

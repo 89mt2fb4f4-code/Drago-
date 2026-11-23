@@ -199,6 +199,20 @@ edits, each marked with a "Mission Control" comment.
    • Violet edge glow: Cesium sky atmosphere hue/brightness shifted.
    • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km and
      only on the 3D globe (on the flat MAP it read as graph paper).
+22. Click a region — regionSelect.js (Pinterest refs: glowing region outline +
+   side info). Click the map (not a marker) from > 150 km: country (camera
+   > 3,000 km) or state/province (closer; country if there is none).
+   Glowing violet ground outline (PolylineGlow, clampToGround, biggest 60
+   parts) + faint fill. REGION card (03; Signals is now 04) docks at the top
+   of upstream's right panel stack when it shows (its layout moves CCTV etc.
+   below), else in #mc-right before Signals; on small screens only the card
+   shows. Card: name, type · country, capital, population + year, currency
+   (countries) or ISO code (states), area ≈ from the Natural Earth shape,
+   a short Wikipedia description and link, ZOOM TO. Facts from Wikidata
+   (SPARQL by ISO 3166 code, validated) and Wikipedia's summary API — free,
+   no key, cached per region; "—" when unknown. Same region again, open
+   sea, × or Esc clears it. The globe doesn't auto-spin while a region is
+   selected (html[data-mc-region]). placeName.js now exports adminUnitAt().
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

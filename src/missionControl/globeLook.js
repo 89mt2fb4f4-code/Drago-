@@ -90,6 +90,7 @@ export function attachGlobeLook(viewer) {
   const shouldSpin = () =>
     enabled &&
     !document.hidden &&
+    !document.documentElement.dataset.mcRegion && // a region is selected
     scene.mode === Cesium.SceneMode.SCENE3D &&
     !viewer.trackedEntity &&
     !camera._currentFlight && // Cesium's own fly-to in progress
