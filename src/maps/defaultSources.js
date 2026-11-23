@@ -12,6 +12,11 @@ import {
   createDarkImagery,
   DARK_MAP_ATTRIBUTION_HTML,
 } from '../missionControl/darkMap.js';
+// Mission Control: Vector Dark trial map
+import {
+  createVectorDarkImagery,
+  VECTOR_MAP_ATTRIBUTION_HTML,
+} from '../missionControl/vectorMap.js';
 import { createWorldTerrain, createKeylessTerrain } from './terrain.js';
 
 /** Select sources and setup guidance without putting provider branches in the controller. */
@@ -56,6 +61,8 @@ export function createDefaultMapSources({
           ? () => createIonImagery(descriptor.style, ionToken)
           : descriptor.id === 'dark'
             ? createDarkImagery
+            : descriptor.id === 'vector' // Mission Control
+              ? createVectorDarkImagery
             : descriptor.id === 'osm'
               ? createOsmImagery
               : createEsriImagery;
@@ -75,6 +82,14 @@ export function createDefaultMapSources({
                 threshold: 2,
                 message: 'Dark map tile requests failed; using Esri Satellite',
               },
+            }
+          : {}),
+        // Mission Control: Vector Dark falls back to the Dark map
+        ...(descriptor.id === 'vector'
+          ? {
+              credit: VECTOR_MAP_ATTRIBUTION_HTML,
+              constructionFallback: { id: 'dark', message: 'Vector Dark map is unavailable; using Dark' },
+              tileFailureFallback: { id: 'dark', threshold: 3, message: 'Vector Dark tile requests failed; using Dark' },
             }
           : {}),
         ...(descriptor.id === 'esri-imagery'

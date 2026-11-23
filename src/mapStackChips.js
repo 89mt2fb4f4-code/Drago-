@@ -16,6 +16,7 @@ import { t } from './i18n/index.js';
 export const MAP_STACK_CHIP_CLASS = 'map-stack-chip';
 export const PRESENTED_MAP_STACK_IDS = Object.freeze([
   'dark',
+  'vector', // Mission Control: Vector Dark trial map
   'photoreal',
   'bing-aerial',
   'bing-labels',

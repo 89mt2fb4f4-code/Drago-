@@ -33,6 +33,7 @@ export const VIEW_STYLES = Object.freeze(Object.keys(STYLE_URL_NAMES));
 
 export const VIEW_MAPS = Object.freeze([
   'dark',
+  'vector', // Mission Control: Vector Dark trial map
   'photoreal',
   'bing-aerial',
   'bing-labels',

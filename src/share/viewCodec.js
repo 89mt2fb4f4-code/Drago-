@@ -110,6 +110,7 @@ export const SHARE_VIEW_ENUMS = Object.freeze({
     'esri-imagery',
     'osm',
     'dark', // appended: share-code indexes must not shift
+    'vector', // Mission Control: appended too (Vector Dark)
   ]),
   hudVariant: Object.freeze(['tactical', 'operator', 'minimal', 'cyber']),
   detectionMode: Object.freeze(['OFF', 'SPARSE', 'BALANCED', 'DENSE']),

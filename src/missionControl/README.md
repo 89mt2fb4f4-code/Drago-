@@ -100,6 +100,18 @@ edits, each marked with a "Mission Control" comment.
    • upstream panel headers keep their own layout (an earlier clip hid the
      +/– button, so collapsed panels couldn't reopen)
    • ocean: faint tactical grid on open water (darkMap.js)
+14. Vector Dark trial map — vectorMap.js. New MAP SOURCE chip next to Dark.
+   Keyless: fetches OpenFreeMap vector tiles (OpenMapTiles schema, the same
+   data a MapLibre map uses) and paints each tile itself in the Mission
+   Control palette — water, parks, buildings, roads by class, rail, country
+   and state borders, tactical grid on water. Beyond zoom 14 it zooms into
+   the z14 data, so streets stay sharp. No names painted in (they'd stretch
+   when the 3D view tilts; screen-facing labels come next). Tiles go to
+   Cesium upside down on purpose (Cesium uploads ImageBitmaps unflipped).
+   Falls back to Dark if tiles fail. Credits: OpenFreeMap, OpenMapTiles,
+   OpenStreetMap. Upstream edits (one line each, like Dark): maps/catalog.js,
+   maps/defaultSources.js, mapStackChips.js, view/index.js,
+   share/viewCodec.js (appended), layers/submarineCables/policy.js.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

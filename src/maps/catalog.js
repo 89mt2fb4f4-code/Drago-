@@ -8,6 +8,14 @@ export const MAP_STACKS = [
     kind: 'dark',
     requiresIon: false,
   },
+  // Mission Control: Vector Dark trial map (src/missionControl/vectorMap.js)
+  {
+    id: 'vector',
+    label: 'Vector Dark', // i18n-ignore: map name
+    shortLabel: 'VECTOR',
+    kind: 'vector',
+    requiresIon: false,
+  },
   {
     id: 'photoreal',
     label: 'Google 3D', // i18n-ignore: imagery product name
