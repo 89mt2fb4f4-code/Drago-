@@ -286,6 +286,9 @@ html.mc body.mobile-shell #cesium-credits .cesium-widget-credits {
 }
 
 /* ── Trimmed upstream options (Elijah, 2026-11-23) ─────────────── */
+/* DISPLAY panel: no Clean UI button — the top bar's CLEAN UI chip does it
+   (it still presses this hidden button, so upstream's logic is unchanged) */
+html.mc #clean-view-toggle { display: none !important; }
 /* Visual Presets: no CRT look */
 html.mc .style-btn[data-style='retro'] { display: none !important; }
 /* Display: no Scope (circular viewport mask); shell.js also switches it off */

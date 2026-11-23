@@ -17,6 +17,7 @@ import { attachHudFrame } from './hudFrame.js';
 import { attachCategoryToggles } from './categoryToggle.js';
 import { attachVectorLabels } from './vectorLabels.js';
 import { attachOverture } from './overture.js';
+import { describePlace } from './placeName.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -270,6 +271,19 @@ export function attachMissionControl(viewer) {
 
   // Focus panel: what the camera is looking at (real numbers only)
   const $ = (id) => document.getElementById(id);
+  // The place name is looked up a moment after the camera settles (offline
+  // data, see placeName.js); "—" while unknown, never a guess.
+  let nameTimer = 0;
+  let nameAsk = 0;
+  const nameSoon = (lat, lon, viewKm) => {
+    clearTimeout(nameTimer);
+    nameTimer = setTimeout(() => {
+      const ask = ++nameAsk;
+      describePlace(lat, lon, viewKm)
+        .then((text) => { if (ask === nameAsk) $('mc-focus-name').textContent = text || '—'; })
+        .catch(() => { if (ask === nameAsk) $('mc-focus-name').textContent = '—'; });
+    }, 300);
+  };
   const update = () => {
     if (viewer.isDestroyed()) return;
     const cam = viewer.camera;
@@ -287,6 +301,7 @@ export function attachMissionControl(viewer) {
       : '—';
     if (!hit) {
       $('mc-focus-coords').textContent = '—';
+      nameAsk++; // drop any lookup still running
       $('mc-focus-name').textContent = 'Orbit';
       $('mc-focus-time').textContent = '—';
       return;
@@ -297,7 +312,12 @@ export function attachMissionControl(viewer) {
     $('mc-focus-coords').textContent =
       `${Math.abs(lat).toFixed(3)}° ${lat >= 0 ? 'N' : 'S'} · ${Math.abs(lon).toFixed(3)}° ${lon >= 0 ? 'E' : 'W'}`;
     const nearHome = Math.abs(lat - HOME_CITY.lat) < 0.5 && Math.abs(lon - HOME_CITY.lon) < 0.6;
-    $('mc-focus-name').textContent = nearHome ? HOME_CITY.name : 'Unknown area';
+    // How far away the point is decides city vs state vs country. In flat
+    // MAP view the camera height is the honest measure.
+    const viewKm = viewer.scene.mode === Cesium.SceneMode.SCENE3D
+      ? Cesium.Cartesian3.distance(cam.positionWC, hit) / 1000
+      : (alt || 0) / 1000;
+    nameSoon(lat, lon, viewKm);
     // Solar local time from longitude (exact zone names come with geocoding later)
     const off = Math.round(lon / 15);
     const now = new Date(Date.now() + off * 3600_000);

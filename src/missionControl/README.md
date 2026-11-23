@@ -151,6 +151,17 @@ edits, each marked with a "Mission Control" comment.
    a MAP SOURCE choice). Upstream edits: app/scene.js (initialStack +
    first setStack), maps/defaultSources.js (defaultId). Share-link codec
    defaults unchanged (frozen by design).
+18. Focus panel names the real place — placeName.js, shell.js. Offline, no
+   key: nearest city/town/village from OpenFreeMap place points (same tiles
+   as Vector Dark), state/province + country from upstream's bundled Natural
+   Earth borders (src/data/local_data/natural_earth), lakes/seas from the
+   tiles' water polygons + water names, open ocean from Natural Earth marine
+   areas. "Buffalo, NY", "Toronto, ON", "Paris, France", "New York, USA"
+   (zoomed out), "USA" (globe), "Lake Erie", "North Atlantic Ocean"; "—"
+   when unknown. Looked up 300 ms after the camera settles, cached.
+   Local time still solar (UTC±n) away from Buffalo.
+   DISPLAY panel: Clean UI button hidden (theme.css); the top bar's CLEAN UI
+   chip still presses it.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
