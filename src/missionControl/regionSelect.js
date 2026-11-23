@@ -3,7 +3,8 @@
 // side info panel).
 //
 //   • zoomed out (> 3,000 km): countries; closer: states / provinces
-//   • glowing violet outline + faint fill, drawn on the ground
+//   • looks lifted off the map: violet top with a glowing edge, a deep-violet
+//     depth edge and a soft shadow towards the bottom-right of the screen
 //   • REGION card: name, type, capital, population (with its year), area,
 //     currency, a short description and a Wikipedia link. Facts come from
 //     Wikidata and Wikipedia (free, no key); shape and area from the Natural
@@ -20,7 +21,10 @@ const MIN_VIEW_M = 150_000;
 const MAX_RINGS = 60; // biggest parts only (islands add up fast)
 const GLOW = Cesium.Color.fromCssColorString('#9b87ff');
 const CORE = Cesium.Color.fromCssColorString('#e4dcff');
-const FILL = Cesium.Color.fromCssColorString('#6d4dff').withAlpha(0.13);
+const FILL = Cesium.Color.fromCssColorString('#6e55ff').withAlpha(0.55); // the region's top
+const DEPTH = Cesium.Color.fromCssColorString('#2a1f70'); // its thick edge
+const SHADOW = Cesium.Color.BLACK.withAlpha(0.7);
+const SHADOW_SOFT = Cesium.Color.BLACK.withAlpha(0.4);
 
 const toRad = (d) => (d * Math.PI) / 180;
 function ringAreaKm2(ring) {
@@ -172,6 +176,8 @@ export function attachRegionSelect(viewer) {
     ask++;
     current = null;
     layer.entities.removeAll();
+    shadows = [];
+    shadowHeading = null;
     card.hidden = true;
     delete document.documentElement.dataset.mcRegion; // globe may spin again
     scene.requestRender();
@@ -192,44 +198,102 @@ export function attachRegionSelect(viewer) {
     });
   });
 
+  // The selected region looks lifted off the map (Pinterest ref), faked the
+  // way 3D map cards do it, all drawn flat on the ground so edges stay clean:
+  //   top    — the region, filled violet, glowing edge
+  //   depth  — a deep-violet copy just below-right: reads as the slab's edge
+  //   shadow — a soft dark copy further below-right (two layers = soft edge)
+  // "Below-right" is measured on screen, so it follows the map's rotation.
+  let shadows = [];
+  let shadowHeading = null;
+  function sizeOf(unit) {
+    const [w, s, e, n] = unit.box;
+    const lat = (s + n) / 2;
+    return { lat, diagKm: Math.hypot((e - w) * 111 * Math.cos(toRad(lat)), (n - s) * 111) };
+  }
+  // Shift [lon, lat] rings towards screen down-right by `factor` × region size.
+  function shifted(ring, unit, factor) {
+    const { lat, diagKm } = sizeOf(unit);
+    const h = scene.camera.heading; // clockwise from north
+    let ex = -Math.sin(h) + 0.7 * Math.cos(h); // screen down + some screen right
+    let ny = -Math.cos(h) - 0.7 * Math.sin(h);
+    const len = Math.hypot(ex, ny);
+    ex /= len; ny /= len;
+    const km = diagKm * factor;
+    const dLon = (ex * km) / (111 * Math.max(0.2, Math.cos(toRad(lat))));
+    const dLat = (ny * km) / 111;
+    return ring.map(([lon, la]) => [lon + dLon, Math.max(-89.9, Math.min(89.9, la + dLat))]);
+  }
+  const hierarchyOf = (outer, holes) => new Cesium.PolygonHierarchy(
+    Cesium.Cartesian3.fromDegreesArray(outer.flat()),
+    holes.map((h) => new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(h.flat()))),
+  );
+  const biggest = (unit) => unit.polygons
+    .map((p) => ({ p, a: polyArea(p) }))
+    .sort((x, y) => y.a - x.a)
+    .slice(0, MAX_RINGS)
+    .map(({ p }) => p);
+  const groundFill = (outer, holes, color, zIndex) => layer.entities.add({
+    polygon: {
+      hierarchy: hierarchyOf(outer, holes),
+      material: color,
+      classificationType: Cesium.ClassificationType.TERRAIN,
+      arcType: Cesium.ArcType.RHUMB, // same edges as the outline (borders like 49°N are parallels)
+      zIndex,
+    },
+  });
+
+  function drawShadow(unit) {
+    for (const e of shadows) layer.entities.remove(e);
+    shadows = [];
+    shadowHeading = scene.camera.heading;
+    const [, s, , n] = unit.box;
+    if (n - s >= 80) return; // giant polar shapes: no depth
+    const parts = biggest(unit);
+    for (const [factor, color, z] of [
+      [0.085, SHADOW_SOFT, 0],
+      [0.055, SHADOW, 1],
+      [0.028, DEPTH, 2],
+    ]) {
+      for (const [outer, ...holes] of parts) {
+        shadows.push(groundFill(shifted(outer, unit, factor), holes.map((h) => shifted(h, unit, factor)), color, z));
+      }
+    }
+  }
+
   function draw(unit) {
     layer.entities.removeAll();
-    const polys = unit.polygons
-      .map((p) => ({ p, a: polyArea(p) }))
-      .sort((x, y) => y.a - x.a)
-      .slice(0, MAX_RINGS);
+    shadows = [];
+    drawShadow(unit);
     const [, s, , n] = unit.box;
     const fill = n - s < 80; // giant polar shapes: outline only
-    for (const { p } of polys) {
-      const [outer, ...holes] = p;
-      const ring = [...outer, outer[0]];
-      const positions = Cesium.Cartesian3.fromDegreesArray(ring.flat());
+    for (const [outer, ...holes] of biggest(unit)) {
+      if (fill) groundFill(outer, holes, FILL, 3);
+      const positions = Cesium.Cartesian3.fromDegreesArray([...outer, outer[0]].flat());
       layer.entities.add({
         polyline: {
           positions,
           width: 9,
           clampToGround: true,
+          arcType: Cesium.ArcType.RHUMB,
+          zIndex: 4,
           material: new Cesium.PolylineGlowMaterialProperty({ color: GLOW.withAlpha(0.85), glowPower: 0.3, taperPower: 1 }),
         },
       });
       layer.entities.add({
-        polyline: { positions, width: 1.5, clampToGround: true, material: CORE.withAlpha(0.95) },
+        polyline: { positions, width: 1.5, clampToGround: true, arcType: Cesium.ArcType.RHUMB, zIndex: 5, material: CORE.withAlpha(0.95) },
       });
-      if (fill) {
-        layer.entities.add({
-          polygon: {
-            hierarchy: new Cesium.PolygonHierarchy(
-              Cesium.Cartesian3.fromDegreesArray(outer.flat()),
-              holes.map((h) => new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(h.flat()))),
-            ),
-            material: FILL,
-            classificationType: Cesium.ClassificationType.TERRAIN,
-          },
-        });
-      }
     }
     scene.requestRender();
   }
+  // Keep the shadow falling towards the bottom-right after the map turns.
+  scene.camera.moveEnd.addEventListener(() => {
+    try {
+      if (!current || shadowHeading === null) return;
+      const d = Math.abs(Cesium.Math.negativePiToPi(scene.camera.heading - shadowHeading));
+      if (d > 0.35) { drawShadow(current.unit); scene.requestRender(); }
+    } catch (err) { console.warn('[Mission Control] region shadow skipped:', err); }
+  });
 
   async function show(unit, level) {
     const my = ++ask;

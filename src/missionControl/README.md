@@ -203,7 +203,12 @@ edits, each marked with a "Mission Control" comment.
    side info). Click the map (not a marker) from > 150 km: country (camera
    > 3,000 km) or state/province (closer; country if there is none).
    Glowing violet ground outline (PolylineGlow, clampToGround, biggest 60
-   parts) + faint fill. REGION card (03; Signals is now 04) docks at the top
+   parts) on a violet fill, made to look lifted (Pinterest ref) with flat
+   ground layers, no real height (raised outlines spiked on coastlines):
+   a deep-violet copy shifted 2.8% of the region's size towards screen
+   bottom-right (its thick edge) and two black copies at 5.5% / 8.5% (soft
+   shadow). Redrawn when the map turns > 20°. Fill and outline use rhumb
+   edges so long straight borders (49°N) line up. REGION card (03; Signals is now 04) docks at the top
    of upstream's right panel stack when it shows (its layout moves CCTV etc.
    below), else in #mc-right before Signals; on small screens only the card
    shows. Card: name, type · country, capital, population + year, currency
