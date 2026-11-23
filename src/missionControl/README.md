@@ -40,8 +40,8 @@ edits, each marked with a "Mission Control" comment.
    Buffalo: the Canadian ALPR extract has no tiles south of the border.
    The tile index (.json) 404 is still an error. Shared by ALPR, TomTom
    traffic and OpenFreeMap. Upstream edit: src/sources/vectorTiles.js.
-8. Street Level: Mapillary coverage lines + cones in palette blue #3f7bff
-   instead of Mapillary green. Upstream edit: src/layers/streetLevel/policy.js.
+8. Street Level: Mapillary coverage lines + cones in a dim palette blue
+   #2f4a85 instead of neon Mapillary green. Upstream edit: src/layers/streetLevel/policy.js.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

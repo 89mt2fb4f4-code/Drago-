@@ -16,7 +16,7 @@ export const POSITION_PICK_ID = 'sl:pos';
 
 /** One colour per imagery source: chip, coverage lines and cones. */
 export const PROVIDER_COLORS = Object.freeze({
-  mapillary: '#3f7bff', // Mission Control: palette blue (was Mapillary green #05cb63)
+  mapillary: '#2f4a85', // Mission Control: dim palette blue (was Mapillary green #05cb63)
   google: '#4285f4',
   kartaview: '#635bff',
   panoramax: '#ff6f00',
