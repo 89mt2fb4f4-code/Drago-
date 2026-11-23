@@ -20,6 +20,7 @@ import { attachOverture } from './overture.js';
 import { describePlace } from './placeName.js';
 import { attachRelief } from './relief.js';
 import { attachTiltSlider } from './tiltSlider.js';
+import { attachGlobeLook } from './globeLook.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -236,6 +237,7 @@ export function attachMissionControl(viewer) {
   attachMapToggle(); // bottom-right layers button opens Visual Presets (looks + map source)
   attachRelief(viewer); // Visual Presets → TERRAIN: Relief (heights, shading, contours)
   attachTiltSlider(viewer); // TILT slider beside the map buttons: 0° straight down … 85°
+  attachGlobeLook(viewer); // far-away globe: auto-spin when idle, violet edge glow, faint grid
   attachCategoryToggles(); // one switch per Data Layers category
   attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   attachVectorLabels(viewer); // names on the Vector Dark map (screen-facing labels)

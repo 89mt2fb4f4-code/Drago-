@@ -181,6 +181,16 @@ edits, each marked with a "Mission Control" comment.
    keeps following a tracked object. Shows the current tilt after any other
    move; greyed out in flat MAP view; arrow keys work, upstream one-letter
    shortcuts are blocked while it has focus. No upstream edits.
+21. Globe look (idea from a 21st.dev React/three.js "3D globe", rebuilt in
+   Cesium instead of adding React + a second globe) — globeLook.js.
+   • Auto-spin: whole globe in view (camera > 6,000 km), 3D, nothing
+     tracked, no fly-to running, and no click/scroll/touch/key for 3 s →
+     turns west → east at 2°/s (a turn in 3 min). Any input stops it at
+     once. Any map source. Switch: Visual Presets → GLOBE (remembered per
+     browser, on by default). Uses upstream's holdContinuousRender while
+     turning (requestRenderMode would otherwise stop drawing).
+   • Violet edge glow: Cesium sky atmosphere hue/brightness shifted.
+   • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
