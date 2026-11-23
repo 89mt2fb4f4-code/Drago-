@@ -16,6 +16,7 @@ import { attachIcons } from './icons.js';
 import { attachHudFrame } from './hudFrame.js';
 import { attachCategoryToggles } from './categoryToggle.js';
 import { attachVectorLabels } from './vectorLabels.js';
+import { attachOverture } from './overture.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -233,6 +234,7 @@ export function attachMissionControl(viewer) {
   attachCategoryToggles(); // one switch per Data Layers category
   attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   attachVectorLabels(viewer); // names on the Vector Dark map (screen-facing labels)
+  attachOverture(viewer); // Overture 3D buildings + place names on Vector Dark
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
   setActive('city');

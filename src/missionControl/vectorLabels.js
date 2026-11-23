@@ -29,6 +29,7 @@ const KINDS = {
   neighbourhood: { font: `500 10px ${FONT}`, color: '#8a7be0', upper: true, prio: 560, near: 1.6e4 },
   street: { font: `500 11px ${FONT}`, color: '#aaa3da', prio: 400, near: 6e3 },
   poi: { font: `500 11px ${FONT}`, color: '#cfc6ff', prio: 300, near: 2.5e3 },
+  building: { font: `600 11px ${FONT}`, color: '#e6e0ff', prio: 340, near: 3.5e3 },
 };
 const PLACE_KIND = {
   country: 'country', state: 'state', province: 'state', city: 'city', town: 'town',
@@ -46,10 +47,11 @@ const POI_SKIP = new Set([
   'hairdresser', 'jewelry', 'alcohol_shop', 'mobile_phone', 'playground',
 ]);
 const SAME_NAME_GAP = 320; // px between two copies of the same name
-const MAX_SHOWN = { street: 16, poi: 6 }; // keep it calm
+const MAX_SHOWN = { street: 16, poi: 6, building: 5 }; // keep it calm
 const PAD_X = 12; // empty space kept around each name, px
 const PAD_Y = 7;
 const EDGE = 56; // keep names off the screen's top/bottom HUD edge, px
+const OBSTACLES = '#gev-voice-control';
 
 const measureCtx = document.createElement('canvas').getContext('2d');
 const nameOf = (p) => String(p['name:en'] || p.name_en || p.name || '').trim();
@@ -110,6 +112,26 @@ function namesInTile(tile, z, x, y) {
   return out;
 }
 
+// Names other modules add (Overture buildings and places), by source id.
+const extraNames = new Map();
+let refreshSoon = () => {};
+/**
+ * Add or replace a set of names from another source. Each name:
+ * { kind, text, lon, lat, prio?, near? } — kind is one of KINDS.
+ */
+export function setExtraNames(sourceId, names) {
+  extraNames.set(sourceId, (names || []).filter((n) => KINDS[n.kind] && n.text).map((n) => {
+    const style = KINDS[n.kind];
+    const text = style.upper ? n.text.toUpperCase() : n.text;
+    return {
+      key: `${sourceId}|${n.kind}|${text}|${n.lon.toFixed(5)}|${n.lat.toFixed(5)}`,
+      kind: n.kind, text, lon: n.lon, lat: n.lat,
+      prio: n.prio ?? style.prio, near: n.near ?? style.near,
+    };
+  }));
+  refreshSoon();
+}
+
 export function attachVectorLabels(viewer) {
   const scene = viewer.scene;
   const camera = scene.camera;
@@ -163,6 +185,7 @@ export function attachVectorLabels(viewer) {
     }
     const found = (await Promise.all(jobs)).flat();
     if (my !== gen || !active) return;
+    for (const list of extraNames.values()) found.push(...list);
 
     const keep = new Set();
     for (const name of found) {
@@ -214,6 +237,11 @@ export function attachVectorLabels(viewer) {
     // A name under a panel or button would fight with its text: only draw
     // it where the map itself is on top (HUD lines let clicks through).
     const onMap = (x, y) => document.elementFromPoint(rect.left + x, rect.top + y) === canvas;
+    // Click-through boxes (voice control) still cover the map: keep clear.
+    for (const el of document.querySelectorAll(OBSTACLES)) {
+      const r = el.getBoundingClientRect();
+      if (r.width && r.height) boxes.push([r.left - rect.left, r.top - rect.top, r.right - rect.left, r.bottom - rect.top]);
+    }
     for (const item of ordered) {
       let show = false;
       const dist = is3d ? Cesium.Cartesian3.distance(camera.positionWC, item.position) : height2d;
@@ -269,6 +297,11 @@ export function attachVectorLabels(viewer) {
     if (queued || !active) return;
     queued = true;
     requestAnimationFrame(() => { queued = false; safe(declutter)(); });
+  };
+  let refreshTimer = 0;
+  refreshSoon = () => {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(safe(refresh), 150);
   };
   camera.changed.addEventListener(declutterSoon);
   camera.moveEnd.addEventListener(safe(refresh));

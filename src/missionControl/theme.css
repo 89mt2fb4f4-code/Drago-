@@ -230,6 +230,11 @@ html.mc #cesium-credits {
   opacity: 0.4; font: 400 9px var(--mc-mono) !important; transform: none !important;
 }
 html.mc #cesium-credits:hover { opacity: 0.9; }
+/* Long credit lines (Vector Dark + Overture) wrap upward before the centred
+   voice box instead of running under it — credits must stay readable. */
+html.mc body:not(.mobile-shell) #cesium-credits .cesium-widget-credits {
+  display: inline-block; width: max-content; max-width: calc(50vw - 104px); white-space: normal;
+}
 
 /* Loading screen */
 html.mc #loading-screen { background: var(--mc-bg) !important; }

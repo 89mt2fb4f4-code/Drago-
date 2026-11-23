@@ -123,6 +123,27 @@ edits, each marked with a "Mission Control" comment.
    shops, cafés…) are skipped. Refreshes when the camera stops; every
    handler is wrapped so a label error can't stop the map drawing.
    No upstream edits.
+16. Overture Maps on Vector Dark — overture.js, pmtiles.js. Read straight
+   from Overture's public PMTiles (small HTTP range requests; the newest
+   release is found from the bucket listing, falls back to older ones).
+   • 3D buildings (zoom 14 tiles, 3 × 3 around the point in view, within
+     9 km): real footprints and heights (height, else floors × 3.3 m, else
+     7 m); tower parts keep their own base. Sit on the terrain (one height
+     sample per tile). Navy → violet by height. Not clickable, so clicks
+     still reach cameras/markers. Hidden in flat MAP view and on other maps.
+     If Cesium ever fails drawing them, they switch off for the session and
+     the map keeps drawing.
+   • Names: named buildings (taller first, max 5 at once) and public places
+     from Overture Places (hotels, museums, parks, stations, venues… with
+     confidence ≥ 0.8, within 3.5 km). Only the name is used — never
+     phones, emails or socials — and private services (law offices,
+     clinics, home services…) are left out. Fed to vectorLabels.js via
+     setExtraNames().
+   • Credit "© Overture Maps Foundation" on screen while Vector Dark is on.
+     theme.css: the credit line now wraps before the centred voice box
+     instead of running under it.
+   pmtiles.js is a tiny PMTiles v3 reader (no library; gzip via the
+   browser's DecompressionStream); tile ids checked against the spec.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
