@@ -33,7 +33,10 @@ function stamp() {
 }
 
 // ── persistent toggles (View = upstream display panels, Tools = dock) ──
-const flag = (k) => `mc${k[0].toUpperCase()}${k.slice(1)}`;
+// → <html data-mc-open-view / data-mc-open-tools>. Must NOT be data-mc-view:
+// that name belongs to the GLOBE/CITY/MAP buttons (a clash once made every
+// click on the page fly back to the home city).
+const flag = (k) => `mcOpen${k[0].toUpperCase()}${k.slice(1)}`;
 function setOpen(key, open) {
   root.dataset[flag(key)] = open ? 'open' : '';
   document
@@ -155,7 +158,7 @@ function build() {
 
 // ── Viewer-dependent parts (called from app/controls.js) ──────────────
 export function attachMissionControl(viewer) {
-  const views = document.querySelectorAll('[data-mc-view]');
+  const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
   setActive('city');
 
