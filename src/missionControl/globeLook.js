@@ -28,7 +28,7 @@ function saveSpin(on) {
 function addGrid(scene) {
   const lines = scene.primitives.add(new Cesium.PolylineCollection());
   const material = Cesium.Material.fromType('Color', {
-    color: Cesium.Color.fromCssColorString('#9b87ff').withAlpha(0.16),
+    color: Cesium.Color.fromCssColorString('#9b87ff').withAlpha(0.12),
   });
   const line = (points) => lines.add({
     positions: Cesium.Cartesian3.fromDegreesArrayHeights(points),

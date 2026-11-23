@@ -30,24 +30,24 @@ const C = {
   green: '#11172c', // parks, woods: barely there
   water: '#020309',
   waterway: '#0e1533',
-  gridMinor: 'rgba(70, 52, 150, 0.35)',
-  gridMajor: 'rgba(109, 77, 255, 0.45)',
+  gridMinor: 'rgba(70, 52, 150, 0.27)',
+  gridMajor: 'rgba(109, 77, 255, 0.34)',
   aeroway: '#141831',
   building: '#1a1f3a',
   buildingEdge: '#2a3158',
   rail: '#262b47',
   path: '#1c1a3a',
   road: {
-    motorway: '#6d4dff',
-    trunk: '#5a42d6',
-    primary: '#4a38ac',
-    secondary: '#3a2f88',
-    tertiary: '#30296f',
-    minor: '#241f52',
-    service: '#1d1a40',
+    motorway: '#5c42d8',
+    trunk: '#4c38b4',
+    primary: '#3e3091',
+    secondary: '#312772',
+    tertiary: '#29235e',
+    minor: '#201b48',
+    service: '#1a1739',
   },
-  border2: 'rgba(155, 135, 255, 0.75)', // countries
-  border4: 'rgba(109, 77, 255, 0.45)', // states / provinces
+  border2: 'rgba(155, 135, 255, 0.55)', // countries
+  border4: 'rgba(109, 77, 255, 0.34)', // states / provinces
 };
 
 // Road width in px at zoom 14, then scaled by zoom.
