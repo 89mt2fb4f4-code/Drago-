@@ -18,6 +18,7 @@ import { attachCategoryToggles } from './categoryToggle.js';
 import { attachVectorLabels } from './vectorLabels.js';
 import { attachOverture } from './overture.js';
 import { describePlace } from './placeName.js';
+import { attachRelief } from './relief.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -232,6 +233,7 @@ export function attachMissionControl(viewer) {
   viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
   attachMapToggle(); // bottom-right layers button opens Visual Presets (looks + map source)
+  attachRelief(viewer); // Visual Presets → TERRAIN: Relief (heights, shading, contours)
   attachCategoryToggles(); // one switch per Data Layers category
   attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   attachVectorLabels(viewer); // names on the Vector Dark map (screen-facing labels)

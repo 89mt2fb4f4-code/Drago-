@@ -162,6 +162,18 @@ edits, each marked with a "Mission Control" comment.
    Local time still solar (UTC±n) away from Buffalo.
    DISPLAY panel: Clean UI button hidden (theme.css); the top bar's CLEAN UI
    chip still presses it.
+19. Relief mode — relief.js (Visual Presets → TERRAIN: Relief switch +
+   1× / 1.5× / 2× / 3× height chips; remembered per browser). A globe
+   material on the real terrain (keyless Re:Earth / Mapterhorn DEM):
+   slopes become grey-violet hill shading (light from the north-west, from
+   Cesium's slope + aspect), flat ground fades back to the map so streets,
+   water and names stay; soft contour lines every 20 m–1 km by zoom, every
+   5th brighter. Height exaggeration is centred on the real ground height
+   where Boss looks (re-centred after 50 km moves), so ground markers there
+   stay put. Overture buildings hide when heights are exaggerated (they're
+   placed at real height) and return at 1×. A draw error switches Relief
+   off and restarts the map. Upstream edit: src/maps/terrain.js
+   (keyless terrain now requests vertex normals, needed for shading).
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

@@ -17,6 +17,7 @@ import { VectorTile } from '@mapbox/vector-tile';
 import { openPmtiles } from './pmtiles.js';
 import { VECTOR_MAP_ID } from './vectorMap.js';
 import { setExtraNames } from './vectorLabels.js';
+import { reliefState } from './relief.js';
 
 const BUCKET = 'https://overturemaps-extras-us-west-2.s3.amazonaws.com';
 const FALLBACK_RELEASE = '2026-11-18.0';
@@ -185,6 +186,13 @@ export function attachOverture(viewer) {
   let broken = false; // set if Cesium ever fails to draw our buildings
   let gen = 0;
   let creditOn = false;
+  // Relief can stretch terrain heights; buildings are placed at real height,
+  // so they'd sink or float. Show them only at 1×.
+  let heightsTrue = !reliefState.on || reliefState.exaggeration === 1;
+  window.addEventListener('mc:relief', (e) => {
+    heightsTrue = !e.detail?.on || e.detail.exaggeration === 1;
+    safeRefresh();
+  });
 
   const isVectorActive = () =>
     document.querySelector('.map-stack-chip.active')?.dataset.stackId === VECTOR_MAP_ID;
@@ -324,6 +332,7 @@ export function attachOverture(viewer) {
     const in3d = scene.mode === Cesium.SceneMode.SCENE3D;
     const { fx, fy, dist } = in3d ? focus() : { fx: 0, fy: 0, dist: Infinity };
     const near = active && in3d && dist <= BUILDINGS_WITHIN;
+    const showBuildings = near && heightsTrue;
     setCredit(active);
     const wanted = [];
     const wantedPlaces = [];
@@ -340,7 +349,7 @@ export function attachOverture(viewer) {
         for (const [dx, dy] of [[0, 0], [sx, 0], [0, sy], [sx, sy]]) wantedPlaces.push(`${cx + dx}/${cy + dy}`);
       }
     }
-    for (const [key, t] of tiles) if (t.primitive) t.primitive.show = near && wanted.includes(key);
+    for (const [key, t] of tiles) if (t.primitive) t.primitive.show = showBuildings && wanted.includes(key);
     const jobs = [];
     for (const key of wanted) {
       const t = tiles.get(key);
@@ -357,7 +366,7 @@ export function attachOverture(viewer) {
     if (!jobs.length) return;
     await Promise.all(jobs);
     if (my !== gen) return;
-    for (const [key, t] of tiles) if (t.primitive) t.primitive.show = near && wanted.includes(key);
+    for (const [key, t] of tiles) if (t.primitive) t.primitive.show = showBuildings && wanted.includes(key);
     publishNames(wanted, wantedPlaces);
     // Forget the oldest tiles beyond the budget.
     const idle = [...tiles].filter(([k, t]) => !wanted.includes(k) && !t.loading).sort((a, b) => a[1].lastUsed - b[1].lastUsed);

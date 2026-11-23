@@ -52,6 +52,7 @@ export async function createKeylessTerrain() {
     return {
       provider: await Cesium.CesiumTerrainProvider.fromUrl(
         createKeylessTerrainResource(),
+        { requestVertexNormals: true }, // Mission Control: slopes for Relief shading
       ),
     };
   } catch (error) {

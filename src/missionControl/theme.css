@@ -767,3 +767,27 @@ html.mc .data-layer-group-heading { display: flex; align-items: center; justify-
 #mc-presets .map-stack-chip sup, #mc-presets .map-stack-chip small { font-size: 8px; opacity: 0.6; margin-left: 4px; }
 html.mc #mc-map-toggle[aria-expanded='true'] .material-symbols-outlined { color: #9b87ff; }
 @media (max-width: 700px) { #mc-presets { width: min(300px, calc(100vw - 32px - 46px)); } }
+
+/* ── Relief (Visual Presets → TERRAIN), relief.js ─────────────────── */
+#mc-presets .mc-relief { margin-top: 12px; }
+#mc-presets .mc-relief-toggle {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; width: 100%;
+  padding: 8px; cursor: pointer; text-align: left; border-radius: 0;
+  background: rgba(155, 135, 255, 0.06); border: 1px solid rgba(155, 135, 255, 0.22);
+  color: rgba(236, 238, 250, 0.85); font: 500 10px/1.1 var(--mc-mono, 'JetBrains Mono', monospace); letter-spacing: 0.04em;
+  transition: border-color 140ms ease-out, background-color 140ms ease-out;
+}
+#mc-presets .mc-relief-toggle small { font-size: 8.5px; color: rgba(236, 238, 250, 0.45); letter-spacing: 0.02em; }
+#mc-presets .mc-relief-toggle:hover { border-color: #9b87ff; }
+#mc-presets .mc-relief-toggle[aria-checked='true'] { background: rgba(109, 77, 255, 0.22); border-color: #9b87ff; }
+#mc-presets .mc-relief-scale { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
+#mc-presets .mc-relief-chip {
+  padding: 6px 0; cursor: pointer; border-radius: 0; text-align: center;
+  background: rgba(155, 135, 255, 0.06); border: 1px solid rgba(155, 135, 255, 0.22);
+  color: rgba(236, 238, 250, 0.8); font: 500 10px/1 var(--mc-mono, 'JetBrains Mono', monospace);
+  transition: background-color 140ms ease-out, border-color 140ms ease-out, opacity 140ms ease-out;
+}
+#mc-presets .mc-relief-chip:hover:not(:disabled) { border-color: #9b87ff; color: #fff; }
+#mc-presets .mc-relief-chip:active:not(:disabled) { transform: scale(0.97); }
+#mc-presets .mc-relief-chip.active { background: rgba(109, 77, 255, 0.35); border-color: #9b87ff; color: #fff; }
+#mc-presets .mc-relief-chip:disabled { opacity: 0.35; cursor: default; }
