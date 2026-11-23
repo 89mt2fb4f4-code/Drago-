@@ -312,3 +312,160 @@ body.scene-playback-mode .mc-end-scene { display: inline-block;
   color: #fff; border-color: var(--mc-purple); background: rgba(155, 135, 255, 0.16);
 }
 .mc-cctv-kinds button[aria-selected='true'] b { color: var(--mc-purple); }
+
+/* ═══════════════════════════════════════════════════════════════
+   RESTYLE v2 (preview) — purple reference + design skills
+   • Palette from the purple dashboard reference: deep indigo base,
+     violet/purple accents, cyan for data. Amber stays alerts-only.
+   • Glass, not boxes (apple-design §12): translucent panels, blur,
+     a bright top edge; no outlines, no Arwes frames, no brackets.
+   • Panel title bars like the reference: marker + fading rule.
+   • Motion (emil-design-eng / animate): strong ease-out tokens,
+     press feedback scale(.97) 160ms, hover gated to real pointers,
+     nothing on keyboard toggles, reduced-motion/-transparency.
+   ═══════════════════════════════════════════════════════════════ */
+html.mc {
+  --mc-bg: #07041c;
+  --mc-purple: #a084ff;
+  --mc-violet: #6c3dff;
+  --mc-magenta: #c46bff;
+  --mc-blue: #4b7cff;
+  --mc-cyan: #46d6ff;
+  --mc-text: #eeeaff;
+  --mc-text-2: #b6aedb;
+  --mc-text-3: #7a72a6;
+  --mc-line: rgba(160, 132, 255, 0.18);
+  --mc-line-2: rgba(160, 132, 255, 0.38);
+  --mc-glass: linear-gradient(180deg, rgba(36, 20, 92, 0.42), rgba(12, 7, 40, 0.30));
+  --mc-glass-edge: rgba(200, 180, 255, 0.22);
+  --mc-panel: rgba(16, 9, 48, 0.55);
+  --mc-grad: linear-gradient(135deg, #5b5bff, #8a3dff 55%, #c46bff);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --glass-bg: var(--mc-panel);
+}
+html.mc body { background: var(--mc-bg); }
+
+/* Background: violet halo behind the globe + soft edge falloff */
+#mc-frame {
+  background:
+    radial-gradient(ellipse 55% 50% at 50% 55%, rgba(108, 61, 255, 0.16), transparent 70%),
+    radial-gradient(ellipse at center, transparent 55%, rgba(7, 4, 28, 0.78) 100%);
+}
+#mc-frame i { display: none; } /* no corner brackets on the screen */
+
+/* Top bar: glass strip, glowing violet rule */
+#mc-topbar {
+  background: linear-gradient(to bottom, rgba(10, 5, 34, 0.92), rgba(10, 5, 34, 0.45));
+  border-bottom: 0;
+}
+#mc-topbar::after {
+  left: 0; right: 0; height: 1px; opacity: 0.9;
+  background: linear-gradient(90deg, transparent, rgba(108, 61, 255, 0.7) 25%, var(--mc-magenta) 50%, rgba(108, 61, 255, 0.7) 75%, transparent);
+  box-shadow: 0 0 12px rgba(160, 108, 255, 0.55);
+}
+.mc-title { letter-spacing: 0.04em; }
+.mc-views { border: 0; gap: 4px; padding: 3px; border-radius: 999px;
+  background: rgba(40, 22, 104, 0.35); box-shadow: inset 0 0 0 1px var(--mc-line); }
+.mc-views button { border-radius: 999px; }
+.mc-views button + button { border-left: 0; }
+.mc-views button[aria-pressed='true'] { background: var(--mc-grad); box-shadow: 0 0 18px rgba(138, 61, 255, 0.55); }
+.mc-chip { border-radius: 999px; border-color: var(--mc-line); }
+.mc-chip[aria-pressed='true'] { border-color: var(--mc-purple); background: rgba(160, 132, 255, 0.18);
+  box-shadow: 0 0 12px rgba(160, 132, 255, 0.35); }
+
+/* ── Glass panels (ours + upstream) ─────────────────────────────── */
+html.mc .mc-panel,
+html.mc .panel-collapsible,
+html.mc #pp-toggles {
+  background: var(--mc-glass) !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  box-shadow: inset 0 1px 0 var(--mc-glass-edge), 0 12px 32px rgba(4, 2, 18, 0.35) !important;
+  backdrop-filter: blur(18px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+}
+html.mc .panel-collapsible [class$='-inner'], html.mc .panel-inner {
+  background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+}
+.mc-panel::before, .mc-panel::after { display: none; }
+
+/* Title bars: violet marker + rule fading to the right (as in the reference) */
+.mc-panel-head { position: relative; align-items: center; padding-bottom: 8px; margin-bottom: 12px; }
+.mc-panel-head::after, html.mc .panel-collapsible:not(.collapsed) .panel-header::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: linear-gradient(90deg, var(--mc-purple), rgba(160, 132, 255, 0.25) 45%, transparent);
+}
+html.mc .panel-collapsible .panel-header { position: relative; }
+.mc-code {
+  display: inline-grid; place-items: center; min-width: 20px; height: 16px; padding: 0 4px; border-radius: 3px;
+  background: linear-gradient(135deg, var(--mc-violet), var(--mc-magenta)); color: #fff; font-size: 9px;
+}
+.mc-panel-head h2, html.mc .panel-title { letter-spacing: 0.12em !important; }
+html.mc .panel-title::before {
+  content: ''; display: inline-block; width: 4px; height: 12px; margin-right: 8px; vertical-align: -1px;
+  border-radius: 1px; background: linear-gradient(180deg, var(--mc-magenta), var(--mc-violet));
+  box-shadow: 0 0 8px rgba(196, 107, 255, 0.6);
+}
+/* Upstream collapse buttons: one soft round style everywhere (+, –, ◀) */
+html.mc .panel-collapse-btn {
+  border-radius: 999px !important; border: 1px solid var(--mc-line) !important;
+  background: rgba(160, 132, 255, 0.08) !important; color: var(--mc-text-2) !important;
+}
+
+/* Data on glass: brighter, slightly heavier text (apple-design vibrancy) */
+.mc-note, .mc-list li, .mc-quote, .mc-signals { color: var(--mc-text-2); }
+.mc-tiles div { border: 0; border-radius: 4px; background: rgba(70, 214, 255, 0.05);
+  box-shadow: inset 0 -1px 0 rgba(70, 214, 255, 0.25); }
+.mc-tiles b { color: var(--mc-cyan); font-weight: 600; }
+.mc-focus-name { letter-spacing: -0.01em; }
+
+/* Drago orb: violet → magenta core like the reference's ring gauges */
+.mc-orb i:nth-child(1) { border-color: rgba(70, 214, 255, 0.35); }
+.mc-orb i:nth-child(3) { background: radial-gradient(circle, #fff 0%, var(--mc-magenta) 40%, var(--mc-violet) 70%, transparent 100%);
+  box-shadow: 0 0 28px rgba(160, 90, 255, 0.7); }
+
+/* Command bar + map buttons: same glass */
+.mc-input, html.mc #top-center-actions button {
+  background: var(--mc-glass) !important; border: 0 !important; border-radius: 999px !important;
+  box-shadow: inset 0 0 0 1px var(--mc-line), inset 0 1px 0 var(--mc-glass-edge) !important;
+  backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+html.mc #top-center-actions button { border-radius: 10px !important; }
+.mc-input span { color: var(--mc-magenta); }
+.mc-cctv-kinds button { border-radius: 999px; }
+
+/* ── Motion: press feedback, gated hover (skills) ───────────────── */
+.mc-views button, .mc-chip, .mc-cctv-kinds button,
+html.mc .panel-collapse-btn, html.mc #top-center-actions button, html.mc .gev-action-button, html.mc .scene-btn {
+  transition: transform 160ms var(--ease-out), background-color 150ms ease, color 150ms ease, box-shadow 150ms ease !important;
+}
+.mc-views button:active, .mc-chip:active, .mc-cctv-kinds button:active,
+html.mc .panel-collapse-btn:active, html.mc #top-center-actions button:active,
+html.mc .gev-action-button:active, html.mc .scene-btn:active { transform: scale(0.97) !important; }
+.mc-views button:hover, .mc-chip:hover { background: transparent; }
+@media (hover: hover) and (pointer: fine) {
+  .mc-views button:not([aria-pressed='true']):hover, .mc-chip:hover { background: rgba(160, 132, 255, 0.12); color: var(--mc-text); }
+}
+
+/* Accessibility: macOS Reduce motion / Reduce transparency / Increase contrast */
+@media (prefers-reduced-motion: reduce) {
+  .mc-orb i, .mc-live i { animation: none !important; }
+  .mc-views button:active, .mc-chip:active, html.mc .gev-action-button:active { transform: none !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html.mc .mc-panel, html.mc .panel-collapsible, html.mc #pp-toggles, .mc-input {
+    background: #120a36 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+  }
+}
+@media (prefers-contrast: more) {
+  html.mc .mc-panel, html.mc .panel-collapsible, html.mc #pp-toggles { box-shadow: inset 0 0 0 1px var(--mc-purple) !important; }
+}
+
+/* Map tint: shift the grey basemap toward violet (hue only, ~20%) so it sits
+   in the purple palette like the reference globe. Brightness is untouched,
+   and at this strength layer colours (fires, alerts) stay recognisable. */
+#mc-frame::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: #6c3dff; mix-blend-mode: color; opacity: 0.2;
+}

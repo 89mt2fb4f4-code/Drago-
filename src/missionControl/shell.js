@@ -133,7 +133,8 @@ function build() {
   const frame = h(`<div id="mc-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`);
 
   document.body.append(frame, top, left, right, bottom);
-  attachArwes();
+  // Restyle v2: glass panels, no Arwes frames ('not in a cube')
+  // attachArwes();
 
   // Clock
   const tick = () => {
@@ -184,6 +185,9 @@ function build() {
 
 // ── Viewer-dependent parts (called from app/controls.js) ──────────────
 export function attachMissionControl(viewer) {
+  // Restyle v2: no ground-atmosphere haze, so oceans stay dark and land reads
+  // violet like the reference globe (the haze washed the globe pale).
+  viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
