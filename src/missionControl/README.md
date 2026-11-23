@@ -82,6 +82,10 @@ edits, each marked with a "Mission Control" comment.
      one-letter shortcuts (F hides layers, C, V, 1-7…) ignore modifier keys,
      so ⌘⌃F (Mac full screen) used to hide Data Layers — shell.js now stops
      ⌘/Ctrl/Alt + letter before upstream sees it
+   • Data Layers category switches — categoryToggle.js. Each heading
+     (Movement, Cameras…) gets a switch: any layer on → click turns the whole
+     category off; all off → click turns it all on. It presses upstream's own
+     row buttons (staggered 120 ms), so no upstream file changes
    • upstream panel headers keep their own layout (an earlier clip hid the
      +/– button, so collapsed panels couldn't reopen)
    • ocean: faint tactical grid on open water (darkMap.js)

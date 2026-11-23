@@ -14,6 +14,7 @@ import { attachMapToggle } from './mapToggle.js';
 import { attachCctvCard } from './cctvCard.js';
 import { attachIcons } from './icons.js';
 import { attachHudFrame } from './hudFrame.js';
+import { attachCategoryToggles } from './categoryToggle.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -228,6 +229,7 @@ export function attachMissionControl(viewer) {
   viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
   attachMapToggle(); // one-click Dark ⇄ Satellite in the map-button column
+  attachCategoryToggles(); // one switch per Data Layers category
   attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
