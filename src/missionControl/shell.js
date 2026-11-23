@@ -10,6 +10,7 @@
 import * as Cesium from 'cesium';
 import { HOME_CITY, flyToHomeCity } from './home.js';
 import { attachArwes } from './arwes.js';
+import { attachCctvSplit } from './cctvSplit.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -183,6 +184,7 @@ function build() {
 
 // ── Viewer-dependent parts (called from app/controls.js) ──────────────
 export function attachMissionControl(viewer) {
+  attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
   setActive('city');

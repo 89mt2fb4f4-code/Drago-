@@ -300,3 +300,15 @@ html.mc #safe-frame-overlay { display: none !important; }
 .mc-end-scene { display: none; }
 body.scene-playback-mode .mc-end-scene { display: inline-block;
   color: #fff; border-color: var(--mc-purple); background: rgba(155, 135, 255, 0.22); }
+/* CCTV: STILL IMAGES / LIVE VIDEO tabs (cctvSplit.js) */
+.mc-cctv-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 4px 0 10px; }
+.mc-cctv-kinds button {
+  font: 500 10px/1 var(--mc-mono); letter-spacing: 0.14em; color: var(--mc-text-2);
+  background: transparent; border: 1px solid var(--mc-line); padding: 8px 6px; cursor: pointer;
+  white-space: nowrap;
+}
+.mc-cctv-kinds button b { font-weight: 500; color: var(--mc-text-3); margin-left: 4px; }
+.mc-cctv-kinds button[aria-selected='true'] {
+  color: #fff; border-color: var(--mc-purple); background: rgba(155, 135, 255, 0.16);
+}
+.mc-cctv-kinds button[aria-selected='true'] b { color: var(--mc-purple); }

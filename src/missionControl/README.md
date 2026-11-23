@@ -42,6 +42,13 @@ edits, each marked with a "Mission Control" comment.
    traffic and OpenFreeMap. Upstream edit: src/sources/vectorTiles.js.
 8. Street Level: Mapillary coverage lines + cones in a dim palette blue
    #2f4a85 instead of neon Mapillary green. Upstream edit: src/layers/streetLevel/policy.js.
+9. Trimmed options (theme.css/shell.js only): no + grid, no CRT preset (and a
+   scene switching to it goes back to Normal), no Scope, no scene safe-frame
+   grid; END SCENE in the top bar while a scene plays.
+10. CCTV split into STILL IMAGES / LIVE VIDEO tabs — cctvSplit.js. Dropdown,
+   PREV/NEXT/NEAREST stay within the chosen kind. Upstream edit:
+   src/layers/cctv/navigation.js (AUTO HOP + nearest-camera skip the other
+   kind, read from <html data-mc-cctv-kind>).
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

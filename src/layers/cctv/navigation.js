@@ -7,6 +7,16 @@ export function createNavigation({
   parts,
   source,
 }) {
+  // Mission Control: respect the STILL IMAGES / LIVE VIDEO tab, which
+  // src/missionControl/cctvSplit.js stores as <html data-mc-cctv-kind>.
+  function mcKindOk(record) {
+    const kind = globalThis.document?.documentElement?.dataset?.mcCctvKind;
+    if (!kind) return true;
+    const feed = parts.model.normalizeFeedType(record.camera.feedType);
+    const video = parts.model.isVideoFeedType(feed) || feed === 'mjpeg';
+    return (video ? 'video' : 'image') === kind;
+  }
+
   /**
    * Finds the camera closest to the Cesium viewer's current position.
    * @returns {string|null} Camera ID of the nearest camera, or null.
@@ -20,6 +30,7 @@ export function createNavigation({
 
     let best = null;
     for (const record of layerState._records) {
+      if (!mcKindOk(record)) continue; // Mission Control: chosen kind only
       const distKm = parts.model.haversineKm(
         lat,
         lon,
@@ -118,13 +129,16 @@ export function createNavigation({
       }
     }
 
-    const nextIdx = cctvCycleIndex(
+    let nextIdx = cctvCycleIndex(
       layerState._records.findIndex(
         (record) => record.camera.id === layerState._activeCameraId,
       ),
       1,
       layerState._records.length,
     );
+    // Mission Control: skip cameras of the other kind (STILL / LIVE tab)
+    for (let n = 0; n < layerState._records.length && !mcKindOk(layerState._records[nextIdx]); n++)
+      nextIdx = (nextIdx + 1) % layerState._records.length;
     parts.selection.setActiveCamera(layerState._records[nextIdx].camera.id);
     layerState._lastHopAt = nowMs;
   }
