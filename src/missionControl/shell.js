@@ -15,6 +15,15 @@ const TZ = 'America/New_York';
 const root = document.documentElement;
 root.classList.add('mc');
 
+// Mission Control is already dark. Tell the Dark Reader extension to leave
+// it alone: it otherwise repaints the Arwes frames with the text colour,
+// giving pale/white panels with unreadable text.
+if (!document.querySelector('meta[name="darkreader-lock"]')) {
+  const lock = document.createElement('meta');
+  lock.name = 'darkreader-lock';
+  document.head.append(lock);
+}
+
 const h = (html) => {
   const t = document.createElement('template');
   t.innerHTML = html.trim();
