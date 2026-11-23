@@ -63,5 +63,7 @@ Drago).
 ## Known: upstream tests that fail on purpose
 They encode upstream defaults we changed (see `src/missionControl/README.md`):
 `src/mapStackChips.test.mjs`, `src/share/viewCodec.test.mjs` (defaults
-test), `src/maps/controller.test.mjs` (6 imagery-comparison tests). Any
+test), `src/maps/controller.test.mjs` (6 imagery-comparison tests),
+`src/layers/streetLevel/providers/mapillary/provider.test.mjs` (green colour
+check). Any
 *other* failing test is a real problem.
