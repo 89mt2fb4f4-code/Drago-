@@ -12,6 +12,8 @@ import { HOME_CITY, flyToHomeCity } from './home.js';
 import { attachCctvSplit } from './cctvSplit.js';
 import { attachMapToggle } from './mapToggle.js';
 import { attachCctvCard } from './cctvCard.js';
+import { attachIcons } from './icons.js';
+import { attachHudFrame } from './hudFrame.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -104,6 +106,7 @@ function build() {
       </div>
     </div>
     <div class="mc-status">
+      <button type="button" class="mc-chip mc-clean" aria-pressed="false" title="Hide every panel — map only (press again to bring them back)">CLEAN UI</button>
       <span class="mc-stamp"><span class="mc-place">${HOME_CITY.name.toUpperCase()}</span><i>·</i><span id="mc-day"></span><span id="mc-day-short"></span><i>·</i><span class="mc-clock"><b id="mc-time"></b> <span id="mc-tz"></span></span></span>
       <span class="mc-live"><i></i>LIVE</span>
     </div></header>`);
@@ -149,6 +152,20 @@ function build() {
   const frame = h(`<div id="mc-frame" aria-hidden="true"><i>${CORNER}</i><i>${CORNER}</i><i>${CORNER}</i><i>${CORNER}</i></div>`);
 
   document.body.append(frame, top, left, right, bottom);
+  attachHudFrame(); // full-screen HUD outline
+  attachIcons(); // clean line icons instead of upstream emoji
+
+  // CLEAN UI: presses upstream's own Clean UI switch (VIEW → Display) and
+  // theme.css hides every panel while it is on; the top bar stays so it can
+  // be switched back, and the map credits stay (license).
+  const cleanBtn = top.querySelector('.mc-clean');
+  const paintClean = () =>
+    cleanBtn.setAttribute('aria-pressed', String(document.body.classList.contains('ui-clean-view')));
+  cleanBtn.addEventListener('click', () => {
+    document.getElementById('clean-view-toggle')?.click();
+    requestAnimationFrame(paintClean);
+  });
+  new MutationObserver(paintClean).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
   // Clock
   const tick = () => {

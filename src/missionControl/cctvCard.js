@@ -36,7 +36,12 @@ export function attachCctvCard() {
       <span class="mc-cctv-wait">Acquiring frame…</span>
     </div>
     <footer class="mc-cctv-credit">—</footer>`;
-  document.body.append(card);
+  // Dim the map behind the card so the feed reads bright; clicking the dimmed
+  // area closes the card (same as ×).
+  const backdrop = document.createElement('div');
+  backdrop.id = 'mc-cctv-backdrop';
+  backdrop.hidden = true;
+  document.body.append(backdrop, card);
 
   const img = card.querySelector('img');
   const canvas = card.querySelector('canvas');
@@ -68,6 +73,7 @@ export function attachCctvCard() {
   function sync() {
     const show = enabled() && cameraId() && dismissedFor !== cameraId();
     card.hidden = !show;
+    backdrop.hidden = !show;
     if (!show) { cancelAnimationFrame(raf); raf = 0; return; }
     projectionOff();
     const live = isLive();
@@ -82,10 +88,13 @@ export function attachCctvCard() {
     if (live && !raf) raf = requestAnimationFrame(copyVideo);
   }
 
-  card.querySelector('.mc-cctv-close').addEventListener('click', () => {
+  const dismiss = () => {
     dismissedFor = cameraId(); // comes back when another camera is chosen
     sync();
-  });
+  };
+  card.querySelector('.mc-cctv-close').addEventListener('click', dismiss);
+  backdrop.addEventListener('click', dismiss);
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !card.hidden) dismiss(); });
 
   // Follow upstream: camera changes, frame refreshes, CCTV on/off, live/still.
   const watch = (el, opts) => el && new MutationObserver(sync).observe(el, opts);

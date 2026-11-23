@@ -591,3 +591,78 @@ html.mc .panel-collapsible .panel-header { margin: 0 !important; }
 .mc-cctv-wait[hidden] { display: none; }
 .mc-cctv-credit { margin-top: 6px; padding: 0 4px; font: 400 9px var(--mc-mono); letter-spacing: 0.1em; color: var(--mc-text-3); }
 @media (max-width: 1100px) { #mc-cctv-card { width: min(420px, calc(100vw - 2 * 20px - var(--mc-rail) - 40px)); left: calc(20px + var(--mc-rail) + 20px); transform: none; } }
+
+/* ═══ ROUND 3 (EASYV frame, water-plant transparency, clean icons) ═══ */
+/* Transparent panels: no boxes. Readability comes from darkened screen
+   edges (below), like the water-plant reference. Title tabs stay. */
+html.mc .mc-panel, html.mc .panel-collapsible, html.mc #pp-toggles,
+html.mc #right-context-rail > *, html.mc .panel-collapsible [class$='-inner'] {
+  background: transparent !important; box-shadow: none !important;
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+.mc-tiles div { background: transparent; }
+.mc-panel, html.mc .panel-collapsible { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9); }
+
+/* Darkened edges + corners over the map (under every panel and the frame) */
+#mc-frame {
+  background:
+    radial-gradient(ellipse 55% 50% at 50% 55%, rgba(108, 61, 255, 0.10), transparent 70%),
+    linear-gradient(90deg, rgba(4, 2, 16, 0.82) 0%, rgba(4, 2, 16, 0.55) 16%, transparent 32%, transparent 68%, rgba(4, 2, 16, 0.55) 84%, rgba(4, 2, 16, 0.82) 100%),
+    linear-gradient(0deg, rgba(4, 2, 16, 0.8) 0%, transparent 22%),
+    linear-gradient(180deg, rgba(4, 2, 16, 0.75) 0%, transparent 16%),
+    radial-gradient(ellipse at center, transparent 60%, rgba(4, 2, 16, 0.6) 100%);
+}
+
+/* Full-screen HUD outline (hudFrame.js) replaces the four corner brackets */
+#mc-frame i { display: none !important; }
+.mc-hud { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; fill: none; }
+.mc-hud-line { stroke: rgba(160, 132, 255, 0.55); stroke-width: 1; filter: drop-shadow(0 0 3px rgba(160, 108, 255, 0.6)); }
+.mc-hud-corner { stroke: var(--mc-purple); stroke-width: 2.2; filter: drop-shadow(0 0 5px rgba(160, 108, 255, 0.8)); }
+.mc-hud-bevel { stroke: var(--mc-magenta); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(196, 107, 255, 0.9)); }
+.mc-hud-tick { stroke: rgba(160, 132, 255, 0.7); stroke-width: 1.5; }
+@media (max-width: 760px) { .mc-hud { display: none; } }
+
+/* Clean line icons (icons.js) in thin rings */
+.mc-ico-host { display: inline-grid !important; place-items: center; width: 24px; height: 24px; flex: 0 0 24px;
+  border-radius: 50%; box-shadow: inset 0 0 0 1px var(--mc-line-2); font-size: 0 !important; }
+.mc-ico { width: 14px; height: 14px; fill: none; stroke: var(--mc-purple); stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round; }
+.pp-icon.mc-ico-host { width: 20px; height: 20px; flex-basis: 20px; }
+.pp-icon .mc-ico { width: 12px; height: 12px; }
+
+/* Not needed: Visual Presets in the bottom dock (map switch is bottom-right)
+   and the language picker (English only) */
+html.mc #control-panel-toggle, html.mc #control-panel-popover,
+html.mc #locale-picker { display: none !important; }
+
+/* CLEAN UI (top bar): map only — every panel hidden, top bar + credits stay */
+body.ui-clean-view #mc-left, body.ui-clean-view #mc-right, body.ui-clean-view #mc-command,
+body.ui-clean-view #left-panel-stack, body.ui-clean-view #right-context-rail, body.ui-clean-view #pp-toggles,
+body.ui-clean-view #command-dock, body.ui-clean-view [id$='-sync-chip'] { display: none !important; }
+.mc-clean[aria-pressed='true'] { color: #fff; border-color: var(--mc-cyan); background: rgba(70, 214, 255, 0.14);
+  box-shadow: 0 0 12px rgba(70, 214, 255, 0.35); }
+
+/* CCTV: big, centred, map dimmed behind it, sci-fi frame */
+#mc-cctv-backdrop { position: fixed; inset: 0; z-index: 1090; background: rgba(3, 1, 12, 0.72);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+#mc-cctv-backdrop[hidden] { display: none; }
+#mc-cctv-card {
+  top: 50% !important; left: 50% !important; transform: translate(-50%, -46%) !important;
+  width: min(900px, 72vw) !important; padding: 14px 16px 12px; background: rgba(10, 6, 34, 0.55);
+  backdrop-filter: none; clip-path: polygon(22px 0, calc(100% - 140px) 0, calc(100% - 124px) 10px, 100% 10px, 100% calc(100% - 22px), calc(100% - 22px) 100%, 140px 100%, 124px calc(100% - 10px), 0 calc(100% - 10px), 0 22px);
+  box-shadow: inset 0 0 0 1px var(--mc-line-2), inset 0 0 40px rgba(108, 61, 255, 0.18);
+}
+#mc-cctv-card::before, #mc-cctv-card::after { content: ''; position: absolute; width: 36px; height: 36px; pointer-events: none;
+  border: 0 solid var(--mc-purple); filter: drop-shadow(0 0 4px rgba(160, 108, 255, 0.9)); }
+#mc-cctv-card::before { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+#mc-cctv-card::after { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+#mc-cctv-card header { padding: 0 6px 8px; margin-bottom: 10px;
+  border-bottom: 1px solid var(--mc-line); background: linear-gradient(90deg, rgba(108, 61, 255, 0.25), transparent 60%); }
+.mc-cctv-name { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+.mc-cctv-media { box-shadow: 0 0 0 1px var(--mc-line-2), 0 0 30px rgba(108, 61, 255, 0.25); }
+#mc-cctv-card[data-kind='live'] .mc-cctv-kind::before { content: ''; display: inline-block; width: 6px; height: 6px;
+  margin-right: 5px; border-radius: 50%; background: #fff; vertical-align: 1px; }
+.mc-cctv-credit { margin-top: 10px; display: flex; justify-content: space-between; }
+@media (max-width: 1100px) { #mc-cctv-card { width: 88vw !important; } }
+/* Keep header labels on one line */
+.mc-chip, .mc-kicker, .mc-sub { white-space: nowrap; }
