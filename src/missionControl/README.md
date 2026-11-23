@@ -199,9 +199,16 @@ edits, each marked with a "Mission Control" comment.
    • Violet edge glow: Cesium sky atmosphere hue/brightness shifted.
    • Faint 15° latitude/longitude grid (12 km up), only above 3,000 km and
      only on the 3D globe (on the flat MAP it read as graph paper).
-22. Click a region — regionSelect.js (Pinterest refs: glowing region outline +
-   side info). Click the map (not a marker) from > 150 km: country (camera
-   > 3,000 km) or state/province (closer; country if there is none).
+22. Double-click a region — regionSelect.js (Pinterest refs: glowing region
+   outline + side info). Double-click the map (not a marker) from > 150 km:
+   country (camera > 3,000 km) or state/province (closer; country if there
+   is none). Double, so ordinary clicks/drags never select; skipped while
+   upstream's draw / imagery-box tools are on (body.gev-drawing /
+   gev-imagery-box). Inside the highlight the next level's lines appear as
+   you zoom in (DistanceDisplayCondition): a country's states/provinces from
+   7,500 km, a US state's counties (US Census pack) from 1,200 km
+   (placeName.js unitsWithin). Top fill is 85% solid so the depth layer
+   doesn't show through as a seam.
    Glowing violet ground outline (PolylineGlow, clampToGround, biggest 60
    parts) on a violet fill, made to look lifted (Pinterest ref) with flat
    ground layers, no real height (raised outlines spiked on coastlines):

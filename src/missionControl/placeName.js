@@ -14,6 +14,7 @@ import { loadSourceTile } from './vectorMap.js';
 
 const ADMIN1_URL = new URL('../data/local_data/natural_earth/states_provinces.json', import.meta.url);
 const COUNTRIES_URL = new URL('../data/local_data/natural_earth/countries.json', import.meta.url);
+const COUNTIES_URL = new URL('../data/local_data/us_census_counties/counties.json', import.meta.url);
 
 // Countries where people write the short state code: "Buffalo, NY".
 const POSTAL_COUNTRIES = new Set(['US', 'CA', 'AU']);
@@ -69,6 +70,21 @@ async function unitAt(url, lat, lon) {
  */
 export function adminUnitAt(level, lat, lon) {
   return unitRecordAt(level === 'state' ? ADMIN1_URL : COUNTRIES_URL, lat, lon);
+}
+
+/**
+ * The parts inside a region, with shapes: the states/provinces of a country,
+ * or the counties of a US state (US Census, bundled). [] when there are none.
+ */
+export async function unitsWithin(parentLevel, parent) {
+  if (parentLevel === 'country') {
+    const iso2 = /^[A-Z]{2}$/.test(parent.iso2 || '') ? parent.iso2 : null;
+    return (await pack(ADMIN1_URL)).filter((u) => (iso2 ? u.f.iso2 === iso2 : u.f.country === parent.name));
+  }
+  if (parentLevel === 'state' && parent.iso2 === 'US' && parent.postal) {
+    return (await pack(COUNTIES_URL)).filter((u) => u.f.st === parent.postal);
+  }
+  return [];
 }
 
 const toRad = (d) => (d * Math.PI) / 180;

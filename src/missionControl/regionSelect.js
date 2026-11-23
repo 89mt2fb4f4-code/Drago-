@@ -2,26 +2,35 @@
 // in a REGION card on the right (Pinterest refs: glowing region outline +
 // side info panel).
 //
-//   • zoomed out (> 3,000 km): countries; closer: states / provinces
+//   • double-click: zoomed out (> 3,000 km) countries; closer: states /
+//     provinces. (Double, so ordinary clicks and drags never select.)
+//   • inside the highlight, the next level's lines appear as you zoom in:
+//     a country's states/provinces, a US state's counties
 //   • looks lifted off the map: violet top with a glowing edge, a deep-violet
 //     depth edge and a soft shadow towards the bottom-right of the screen
 //   • REGION card: name, type, capital, population (with its year), area,
 //     currency, a short description and a Wikipedia link. Facts come from
 //     Wikidata and Wikipedia (free, no key); shape and area from the Natural
 //     Earth borders bundled with upstream. Anything unknown shows "—".
-//   • a click on a marker (camera, plane…) still goes to that marker; a
-//     click on the same region again, on open sea, × or Esc clears it.
+//   • a double-click on a marker (camera, plane…) is left to that marker;
+//     double-clicking the same region again, open sea, × or Esc clears it.
+//     Off while upstream's draw / imagery-box tools are in use.
 //   • not at street level (camera closer than 150 km), where clicks are
 //     about the city, not the state.
 import * as Cesium from 'cesium';
-import { adminUnitAt } from './placeName.js';
+import { adminUnitAt, unitsWithin } from './placeName.js';
 
 const STATE_WITHIN_M = 3_000_000;
 const MIN_VIEW_M = 150_000;
 const MAX_RINGS = 60; // biggest parts only (islands add up fast)
+// Inner lines appear as you zoom in: a country's states from 7,500 km,
+// a US state's counties from 1,200 km (camera distance to the lines).
+const INNER_FROM_M = { country: 7_500_000, state: 1_200_000 };
+const INNER = Cesium.Color.fromCssColorString('#c9bcff').withAlpha(0.45);
 const GLOW = Cesium.Color.fromCssColorString('#9b87ff');
 const CORE = Cesium.Color.fromCssColorString('#e4dcff');
-const FILL = Cesium.Color.fromCssColorString('#6e55ff').withAlpha(0.55); // the region's top
+// Nearly solid, so the depth layer underneath can't show through as a seam.
+const FILL = Cesium.Color.fromCssColorString('#5a45dc').withAlpha(0.85); // the region's top
 const DEPTH = Cesium.Color.fromCssColorString('#2a1f70'); // its thick edge
 const SHADOW = Cesium.Color.BLACK.withAlpha(0.7);
 const SHADOW_SOFT = Cesium.Color.BLACK.withAlpha(0.4);
@@ -285,6 +294,31 @@ export function attachRegionSelect(viewer) {
       });
     }
     scene.requestRender();
+    drawInner(unit);
+  }
+
+  // The next level's lines inside the highlight (states, or US counties).
+  async function drawInner(unit) {
+    const key = current?.key;
+    const level = current?.level;
+    const parts = await unitsWithin(level, unit.f).catch(() => []);
+    if (!parts.length || current?.key !== key) return;
+    const far = new Cesium.DistanceDisplayCondition(0, INNER_FROM_M[level]);
+    const rings = parts.flatMap((part) => part.polygons.map((p) => p[0])).filter((ring) => ring?.length >= 4);
+    for (const outer of rings.slice(0, 1500)) { // every part (e.g. both halves of Michigan), capped
+      layer.entities.add({
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArray([...outer, outer[0]].flat()),
+          width: 1,
+          clampToGround: true,
+          arcType: Cesium.ArcType.RHUMB,
+          zIndex: 3,
+          material: INNER,
+          distanceDisplayCondition: far,
+        },
+      });
+    }
+    scene.requestRender();
   }
   // Keep the shadow falling towards the bottom-right after the map turns.
   scene.camera.moveEnd.addEventListener(() => {
@@ -327,11 +361,14 @@ export function attachRegionSelect(viewer) {
     }
   }
 
-  // ---- clicks on the map ----
+  // ---- double-clicks on the map ----
   const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
   handler.setInputAction(async (click) => {
     try {
       if (scene.mode === Cesium.SceneMode.MORPHING) return;
+      // Upstream's draw and imagery-box tools finish shapes with a double-click.
+      const body = document.body.classList;
+      if (body.contains('gev-drawing') || body.contains('gev-imagery-box')) return;
       // Markers (cameras, planes…) keep their own click. Our names and our
       // own outline don't count as markers.
       const picked = scene.pick(click.position);
@@ -366,5 +403,5 @@ export function attachRegionSelect(viewer) {
     } catch (err) {
       console.warn('[Mission Control] region select skipped:', err);
     }
-  }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  }, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 }
