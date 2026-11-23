@@ -46,15 +46,20 @@ spec. The full spec lives in his claude.ai project (doc "D.R.A.G.O", sections
   `#3f7bff`, text `#eceefa`. **Amber `#ffb547` only for alerts.**
 - Home city first: opens on Buffalo, NY (`src/missionControl/home.js`).
 - Stamps: `PLACE · DATE · TIME TZ` on briefings, timelines and the header.
-- Default map: dark (CARTO Dark Matter with `CARTO_API_KEY` in .env, else
-  Esri Dark Gray). Satellite and Google 3D are toggles. Flat 2D map = MAP chip.
+- Default map: Vector Dark (`src/missionControl/vectorMap.js`): keyless
+  OpenFreeMap vector tiles painted in the palette, names as screen-facing
+  labels (`vectorLabels.js`), Overture 3D buildings + place names up close
+  (`overture.js`). Dark (CARTO Dark Matter with `CARTO_API_KEY`, else Esri
+  Dark Gray) is its fallback and a MAP SOURCE choice. Satellite and Google 3D
+  are toggles. Flat 2D map = MAP chip.
 - Camera pop-ups: flat, front-facing cards, never skewed at the camera's 3D
   angle.
 
 ## Current state
 Done: Buffalo-first fly-in · dark map source · Mission Control frame
 (top bar, Mission Brief, Drago orb, Focus, Signals, command bar) · dark
-blue/purple theme · CARTO key support.
+blue/purple theme · CARTO key support · own map stack: Vector Dark (default)
+with names and Overture 3D buildings/places.
 Next: review the frame visually and tune spacing/sizes → restyle upstream
 panels to match → flat camera cards → test the 2D MAP mode with each layer →
 the 8.7 build order (Briefing mode, case numbers, live jobs come later with
