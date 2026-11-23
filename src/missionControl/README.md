@@ -133,9 +133,12 @@ edits, each marked with a "Mission Control" comment.
      still reach cameras/markers. Hidden in flat MAP view and on other maps.
      If Cesium ever fails drawing them, they switch off for the session and
      the map keeps drawing.
-   • Names: named buildings (taller first, max 5 at once) and public places
-     from Overture Places (hotels, museums, parks, stations, venues… with
-     confidence ≥ 0.8, within 3.5 km). Only the name is used — never
+   • Names: public places from Overture Places (hotels, museums, parks,
+     stations, venues… confidence ≥ 0.9, open, within 3.5 km; skipped if
+     known only from a business registry, e.g. BrightQuery LLC filings).
+     Building names come from OSM tags that can be years old, so only
+     landmarks ≥ 40 m get one (max 5 at once), and a fresh Overture place
+     inside the footprint replaces it. Only the name is used — never
      phones, emails or socials — and private services (law offices,
      clinics, home services…) are left out. Fed to vectorLabels.js via
      setExtraNames().

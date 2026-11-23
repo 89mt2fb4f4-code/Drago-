@@ -26,6 +26,15 @@ const PLACES_WITHIN = 3500;
 const KEEP_TILES = 16;
 const FLOOR_M = 3.3;
 const DEFAULT_HEIGHT_M = 7;
+// Names, kept fresh (Boss, 2026-11-23): building names come from OSM tags
+// that can be years old, so only landmarks this tall get one, and a fresh
+// Overture place inside the footprint replaces it.
+const LANDMARK_HEIGHT_M = 40;
+const PLACE_MIN_CONFIDENCE = 0.9;
+// Places known only from a business registry (a company filing) may not be
+// a real place on the street.
+const REGISTRY_ONLY = new Set(['BrightQuery']);
+const OVERTURE_INTERNAL = new Set(['Overture', 'Overture-signals']);
 
 export const OVERTURE_CREDIT_HTML =
   '<a href="https://overturemaps.org" target="_blank" rel="noopener">© Overture Maps Foundation</a>';
@@ -141,6 +150,24 @@ function heightsOf(p) {
   const base = num(p.min_height) ?? (num(p.min_floor) ? num(p.min_floor) * FLOOR_M : 0);
   return { base: Math.max(0, Math.min(base, top - 1)), top: Math.max(top, 2) };
 }
+/** True when every outside source of a place is a business registry. */
+function registryOnly(sources) {
+  let list;
+  try { list = JSON.parse(sources || '[]'); } catch { return false; }
+  const outside = list.map((s) => s?.dataset).filter((d) => d && !OVERTURE_INTERNAL.has(d));
+  return outside.length > 0 && outside.every((d) => REGISTRY_ONLY.has(d));
+}
+
+/** Point-in-polygon on a flat [lon, lat, …] ring. */
+function inside(lon, lat, ring) {
+  let hit = false;
+  for (let i = 0, j = ring.length - 2; i < ring.length; j = i, i += 2) {
+    const xi = ring[i], yi = ring[i + 1], xj = ring[j], yj = ring[j + 1];
+    if ((yi > lat) !== (yj > lat) && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) hit = !hit;
+  }
+  return hit;
+}
+
 const nameOf = (p) => {
   if (p['@name']) return String(p['@name']).trim();
   try { return String(JSON.parse(p.names || '{}').primary || '').trim(); } catch { return ''; }
@@ -226,9 +253,9 @@ export function attachOverture(viewer) {
             }));
           }
           const name = nameOf(p);
-          if (name && polys[0]) {
+          if (name && polys[0] && top >= LANDMARK_HEIGHT_M) {
             const [lon, lat] = centroid(polys[0].outer);
-            names.push({ kind: 'building', text: name, lon, lat, prio: 340 + Math.min(top, 200) / 2 });
+            names.push({ kind: 'building', text: name, lon, lat, prio: 340 + Math.min(top, 200) / 2, ring: polys[0].outer });
           }
         }
       }
@@ -263,8 +290,9 @@ export function attachOverture(viewer) {
       for (let i = 0; layer && i < layer.length; i++) {
         const f = layer.feature(i);
         const p = f.properties;
-        if (!PLACE_KINDS.has(p.basic_category) || (num(p.confidence) ?? 0) < 0.8) continue;
+        if (!PLACE_KINDS.has(p.basic_category) || (num(p.confidence) ?? 0) < PLACE_MIN_CONFIDENCE) continue;
         if (p.operating_status && p.operating_status !== 'open') continue;
+        if (registryOnly(p.sources)) continue;
         const name = nameOf(p);
         const pt = f.loadGeometry()[0]?.[0];
         if (!name || !pt) continue;
@@ -279,9 +307,15 @@ export function attachOverture(viewer) {
   }
 
   function publishNames(wanted, wantedPlaces) {
-    const names = [];
-    for (const key of wanted) names.push(...(tiles.get(key)?.names || []));
-    for (const key of wantedPlaces) names.push(...(placeNames.get(key) || []));
+    const places = wantedPlaces.flatMap((key) => placeNames.get(key) || []);
+    const names = [...places];
+    for (const key of wanted) {
+      for (const b of tiles.get(key)?.names || []) {
+        // A fresh place inside this building wins over its OSM name.
+        if (places.some((pl) => inside(pl.lon, pl.lat, b.ring))) continue;
+        names.push(b);
+      }
+    }
     setExtraNames('overture', names);
   }
 
