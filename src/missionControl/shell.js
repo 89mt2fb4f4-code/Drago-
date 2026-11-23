@@ -276,7 +276,11 @@ export function attachMissionControl(viewer) {
     $('mc-focus-alt').textContent = Number.isFinite(alt)
       ? alt > 10000 ? `${(alt / 1000).toFixed(0)} KM` : `${alt.toFixed(0)} M`
       : '—';
-    $('mc-focus-hdg').textContent = `${Cesium.Math.toDegrees(cam.heading).toFixed(0).padStart(3, '0')}°`;
+    // While the map morphs between globe and flat MAP the camera has no
+    // heading for a moment — show "—" instead of crashing.
+    $('mc-focus-hdg').textContent = Number.isFinite(cam.heading)
+      ? `${Cesium.Math.toDegrees(cam.heading).toFixed(0).padStart(3, '0')}°`
+      : '—';
     if (!hit) {
       $('mc-focus-coords').textContent = '—';
       $('mc-focus-name').textContent = 'Orbit';
@@ -297,10 +301,15 @@ export function attachMissionControl(viewer) {
       ? fmt({ hour: '2-digit', minute: '2-digit', hour12: false })
       : `${now.toISOString().slice(11, 16)} UTC${off >= 0 ? '+' : ''}${off}`;
   };
-  viewer.camera.changed.addEventListener(update);
+  // This runs inside Cesium's draw loop: an error here would stop the map
+  // drawing for good (it froze mid-way into MAP view once). Never let it throw.
+  const safeUpdate = () => {
+    try { update(); } catch (err) { console.warn('[Mission Control] Focus update skipped:', err); }
+  };
+  viewer.camera.changed.addEventListener(safeUpdate);
   viewer.camera.percentageChanged = 0.05;
-  update();
-  setInterval(update, 30_000);
+  safeUpdate();
+  setInterval(safeUpdate, 30_000);
 }
 
 if (document.readyState === 'loading') {

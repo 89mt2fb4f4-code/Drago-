@@ -86,6 +86,11 @@ edits, each marked with a "Mission Control" comment.
      (Movement, Cameras…) gets a switch: any layer on → click turns the whole
      category off; all off → click turns it all on. It presses upstream's own
      row buttons (staggered 120 ms), so no upstream file changes
+   • Focus panel can't freeze the map: while the map morphs globe ↔ flat MAP
+     the camera has no heading for a moment; the Focus updater threw, and
+     an error inside Cesium's draw loop stops drawing for good (map stuck
+     half-way, new tiles like OSM never loaded). Heading now shows "—" and
+     the updater is wrapped in try/catch
    • upstream panel headers keep their own layout (an earlier clip hid the
      +/– button, so collapsed panels couldn't reopen)
    • ocean: faint tactical grid on open water (darkMap.js)
