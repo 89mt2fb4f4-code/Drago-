@@ -848,3 +848,19 @@ html.mc #mc-map-toggle[aria-expanded='true'] .material-symbols-outlined { color:
   #mc-right:has(#mc-region:not([hidden])) { display: block; }
   #mc-right:has(#mc-region:not([hidden])) > :not(#mc-region) { display: none; }
 }
+
+/* ── Top bar centring + no voice box (Boss, 2026-11-23) ─────────────── */
+/* The plate always sits in the middle: equal side columns, even when the
+   right side (CLEAN UI · place · date · time · LIVE) is wider than its
+   share — it then reaches into the gap beside the plate, not the plate. */
+#mc-topbar { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+.mc-status { min-width: max-content; }
+/* Short date below 1700px wide ("NOV 23"), so the right side stays clear
+   of the TOOLS wing. */
+@media (max-width: 1700px) {
+  #mc-day { display: none; }
+  #mc-day-short { display: inline; }
+}
+/* Upstream's "AI AGENT · ON/OFF · VOICE STANDBY" box at the bottom: hidden.
+   (Voice comes back with Drago.) */
+html.mc #gev-voice-control { display: none !important; }

@@ -225,6 +225,11 @@ edits, each marked with a "Mission Control" comment.
    no key, cached per region; "—" when unknown. Same region again, open
    sea, × or Esc clears it. The globe doesn't auto-spin while a region is
    selected (html[data-mc-region]). placeName.js now exports adminUnitAt().
+23. Top bar + bottom (theme.css): the MISSION CONTROL plate is always
+   centred (side columns minmax(0, 1fr); the wide right side reaches into
+   the gap instead of pushing the plate left). Below 1700px the stamp uses
+   the short date ("NOV 23") to stay clear of the TOOLS wing. Upstream's
+   "AI AGENT · VOICE STANDBY" box (#gev-voice-control) is hidden.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
