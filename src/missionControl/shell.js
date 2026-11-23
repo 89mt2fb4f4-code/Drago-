@@ -221,7 +221,7 @@ export function attachMissionControl(viewer) {
   viewer.scene.globe.showGroundAtmosphere = false;
   attachCctvSplit(viewer); // CCTV: STILL IMAGES / LIVE VIDEO tabs
   attachMapToggle(); // one-click Dark ⇄ Satellite in the map-button column
-  attachCctvCard(); // CCTV as a flat floating card, not a ground projection
+  attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   const views = document.querySelectorAll('#mc-topbar button[data-mc-view]');
   const setActive = (v) => views.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mcView === v)));
   setActive('city');

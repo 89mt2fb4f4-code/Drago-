@@ -2,16 +2,21 @@
 // pop-ups: flat, front-facing cards, never skewed at the camera's 3D angle").
 //
 // Upstream shows the active camera by projecting its frame onto the ground at
-// the camera's 3D angle. We switch that projection off and instead mirror the
-// CCTV panel's own frame into a card floating near the top centre:
+// the camera's 3D angle. We switch that projection off. The CCTV panel's
+// small screen is the normal view (PREV / NEXT / picking a camera show there).
+// FULL SCREEN opens a big centred card over a darkened map — from the button on
+// the panel's small screen, or by clicking a camera marker on the map. It
+// mirrors the panel's own frame:
 //   • still cameras → the panel's <img> (same src, refreshed by upstream)
 //   • live cameras  → the panel's <canvas>, copied every animation frame
 // The card names the camera, says LIVE or STILL, and keeps the source credit.
 // Nothing is invented: if the panel has no frame yet, the card says so.
 
+import * as Cesium from 'cesium';
+
 const $ = (id) => document.getElementById(id);
 
-export function attachCctvCard() {
+export function attachCctvCard(viewer) {
   const panelImg = $('cctv-frame');
   const panelVideo = $('cctv-video');
   const enableBtn = $('cctv-enable-btn');
@@ -47,7 +52,7 @@ export function attachCctvCard() {
   const canvas = card.querySelector('canvas');
   const ctx = canvas.getContext('2d');
   const wait = card.querySelector('.mc-cctv-wait');
-  let dismissedFor = null;
+  let open = false; // full screen only when asked for
   let raf = 0;
 
   const enabled = () => enableBtn.classList.contains('active');
@@ -57,7 +62,20 @@ export function attachCctvCard() {
   // Upstream's ground projection is the "skewed" view — keep it off.
   const projectionOff = () => {
     if (projectionBtn && /\bON\b/.test(projectionBtn.textContent)) projectionBtn.click();
+    // The green wireframe view-cone ("COVERAGE") also clutters the map. Its
+    // button cycles COVERAGE ON → VIEWSHED ON → OFF; step it to OFF once per
+    // load (one click per second at most), then leave it to the user.
+    const coverageBtn = $('cctv-coverage-btn');
+    if (!coverageDone && coverageBtn) {
+      if (/\bOFF\b/.test(coverageBtn.textContent)) coverageDone = true;
+      else if (Date.now() - lastCoverageClick > 1000) {
+        lastCoverageClick = Date.now();
+        coverageBtn.click();
+      }
+    }
   };
+  let coverageDone = false;
+  let lastCoverageClick = 0;
 
   function copyVideo() {
     raf = 0;
@@ -71,11 +89,11 @@ export function attachCctvCard() {
   }
 
   function sync() {
-    const show = enabled() && cameraId() && dismissedFor !== cameraId();
+    if (enabled()) projectionOff();
+    const show = open && enabled() && Boolean(cameraId());
     card.hidden = !show;
     backdrop.hidden = !show;
     if (!show) { cancelAnimationFrame(raf); raf = 0; return; }
-    projectionOff();
     const live = isLive();
     card.dataset.kind = live ? 'live' : 'still';
     card.querySelector('.mc-cctv-kind').textContent = live ? 'LIVE' : 'STILL';
@@ -88,10 +106,33 @@ export function attachCctvCard() {
     if (live && !raf) raf = requestAnimationFrame(copyVideo);
   }
 
-  const dismiss = () => {
-    dismissedFor = cameraId(); // comes back when another camera is chosen
-    sync();
-  };
+  const dismiss = () => { open = false; sync(); };
+  const openFull = () => { open = true; sync(); };
+
+  // FULL SCREEN button on the panel's small screen
+  const wrap = $('cctv-frame-wrap');
+  if (wrap && !wrap.querySelector('.mc-cctv-full')) {
+    const full = document.createElement('button');
+    full.type = 'button';
+    full.className = 'mc-cctv-full';
+    full.title = 'Full screen';
+    full.setAttribute('aria-label', 'Show this camera full screen');
+    full.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5 M20 9V4h-5 M4 15v5h5 M20 15v5h-5"/></svg>';
+    full.addEventListener('click', openFull);
+    wrap.append(full);
+  }
+
+  // Clicking a camera marker on the map opens it full screen (upstream selects
+  // it on the same click; we open once that has happened).
+  const canvasEl = viewer?.scene?.canvas;
+  canvasEl?.addEventListener('click', (e) => {
+    if (!enabled()) return;
+    const r = canvasEl.getBoundingClientRect();
+    const picked = viewer.scene.pick(new Cesium.Cartesian2(e.clientX - r.left, e.clientY - r.top));
+    const id = typeof picked?.id === 'string' ? picked.id : null;
+    if (!id || ![...(select?.options || [])].some((o) => o.value === id)) return;
+    setTimeout(openFull, 250);
+  });
   card.querySelector('.mc-cctv-close').addEventListener('click', dismiss);
   backdrop.addEventListener('click', dismiss);
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !card.hidden) dismiss(); });
@@ -104,5 +145,6 @@ export function attachCctvCard() {
   watch(badge, { childList: true, characterData: true, subtree: true });
   select?.addEventListener('change', sync);
   setInterval(sync, 1500); // upstream also changes the camera without events (auto hop)
+  // (while full screen, the card follows the active camera)
   sync();
 }

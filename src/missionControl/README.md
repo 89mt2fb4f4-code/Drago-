@@ -71,8 +71,13 @@ edits, each marked with a "Mission Control" comment.
    • panels fully transparent (no boxes), angled gradient title tabs
    • clean line icons replace upstream's colourful emoji (data-icon, pp-icon)
    • Visual Presets dock tray and language picker hidden
-   • CCTV: big centred flat card, map dimmed behind it, notched frame;
-     upstream's ground projection switched off
+   • CCTV: the side panel is the normal view (wider, calibration/projection/
+     summary hidden; PREV/NEXT stay there). FULL SCREEN — button on the small
+     screen, or click a camera on the map — opens a big centred card over a
+     darkened map. Upstream's ground projection and view-cone (COVERAGE) are
+     switched off (the COVERAGE button can turn the cone back on)
+   • upstream panel headers keep their own layout (an earlier clip hid the
+     +/– button, so collapsed panels couldn't reopen)
    • ocean: faint tactical grid on open water (darkMap.js)
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)

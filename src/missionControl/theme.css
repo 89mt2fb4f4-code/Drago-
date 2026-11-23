@@ -545,12 +545,16 @@ html.mc .mc-panel, html.mc .panel-collapsible, html.mc #pp-toggles {
   box-shadow: inset 0 1px 0 var(--mc-glass-edge) !important;
   border-radius: 2px !important;
 }
-.mc-panel-head, html.mc .panel-collapsible .panel-header {
+.mc-panel-head {
   margin: -14px -16px 12px !important; padding: 9px 16px 8px !important;
   background: linear-gradient(90deg, rgba(108, 61, 255, 0.38), rgba(108, 61, 255, 0.08) 70%, transparent);
   clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 100%, 0 100%);
 }
-html.mc .panel-collapsible .panel-header { margin: 0 !important; }
+/* Upstream headers: gradient only — no clip or padding change, which used to
+   push the +/– button outside the header so a collapsed panel couldn't reopen */
+html.mc .panel-collapsible .panel-header {
+  background: linear-gradient(90deg, rgba(108, 61, 255, 0.38), rgba(108, 61, 255, 0.08) 70%, transparent);
+}
 .mc-panel-head::after, html.mc .panel-collapsible:not(.collapsed) .panel-header::after { opacity: 0.6; }
 
 /* Smaller screens: the plate folds back into the compact one-line header */
@@ -666,3 +670,22 @@ body.ui-clean-view #command-dock, body.ui-clean-view [id$='-sync-chip'] { displa
 @media (max-width: 1100px) { #mc-cctv-card { width: 88vw !important; } }
 /* Keep header labels on one line */
 .mc-chip, .mc-kicker, .mc-sub { white-space: nowrap; }
+
+/* ═══ CCTV side panel: bigger and simpler ═══════════════════════════ */
+/* Advanced upstream controls hidden (calibration, projection, summary) so the
+   panel fits without its inner scroll; wider when open. */
+html.mc #cctv-panel .cctv-calibration-block,
+html.mc #cctv-panel .cctv-controls:has(#cctv-projection-btn),
+html.mc #cctv-panel .cctv-summary-label,
+html.mc #cctv-summary { display: none !important; }
+html.mc #cctv-panel:not(.collapsed) { width: 340px !important; max-width: 340px !important; }
+html.mc #cctv-panel:not(.collapsed) .cctv-panel-inner { overflow: visible !important; max-height: none !important; }
+/* FULL SCREEN button on the small screen (cctvCard.js) */
+html.mc #cctv-frame-wrap { position: relative; }
+.mc-cctv-full { position: absolute; top: 6px; right: 6px; z-index: 2; width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center; border: 0; border-radius: 6px; cursor: pointer;
+  background: rgba(7, 4, 28, 0.6); box-shadow: inset 0 0 0 1px var(--mc-line-2);
+  transition: transform 160ms var(--ease-out), background-color 150ms ease; }
+.mc-cctv-full svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; }
+.mc-cctv-full:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) { .mc-cctv-full:hover { background: rgba(108, 61, 255, 0.55); } }
