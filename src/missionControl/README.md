@@ -54,6 +54,27 @@ edits, each marked with a "Mission Control" comment.
    names purple→lavender. Globe ground-atmosphere haze off (shell.js) so
    oceans stay black. Map credits unchanged.
 
+12. Overhaul — theme.css "OVERHAUL" block, mapToggle.js. Pill layer switches
+   and glass panel buttons; status chips (*-sync-chip) as quiet pills; no
+   "POWER UP · N KEYS WAITING" nag (#key-setup-chip; keys live in .env);
+   one-click Dark ⇄ Satellite button in the map-button column (presses
+   upstream's own map-source chip). VIEW keeps Drago + a compact Focus and
+   upstream stacks the VIEW cards below them. Upstream edit:
+   src/ui/panelLayoutController.js ('#mc-right' in the right-rail obstacles).
+13. Sci-fi layout (Pinterest refs: CCTV dashboard, EASYV, Ace Combat,
+   water-plant) — shell.js, hudFrame.js, cctvCard.js, icons.js, darkMap.js,
+   theme.css "SCI-FI LAYOUT" + "ROUND 3" blocks:
+   • top bar: notched HUD plate with title + GLOBE/CITY/MAP, VIEW/TOOLS as
+     wings, END SCENE under it; CLEAN UI chip (presses upstream's Clean UI,
+     hides every panel; top bar + credits stay)
+   • full-screen HUD outline; screen edges/corners darkened
+   • panels fully transparent (no boxes), angled gradient title tabs
+   • clean line icons replace upstream's colourful emoji (data-icon, pp-icon)
+   • Visual Presets dock tray and language picker hidden
+   • CCTV: big centred flat card, map dimmed behind it, notched frame;
+     upstream's ground projection switched off
+   • ocean: faint tactical grid on open water (darkMap.js)
+
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
 - src/share/viewCodec.test.mjs — "defaults ... match today's app defaults"
