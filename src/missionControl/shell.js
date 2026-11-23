@@ -84,6 +84,7 @@ function build() {
       <button type="button" data-mc-view="map">MAP</button>
     </nav>
     <div class="mc-status">
+      <button type="button" class="mc-chip mc-end-scene" title="Stop the scene that is playing">END SCENE</button>
       <button type="button" class="mc-chip" data-mc-toggle="view" title="Display options (V)">VIEW</button>
       <button type="button" class="mc-chip" data-mc-toggle="tools" title="Search · presets · voice (T)">TOOLS</button>
       <span class="mc-sep"></span>
@@ -144,6 +145,21 @@ function build() {
   tick();
   setInterval(tick, 10_000);
 
+  // Scenes hide every panel while they play (upstream "recording mode"), STOP
+  // included. Our top bar stays up, so END SCENE lives here (shown by CSS only
+  // during playback) and presses upstream's own STOP.
+  top.querySelector('.mc-end-scene').addEventListener('click', () => {
+    document.getElementById('scene-stop-btn')?.click();
+  });
+
+  // No CRT look (its button is hidden in theme.css). Scenes can still switch
+  // to it, so whenever it comes on, go back to Normal.
+  new MutationObserver(() => {
+    if (root.getAttribute('data-gev-style') === 'retro') {
+      document.querySelector('.style-btn[data-style="normal"]')?.click();
+    }
+  }).observe(root, { attributes: true, attributeFilter: ['data-gev-style'] });
+
   // Toggles
   top.querySelectorAll('[data-mc-toggle]').forEach((b) =>
     b.addEventListener('click', () => setOpen(b.dataset.mcToggle, !isOpen(b.dataset.mcToggle))),
@@ -189,6 +205,16 @@ export function attachMissionControl(viewer) {
       }
     }),
   );
+
+  // Scope (circular viewport mask) is hidden in theme.css, so make sure it is
+  // off too — otherwise a saved "on" would leave a mask with no switch.
+  setTimeout(() => {
+    const scope = document.getElementById('scope-toggle');
+    if (scope?.checked) {
+      scope.checked = false;
+      scope.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }, 0);
 
   // Focus panel: what the camera is looking at (real numbers only)
   const $ = (id) => document.getElementById(id);

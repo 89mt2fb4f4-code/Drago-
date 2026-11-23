@@ -173,9 +173,6 @@ html.mc .mc-input.mc-arwes { position: relative; }
 .mc-arwes-frame { position: absolute; inset: 0; width: 100%; height: 100%;
   pointer-events: none; z-index: 0; overflow: visible; }
 .mc-arwes > :not(.mc-arwes-frame) { position: relative; z-index: 1; }
-/* Faint dot grid over the map, under the vignette and every panel */
-#mc-arwes-bg { position: fixed; inset: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: 4; }
 
 /* ── Bottom command bar ─────────────────────────────────────────── */
 /* Centered on screen; never wider than the gap between the two rails */
@@ -292,3 +289,14 @@ html.mc body.mobile-shell:not([data-mobile-sheet]):not(.recording-mode):not(.coc
 html.mc body.mobile-shell #cesium-credits .cesium-widget-credits {
   width: calc(100vw - 24px - 46px); white-space: normal;
 }
+
+/* ── Trimmed upstream options (Elijah, 2026-11-23) ─────────────── */
+/* Visual Presets: no CRT look */
+html.mc .style-btn[data-style='retro'] { display: none !important; }
+/* Display: no Scope (circular viewport mask); shell.js also switches it off */
+html.mc .pp-toggle-group:has(> .pp-scope-toggle) { display: none !important; }
+/* Scenes: no 16:9 safe-frame grid; END SCENE (top bar) only while one plays */
+html.mc #safe-frame-overlay { display: none !important; }
+.mc-end-scene { display: none; }
+body.scene-playback-mode .mc-end-scene { display: inline-block;
+  color: #fff; border-color: var(--mc-purple); background: rgba(155, 135, 255, 0.22); }

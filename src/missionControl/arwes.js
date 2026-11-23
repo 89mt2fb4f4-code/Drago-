@@ -1,17 +1,16 @@
-// Mission Control — Arwes accents (frames + background), trial.
-// Uses only Arwes's framework-free packages (@arwes/frames, @arwes/bgs),
+// Mission Control — Arwes accents (frames), trial.
+// Uses only Arwes's framework-free frames package (@arwes/frames),
 // pinned in package.json. Arwes is unmaintained upstream, so everything it
 // touches lives here and can be removed by deleting this file and its import.
 //
-// Both are drawn static (no Arwes animator): no flicker over the map, and they
-// redraw themselves on resize. Colours come from our palette via the CSS
-// variables Arwes reads (--arwes-frames-*), set in theme.css.
+// Frames are drawn static (no Arwes animator): no flicker over the map, and
+// they redraw themselves on resize. Colours come from our palette via the CSS
+// variables Arwes reads (--arwes-frames-*), set on each frame below.
 import {
   createFrame,
   createFrameNefrexSettings,
   styleFrameClipOctagon,
 } from '@arwes/frames';
-import { createBackgroundDots } from '@arwes/bgs';
 
 // Nefrex: cut corners top-left + bottom-right (like our brackets) plus Arwes's
 // short/long accent lines along the edges.
@@ -55,32 +54,8 @@ function framePanel(el, small) {
   }));
 }
 
-function background() {
-  if (document.getElementById('mc-arwes-bg')) return;
-  const canvas = document.createElement('canvas');
-  canvas.id = 'mc-arwes-bg';
-  canvas.setAttribute('aria-hidden', 'true');
-  document.body.append(canvas);
-  // Sizes are in canvas pixels (Arwes draws at up to 2x density):
-  // 8 → ~4px crosses on a ~30px grid.
-  createBackgroundDots({
-    canvas,
-    settingsRef: {
-      current: {
-        type: 'cross',
-        size: 8,
-        crossSize: 1.5,
-        distance: 60,
-        origin: 'center',
-        color: 'rgba(155, 135, 255, 0.35)', // --mc-purple
-      },
-    },
-  });
-}
-
 export function attachArwes() {
   for (const { sel, small } of TARGETS) {
     document.querySelectorAll(sel).forEach((el) => framePanel(el, small));
   }
-  background();
 }
