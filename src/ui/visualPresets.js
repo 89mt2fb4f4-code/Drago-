@@ -58,7 +58,7 @@ export const GLOBAL_POST_DEFAULTS = {
   // flag means the OPERATOR hand-edited detection, and a factory default is not
   // that. Turning detection off by hand therefore still sets the flag and still
   // suppresses the military-style auto-enable for the rest of the session.
-  detectionMode: MILITARY_DETECTION_PRESET.mode.toUpperCase(),
+  detectionMode: 'OFF', // Mission Control: detection boxes off by default (DISPLAY turns them on)
   detectionDensity: MILITARY_DETECTION_PRESET.densityPct,
   detectionAllocation: 'ELASTIC',
   detectionFadePct: 7,

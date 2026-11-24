@@ -1,11 +1,12 @@
 import * as Cesium from 'cesium';
 import { EMERGENCY_TINT_CSS } from '../../data/aircraftEmergency.js';
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 
 export const FOCUS_EVIDENCE_DEV = import.meta.env?.DEV === true;
 
 /** Amber tint for known-military aircraft rendered by this layer (matches the military layer's icon color). */
 
-export const MIL_TINT = Cesium.Color.fromCssColorString('#FFB800');
+export const MIL_TINT = Cesium.Color.fromCssColorString(MC_COLORS.military); // Mission Control (was amber #FFB800)
 
 /** Red tint for aircraft broadcasting an emergency (7500/7600/7700 or ADS-B status). */
 
@@ -110,7 +111,7 @@ export const CYAN_TRANSPARENT = Cesium.Color.CYAN.withAlpha(0);
 export const COCKPIT_CONTACT_SIZE_PX = 6;
 
 export const COCKPIT_CIVILIAN_COLOR =
-  Cesium.Color.fromCssColorString('#DCEEFF');
+  Cesium.Color.fromCssColorString(MC_COLORS.civil); // Mission Control (was #DCEEFF)
 
 export const TRACKED_BILLBOARD_SCALE_BY_DISTANCE = new Cesium.NearFarScalar(
   1000,
@@ -128,7 +129,7 @@ export const TRACKED_BILLBOARD_SCALE_BY_DISTANCE = new Cesium.NearFarScalar(
 
 /** @constant {string} Civilian trail hue (PRD F4, pinned). */
 
-export const TRAIL_COLOR = '#00d4ff';
+export const TRAIL_COLOR = MC_COLORS.trailCivil; // Mission Control (was cyan #00d4ff)
 
 /** @constant {number} Combined cap on trail vertices (backfill + live accumulation). */
 

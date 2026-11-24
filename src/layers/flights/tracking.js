@@ -971,7 +971,7 @@ export function createTracking({
           () =>
             parts.rendering._modelOwnsVisual(flightState._trackedIcao)
               ? CYAN_TRANSPARENT
-              : Cesium.Color.CYAN,
+              : Cesium.Color.WHITE, // Mission Control: followed plane is white (was cyan)
           false,
         ),
         sizeInMeters: false,

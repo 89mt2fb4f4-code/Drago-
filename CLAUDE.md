@@ -71,5 +71,6 @@ They encode upstream defaults we changed (see `src/missionControl/README.md`):
 test), `src/maps/controller.test.mjs` (6 imagery-comparison tests),
 `src/layers/streetLevel/providers/mapillary/provider.test.mjs` (green colour
 check), `src/voice/gevActions.test.mjs` (1 test: our `dark` and `vector`
-maps have no voice alias). Any
+maps have no voice alias), `src/data/aircraftEmergencyAnalyst.test.mjs` (2 tests:
+red emergency / amber military tints; we use the palette). Any
 *other* failing test is a real problem.

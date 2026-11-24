@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 import { gstime } from 'satellite.js';
 import { ISS_NORAD, POSITION_UPDATE_MS, RING_ROTATION_MS } from './policy.js';
@@ -46,21 +47,21 @@ export function createRendering({
     const basePositions = parts.orbits.computeOrbitPath(sat.satrec, bakeDate);
     if (basePositions.length < 2) return;
 
-    const pathColor = color || Cesium.Color.CYAN;
+    const pathColor = color || Cesium.Color.fromCssColorString(MC_COLORS.orbit); // Mission Control (was cyan)
 
     const primitive = new Cesium.Primitive({
       geometryInstances: new Cesium.GeometryInstance({
         geometry: new Cesium.PolylineGeometry({
           positions: basePositions,
-          width: noradId === ISS_NORAD ? 2.5 : 2.0,
+          width: noradId === ISS_NORAD ? 1.5 : 1.2, // Mission Control: thinner (was 2.5 / 2.0)
           vertexFormat: Cesium.PolylineColorAppearance.VERTEX_FORMAT,
         }),
         attributes: {
           color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-            pathColor.withAlpha(0.6),
+            pathColor.withAlpha(0.45), // Mission Control (was 0.6)
           ),
           depthFailColor: Cesium.ColorGeometryInstanceAttribute.fromColor(
-            pathColor.withAlpha(0.35),
+            pathColor.withAlpha(0.18), // Mission Control (was 0.35)
           ),
         },
       }),

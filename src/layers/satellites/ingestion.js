@@ -151,7 +151,7 @@ export function createIngestion({
             color: style.color,
             outlineColor: style.outlineColor,
             outlineWidth: style.outlineWidth,
-            scaleByDistance: new Cesium.NearFarScalar(1e6, 1.5, 2e7, 0.6),
+            scaleByDistance: new Cesium.NearFarScalar(1e6, 1.2, 2e7, 0.45), // Mission Control (was 1.5 → 0.6)
             id: noradId,
           });
 

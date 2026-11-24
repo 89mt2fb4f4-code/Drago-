@@ -1,3 +1,4 @@
+import { MC_FAR_AIRCRAFT_SCALE, MC_NEAR_AIRCRAFT_SCALE } from '../../missionControl/palette.js'; // Mission Control
 import {
   CLASS_MODEL_REAL,
   CLASS_SCALE_3D,
@@ -130,7 +131,7 @@ export function createRendering({
   function _normalBillboardScaleByDistance() {
     // Match commercial flights and preserve the established close-range 3×
     // default. Smaller owner-visible scaling must be proposed separately.
-    return new Cesium.NearFarScalar(1000, 3.0, 8000000, 0.5);
+    return new Cesium.NearFarScalar(1000, MC_NEAR_AIRCRAFT_SCALE, 8000000, MC_FAR_AIRCRAFT_SCALE); // Mission Control (was 3.0 → 0.5)
   }
 
   function _cockpitBillboardScaleByDistance() {

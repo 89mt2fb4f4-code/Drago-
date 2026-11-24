@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 import { satelliteClassColor } from '../../data/satelliteClass.js';
 
@@ -105,8 +106,8 @@ export const POINT_STYLES = {
   // carries a permanent name label, and its size/outline already set it apart.
   // Its card still reads "STATION · ISS", so the class stays legible.
   iss: {
-    pixelSize: 12,
-    color: Cesium.Color.fromCssColorString('#ff4444'),
+    pixelSize: 10, // Mission Control (was 12)
+    color: Cesium.Color.fromCssColorString(MC_COLORS.satIss), // Mission Control (was red #ff4444)
     outlineColor: POINT_OUTLINE,
     outlineWidth: 2,
   },

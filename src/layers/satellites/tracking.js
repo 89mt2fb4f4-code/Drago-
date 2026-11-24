@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 import { satelliteClassLabel } from '../../data/satelliteClass.js';
 import { t } from '../../i18n/index.js';
@@ -419,7 +420,7 @@ export function createTracking({ state: layerState, services, parts, source }) {
     point.show = false;
 
     // Show orbital path
-    parts.rendering._showOrbitPath(noradId, Cesium.Color.YELLOW);
+    parts.rendering._showOrbitPath(noradId, Cesium.Color.fromCssColorString(MC_COLORS.orbit)); // Mission Control (was yellow)
 
     // Tracked entity position propagates per evaluation through the per-frame
     // cache (WS-D2) — dot, host readout, and camera share one SGP4 epoch per frame.
@@ -449,9 +450,9 @@ export function createTracking({ state: layerState, services, parts, source }) {
       position: positionProperty,
       viewFrom,
       point: {
-        pixelSize: 14,
-        color: Cesium.Color.YELLOW,
-        outlineColor: Cesium.Color.WHITE,
+        pixelSize: 10, // Mission Control: white dot, violet ring (was 14 px yellow)
+        color: Cesium.Color.WHITE,
+        outlineColor: Cesium.Color.fromCssColorString(MC_COLORS.orbit),
         outlineWidth: 2,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       },

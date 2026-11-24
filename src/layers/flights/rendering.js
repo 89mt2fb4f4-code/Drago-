@@ -4,6 +4,10 @@ import { selectModelEligible } from '../../data/modelEligibility.js';
 import { civilAircraftModelSpec } from './modelSpec.js';
 import { CLASS_SCALE_2D } from '../../data/aircraftClass.js';
 import { isEmergency } from '../../data/aircraftEmergency.js';
+// Mission Control: palette colours + smaller far planes
+import { MC_COLORS, MC_FAR_AIRCRAFT_SCALE, MC_NEAR_AIRCRAFT_SCALE } from '../../missionControl/palette.js';
+const MC_CIVIL = Cesium.Color.fromCssColorString(MC_COLORS.civil);
+const MC_TRACKED = Cesium.Color.fromCssColorString(MC_COLORS.tracked);
 import { cockpitContactDotImage } from '../../data/cockpitContactDot.js';
 import { aircraftIcon, TRACKED_ICON_PX } from '../../data/aircraftIcons.js';
 import {
@@ -73,7 +77,7 @@ export function createRendering({
     info = flightState.records.data.get(icao24),
   ) {
     if (_isEmergency(icao24, info)) return EMERGENCY_TINT;
-    return isMilitaryIcao(icao24) ? MIL_TINT : Cesium.Color.WHITE;
+    return isMilitaryIcao(icao24) ? MIL_TINT : MC_CIVIL; // Mission Control (was white)
   }
 
   /** Cockpit far-contact dot tint: the emergency red outranks the category tint. */
@@ -122,7 +126,7 @@ export function createRendering({
   function _normalBillboardScaleByDistance() {
     // Preserve the established close-range 3× scale. Any smaller owner-visible
     // default belongs in a separate evidence-backed proposal.
-    return new Cesium.NearFarScalar(1000, 3.0, 8000000, 0.5);
+    return new Cesium.NearFarScalar(1000, MC_NEAR_AIRCRAFT_SCALE, 8000000, MC_FAR_AIRCRAFT_SCALE); // Mission Control (was 3.0 → 0.5)
   }
 
   function _cockpitBillboardScaleByDistance() {
@@ -184,7 +188,7 @@ export function createRendering({
   /** Model tint, mirroring the billboard color rules. */
 
   function _modelColor(icao24) {
-    if (icao24 === flightState._trackedIcao) return Cesium.Color.CYAN;
+    if (icao24 === flightState._trackedIcao) return MC_TRACKED; // Mission Control (was cyan)
     return _fleetBillboardColor(icao24);
   }
 
@@ -718,7 +722,7 @@ export function createRendering({
         environmentMapOptions: AIRCRAFT_ENVIRONMENT_MAP_OPTIONS,
         minimumPixelSize: TRACKED_MODEL_MIN_PX,
         scale: trackedSpec.scale,
-        color: flightState._irBoost ? Cesium.Color.WHITE : Cesium.Color.CYAN,
+        color: flightState._irBoost ? Cesium.Color.WHITE : MC_TRACKED, // Mission Control (was cyan)
         colorBlendMode: Cesium.ColorBlendMode.MIX,
         // The tracked aircraft uses the same dominant light tint as the fleet;
         // IR boost removes the remaining diffuse hint with flat UNLIT white.

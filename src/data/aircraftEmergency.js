@@ -16,7 +16,7 @@
 import { msg } from '../i18n/marker.js';
 
 /** @constant {string} Tint for aircraft broadcasting an emergency (not a priority). */
-export const EMERGENCY_TINT_CSS = '#FF4444';
+export const EMERGENCY_TINT_CSS = '#FFB547'; // Mission Control: amber is the alert colour (was red)
 
 const SQUAWK_KINDS = { 7500: 'unlawful', 7600: 'nordo', 7700: 'general' };
 

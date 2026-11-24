@@ -240,6 +240,21 @@ edits, each marked with a "Mission Control" comment.
    its result through globalThis.__mcSceneVisual). The look is restored too:
    upstream's styleManager.getVisualState() is saved at scene start and
    applyVisualState() puts back bloom, sharpen, detection, HUD, look preset.
+25. Data layer restyle, batch 1 — palette.js (one palette for all layers:
+   movement lavender/violet, military/sensors blue, selected white, amber
+   only for real alerts). Upstream edits, each marked:
+   • ui/visualPresets.js — detection boxes OFF by default (was DENSE)
+   • data/aircraftEmergency.js — emergency tint amber (was red)
+   • layers/flights/policy.js, rendering.js, tracking.js — civil lavender
+     (was white), military blue (was amber), followed plane white (was
+     cyan), violet trails (was cyan), far planes 0.22× (was 0.5×), near 2.4×
+   • layers/military/policy.js, rendering.js — blue icons/trails, white when
+     followed, same far/near scale
+   • data/satelliteClass.js — class colours (station, nav, geo, visual,
+     comms) from the palette; layers/satellites/policy.js ISS lavender (was
+     red), 10 px; rendering.js orbit lines violet, thinner, fainter;
+     tracking.js followed satellite white dot + violet ring and orbit (was
+     yellow); ingestion.js, catalog.js far dots 0.45× (was 0.6×)
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
@@ -250,4 +265,6 @@ edits, each marked with a "Mission Control" comment.
   provider-contract test checks for Mapillary green #05cb63 (we use blue)
 - src/voice/gevActions.test.mjs — "every live basemap is reachable by its
   own id": our `dark` and `vector` maps have no voice alias
+- src/data/aircraftEmergencyAnalyst.test.mjs — 2 tests check red emergency /
+  amber military tints (we use amber alerts / blue military)
 Re-check these when moving to a new upstream release.
