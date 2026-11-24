@@ -55,7 +55,8 @@ export function normalizeRoadMode(value) {
  * @returns {'tomtom'|'osm'|'hybrid'}
  */
 export function resolveRoadMode(value, hasKey) {
-  return hasKey ? normalizeRoadMode(value) || 'hybrid' : 'osm';
+  // Mission Control: with a key, real TomTom flow roads only by default (was Hybrid, which adds simulated OSM roads)
+  return hasKey ? normalizeRoadMode(value) || 'tomtom' : 'osm';
 }
 
 const FLOW_ROAD_TYPES = Object.freeze({

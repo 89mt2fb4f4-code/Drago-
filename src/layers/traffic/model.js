@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 import { roadSurfaceChunks } from './surface.js';
 import { t, translateKnown } from '../../i18n/index.js';
@@ -355,7 +356,7 @@ export function createModel({ state: layerState, services, parts, source }) {
       dot.bucket = bucket;
       dot.point.color = bucket
         ? layerState._activeBucketColors[bucket]
-        : Cesium.Color.WHITE.withAlpha(0.85);
+        : Cesium.Color.fromCssColorString(MC_COLORS.flowUnknown).withAlpha(0.55); // Mission Control (was white)
       dot.nominalSize =
         parts.style.baseDotSize(dot.road?.type, bucket) +
         (bucket === 'jam' ? 1 : 0) +

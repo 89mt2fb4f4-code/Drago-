@@ -4,6 +4,7 @@
  * scene state, no network: everything here is exercised by node:test.
  */
 
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import {
   TRANSIT_MODE_ICON,
   transitRouteLabel,
@@ -187,12 +188,13 @@ export function inflateViewBounds(rect, ratio = VIEW_MARGIN_RATIO) {
 export const SELECTED_CARD_REFRESH_MS = 250;
 /** Mode palette: distinct at a glance, none reused by flights (white/cyan), military (amber), or vessels. */
 export const TRANSIT_MODE_COLORS = Object.freeze({
-  bus: '#5EF08A',
-  tram: '#FFC24A',
-  subway: '#FF4538',
-  rail: '#D9A6FF',
-  ferry: '#5FD6FF',
-  unknown: '#D8DDE5',
+  // Mission Control palette (was green / orange / red / violet / cyan / grey)
+  bus: MC_COLORS.bus,
+  tram: MC_COLORS.tram,
+  subway: MC_COLORS.subway,
+  rail: MC_COLORS.rail,
+  ferry: MC_COLORS.ferry,
+  unknown: MC_COLORS.transitOther,
 });
 
 /**

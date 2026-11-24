@@ -4,6 +4,7 @@
  * after the vessel cards moved out of their dedicated canvas renderer.
  */
 
+import { MC_COLORS, mcRgb } from '../missionControl/palette.js'; // Mission Control palette
 import { t, msg } from '../i18n/index.js';
 import { normalizeVesselType } from './vesselTypes.js';
 
@@ -26,25 +27,26 @@ export const VESSEL_CARD_FADE_START_RATIO = 0.7;
  * vessel type colors so billboard chevrons and host cards cannot drift apart.
  */
 const TYPE_STYLES = [
-  { pattern: /tanker/i, css: '#ffb347', accent: '255, 179, 71' },
+  // Mission Control: ship colours from the palette (was orange / cyan / pink / green / yellow)
+  { pattern: /tanker/i, css: MC_COLORS.shipTanker, accent: mcRgb(MC_COLORS.shipTanker) },
   {
     pattern: /cargo|container|bulk|carrier/i,
-    css: '#39d5ff',
-    accent: '57, 213, 255',
+    css: MC_COLORS.shipCargo,
+    accent: mcRgb(MC_COLORS.shipCargo),
   },
   {
     pattern: /passenger|ferry|cruise/i,
-    css: '#ff7adf',
-    accent: '255, 122, 223',
+    css: MC_COLORS.shipPassenger,
+    accent: mcRgb(MC_COLORS.shipPassenger),
   },
-  { pattern: /fishing/i, css: '#7cff9b', accent: '124, 255, 155' },
+  { pattern: /fishing/i, css: MC_COLORS.shipFishing, accent: mcRgb(MC_COLORS.shipFishing) },
   {
     pattern: /tug|tow|pilot|supply|service/i,
-    css: '#f7f0a3',
-    accent: '247, 240, 163',
+    css: MC_COLORS.shipService,
+    accent: mcRgb(MC_COLORS.shipService),
   },
 ];
-const DEFAULT_STYLE = { css: '#39d5ff', accent: '57, 213, 255' };
+const DEFAULT_STYLE = { css: MC_COLORS.shipCargo, accent: mcRgb(MC_COLORS.shipCargo) }; // Mission Control
 
 // Card text for the type tokens above. The tokens stay English: TYPE_STYLES
 // and tests match on them.

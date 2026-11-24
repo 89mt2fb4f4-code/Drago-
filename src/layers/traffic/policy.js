@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 
 /**
@@ -112,9 +113,10 @@ export const SIZE_BY_TYPE = {
  */
 
 export const FLOW_BUCKET_COLORS = {
-  free: Cesium.Color.fromCssColorString('#2ecc71').withAlpha(0.9),
-  slow: Cesium.Color.fromCssColorString('#f0b23e').withAlpha(0.9),
-  jam: Cesium.Color.fromCssColorString('#e05252').withAlpha(0.9),
+  // Mission Control: violet free / lavender slow / amber jam (was green / amber / red)
+  free: Cesium.Color.fromCssColorString(MC_COLORS.flowFree).withAlpha(0.75),
+  slow: Cesium.Color.fromCssColorString(MC_COLORS.flowSlow).withAlpha(0.9),
+  jam: Cesium.Color.fromCssColorString(MC_COLORS.flowJam).withAlpha(0.9),
 };
 
 // ─── Jam-viz prototype (live mode only — see 2026-07-21 design doc) ────────
@@ -124,7 +126,7 @@ export const HEAT_LINE_CAP = 400;
 
 /** @const {number} Px — glowing jam corridor line width. */
 
-export const HEAT_LINE_JAM_WIDTH = 9;
+export const HEAT_LINE_JAM_WIDTH = 6; // Mission Control: calmer (was 9)
 
 /** @const {number} Px — flat slow corridor line width. */
 
@@ -136,16 +138,16 @@ export const HEAT_JAM_BASE_ALPHA = 0.55;
 
 /** @const {number} Jam heat-line pulse amplitude (±, ~1.6 s period). */
 
-export const HEAT_JAM_PULSE_ALPHA = 0.2;
+export const HEAT_JAM_PULSE_ALPHA = 0.08; // Mission Control: gentle pulse (was 0.2)
 
 /** @const {Cesium.Color} Jam corridor color (bucket red, alpha pulsed live). */
 
-export const HEAT_JAM_COLOR = Cesium.Color.fromCssColorString('#e05252');
+export const HEAT_JAM_COLOR = Cesium.Color.fromCssColorString(MC_COLORS.flowJam); // Mission Control (was red)
 
 /** @const {Cesium.Color} Slow corridor color (bucket amber, faint + static). */
 
 export const HEAT_SLOW_COLOR =
-  Cesium.Color.fromCssColorString('#f0b23e').withAlpha(0.2);
+  Cesium.Color.fromCssColorString(MC_COLORS.flowSlow).withAlpha(0.15); // Mission Control (was amber 0.2)
 
 /** @const {number} Far-distance scale floor for jam dots (shipped: 0.3). */
 

@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import { DOT_FADE_MS } from './retention.js';
 import { flowBucket, flowSpeedScale } from '../../data/trafficFlowStyle.js';
 import { presetDotOutline } from '../../data/trafficPresetStyle.js';
@@ -154,7 +155,7 @@ export function createAnimation({
         position: Cesium.Cartesian3.clone(layerState._scratchLerp),
         pixelSize,
         // No flow data → today's exact simulated white.
-        color: flowColor || Cesium.Color.WHITE.withAlpha(0.85),
+        color: flowColor || Cesium.Color.fromCssColorString(MC_COLORS.flowUnknown).withAlpha(0.55), // Mission Control (was white)
         scaleByDistance: new Cesium.NearFarScalar(
           100,
           1.5,

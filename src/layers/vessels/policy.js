@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import { VESSEL_LABEL_GRID_PX } from '../../data/vesselLabels.js';
 import { msg } from '../../i18n/index.js';
 
@@ -31,7 +32,7 @@ export const CARD_MIN_SEP_PX = 150;
 
 /** Trail hue for the selected vessel (PRD F4, pinned to the AIS teal-green family). */
 
-export const TRAIL_COLOR = '#39ffd5';
+export const TRAIL_COLOR = MC_COLORS.shipTrail; // Mission Control (was #39ffd5)
 
 /** Slight lift (m) for trail vertices to avoid sea-surface z-fighting. */
 

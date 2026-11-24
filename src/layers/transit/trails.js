@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import { getRegisteredTransitFeed } from '../../data/transitFeeds.js';
 import * as Cesium from 'cesium';
 import {
@@ -11,12 +12,13 @@ import { fixDistanceM } from './movement.js';
 import { transitStyleProfile } from '../../data/transitPresetStyle.js';
 
 const MODE_COLOR = {
-  bus: '#5EF08A',
-  tram: '#FFC24A',
-  subway: '#FF4538',
-  rail: '#D9A6FF',
-  ferry: '#5FD6FF',
-  unknown: '#D8DDE5',
+  // Mission Control palette (was green / orange / red / violet / cyan / grey)
+  bus: MC_COLORS.bus,
+  tram: MC_COLORS.tram,
+  subway: MC_COLORS.subway,
+  rail: MC_COLORS.rail,
+  ferry: MC_COLORS.ferry,
+  unknown: MC_COLORS.transitOther,
 };
 // Final Cesium batching uses 3,152 bytes per two-lane edge.
 // The 1,278-instance body plus 64 bytes/instance reserve stays below 2 MiB.

@@ -130,9 +130,9 @@ export function createSelection({
     layerState._selectedEntity = layerState._viewer.entities.add({
       position: record.point.position,
       point: {
-        pixelSize: 14,
-        color: Cesium.Color.CYAN,
-        outlineColor: Cesium.Color.BLACK,
+        pixelSize: 12, // Mission Control: white when selected (was 14 px cyan)
+        color: Cesium.Color.WHITE,
+        outlineColor: Cesium.Color.fromCssColorString('#6d4dff'),
         outlineWidth: 2,
         disableDepthTestDistance: Number.POSITIVE_INFINITY,
       },

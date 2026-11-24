@@ -25,7 +25,33 @@ export const MC_COLORS = Object.freeze({
   satComms: '#4b4f86', // thousands of comms sats in DENSE mode: texture only
   satIss: '#d9ccff',
   orbit: '#9b87ff', // orbit lines
+  // street traffic (flow speed)
+  flowFree: '#7d6bff', // moving freely: dim violet
+  flowSlow: '#c9bcff', // slow: lavender
+  flowJam: '#ffb547', // jammed: amber (alert)
+  flowUnknown: '#8a93c9', // no live flow data
+  // transit modes
+  bus: '#8f7dff',
+  tram: '#b9a8ff',
+  subway: '#5a86ff',
+  rail: '#d9ccff',
+  ferry: '#7fc0d8',
+  transitOther: '#8a93c9',
+  // bike share availability
+  bikesMany: '#c9bcff',
+  bikesSome: '#8f7dff',
+  bikesFew: '#4f5ca8',
+  // ships by type (and their card accents)
+  shipTanker: '#c08cff',
+  shipCargo: '#8fa8ff',
+  shipPassenger: '#e2d9ff',
+  shipFishing: '#7fc0d8',
+  shipService: '#b0b6d6',
+  shipTrail: '#8fa8ff',
 });
+
+/** "r, g, b" for CSS rgba() accents. */
+export const mcRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ');
 
 /** Far planes shrink to this fraction of their close-up size (was 0.5). */
 export const MC_FAR_AIRCRAFT_SCALE = 0.22;

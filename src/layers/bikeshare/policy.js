@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 
 export const BIKESHARE_SELECTED_OVERLAY_SOURCE_ID = 'bikeshare-selected';
@@ -58,17 +59,17 @@ export const MAX_TOTAL_POINTS = 8000;
 /** Station has >60% bikes available. */
 
 export const COLOR_GREEN =
-  Cesium.Color.fromCssColorString('#00ff88').withAlpha(0.95);
+  Cesium.Color.fromCssColorString(MC_COLORS.bikesMany).withAlpha(0.9); // Mission Control (was green)
 
 /** Station has 30-60% bikes available. */
 
 export const COLOR_YELLOW =
-  Cesium.Color.fromCssColorString('#ffaa00').withAlpha(0.94);
+  Cesium.Color.fromCssColorString(MC_COLORS.bikesSome).withAlpha(0.9); // Mission Control (was orange)
 
 /** Station has <30% bikes available. */
 
 export const COLOR_RED =
-  Cesium.Color.fromCssColorString('#ff4444').withAlpha(0.94);
+  Cesium.Color.fromCssColorString(MC_COLORS.bikesFew).withAlpha(0.9); // Mission Control (was red)
 
 /** No status data available for station. */
 
