@@ -230,6 +230,15 @@ edits, each marked with a "Mission Control" comment.
    the gap instead of pushing the plate left). Below 1700px the stamp uses
    the short date ("NOV 23") to stay clear of the TOOLS wing. Upstream's
    "AI AGENT · VOICE STANDBY" box (#gev-voice-control) is hidden.
+24. Scenes on our map — sceneMap.js. While a scene plays (body.scene-
+   playback-mode), ordinary shots use Vector Dark instead of Google 3D /
+   Esri; the Nepal before/after imagery-comparison beats still use
+   satellite (upstream returns them before the hook). Relief is on at 1×,
+   half strength (scenes turn bloom up), via relief.js overrideRelief()
+   (not saved). On END SCENE the previous map and Relief setting come back.
+   Upstream edit: src/scenes/shotPresentation.js (visualStateForShot passes
+   its result through globalThis.__mcSceneVisual). Scene look settings
+   (e.g. bloom) are still left as the scene set them (upstream behaviour).
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")

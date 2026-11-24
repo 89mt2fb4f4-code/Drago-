@@ -57,6 +57,14 @@ function save(state) {
 
 /** Current Relief state, for other modules: { on, exaggeration }. */
 export let reliefState = { ...DEFAULTS };
+let setTemporary = null;
+/**
+ * Switch Relief for a while without saving it (scenes use this).
+ * Returns a function that puts Boss's own setting back.
+ */
+export function overrideRelief(next) {
+  return setTemporary ? setTemporary(next) : () => {};
+}
 
 export function attachRelief(viewer) {
   const scene = viewer.scene;
@@ -183,6 +191,20 @@ export function attachRelief(viewer) {
     apply();
     setTimeout(() => { viewer.useDefaultRenderLoop = true; }, 0);
   });
+
+  // `strength` (0–1) is how strongly slopes are painted; scenes use less
+  // because their own glow (bloom) brightens the picture further.
+  setTemporary = ({ strength, ...next }) => {
+    const saved = { on: state.on, exaggeration: state.exaggeration };
+    Object.assign(state, next);
+    if (Number.isFinite(strength)) material.uniforms.strength = strength;
+    apply();
+    return () => {
+      Object.assign(state, saved);
+      material.uniforms.strength = 0.95;
+      apply();
+    };
+  };
 
   apply();
 }

@@ -117,7 +117,9 @@ export function visualStateForShot(shot, packs, isMapStackAvailable) {
   )
     ? { ...(shot.visual || {}), mapStack: 'photoreal' }
     : shot?.visual || {};
-  return packs.resolveVisual(shot, visual, isMapStackAvailable);
+  const resolved = packs.resolveVisual(shot, visual, isMapStackAvailable);
+  // Mission Control: scenes may swap the map for ordinary shots (src/missionControl/sceneMap.js).
+  return globalThis.__mcSceneVisual?.(resolved) ?? resolved;
 }
 
 /** Combine authored holds, registered pack overrides and layer reveal requirements. */

@@ -22,6 +22,7 @@ import { attachRelief } from './relief.js';
 import { attachTiltSlider } from './tiltSlider.js';
 import { attachGlobeLook } from './globeLook.js';
 import { attachRegionSelect } from './regionSelect.js';
+import { attachSceneMap } from './sceneMap.js';
 
 const TZ = 'America/New_York';
 const root = document.documentElement;
@@ -240,6 +241,7 @@ export function attachMissionControl(viewer) {
   attachTiltSlider(viewer); // TILT slider beside the map buttons: 0° straight down … 85°
   attachGlobeLook(viewer); // far-away globe: auto-spin when idle, violet edge glow, faint grid
   attachRegionSelect(viewer); // click a country/state: glowing outline + REGION card
+  attachSceneMap(); // scenes play on Vector Dark + Relief; your map comes back after
   attachCategoryToggles(); // one switch per Data Layers category
   attachCctvCard(viewer); // CCTV full screen: button on the small screen, or click a camera on the map
   attachVectorLabels(viewer); // names on the Vector Dark map (screen-facing labels)
