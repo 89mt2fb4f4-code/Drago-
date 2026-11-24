@@ -237,8 +237,9 @@ edits, each marked with a "Mission Control" comment.
    half strength (scenes turn bloom up), via relief.js overrideRelief()
    (not saved). On END SCENE the previous map and Relief setting come back.
    Upstream edit: src/scenes/shotPresentation.js (visualStateForShot passes
-   its result through globalThis.__mcSceneVisual). Scene look settings
-   (e.g. bloom) are still left as the scene set them (upstream behaviour).
+   its result through globalThis.__mcSceneVisual). The look is restored too:
+   upstream's styleManager.getVisualState() is saved at scene start and
+   applyVisualState() puts back bloom, sharpen, detection, HUD, look preset.
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
