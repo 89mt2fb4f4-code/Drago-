@@ -48,6 +48,25 @@ export const MC_COLORS = Object.freeze({
   shipFishing: '#7fc0d8',
   shipService: '#b0b6d6',
   shipTrail: '#8fa8ff',
+  // cameras
+  camIdle: '#7da2ff',
+  camActive: '#ffffff',
+  camLive: '#b9a8ff',
+  camCoverage: '#7da2ff',
+  camCoverageActive: '#c9bcff',
+  alpr: '#8a93c9',
+  alprSelected: '#ffffff',
+  // hazards: amber = the dangerous end
+  quakeShallow: '#ffb547',
+  quakeMid: '#c9bcff',
+  quakeDeep: '#8f7dff',
+  fireHigh: '#ffb547',
+  fireMid: '#c98a3c',
+  fireLow: '#7a5a3a',
+  perimOpen: '#ffb547',
+  perimLow: '#d9a05a',
+  perimMost: '#c9bcff',
+  perimDone: '#8a93c9',
 });
 
 /** "r, g, b" for CSS rgba() accents. */

@@ -1,14 +1,16 @@
 /** Card model for one selected fire-perimeter incident. Pure — no Cesium types. */
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import { formatNumber, t, tn } from '../../i18n/index.js';
 
 export const PERIMETER_OVERLAY_SOURCE_ID = 'fire-perimeters';
 
 /** CSS accent for a perimeter card by containment progress (mirrors the fill). */
 export function containmentAccent(containedPct) {
-  if (!Number.isFinite(containedPct) || containedPct <= 0) return '#ff3b30';
-  if (containedPct < 50) return '#ff7a00';
-  if (containedPct < 100) return '#ffb300';
-  return '#8bc34a';
+  // Mission Control: amber → lavender → slate (was red / orange / yellow / green)
+  if (!Number.isFinite(containedPct) || containedPct <= 0) return MC_COLORS.perimOpen;
+  if (containedPct < 50) return MC_COLORS.perimLow;
+  if (containedPct < 100) return MC_COLORS.perimMost;
+  return MC_COLORS.perimDone;
 }
 
 /** Shoelace area along short longitude edges (degree², relative sizes only). */

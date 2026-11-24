@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 export const EARTHQUAKE_OVERLAY_SOURCE_ID = 'earthquakes';
 export const EARTHQUAKE_OVERLAY_COHORT_LIMIT = 96;
@@ -10,9 +11,10 @@ export const EARTHQUAKE_OVERLAY_COLLISION_CAPACITY = 48;
  *  - Deep (>300km): Yellow
  */
 export function depthColor(depthKm) {
-  if (depthKm < 70) return Cesium.Color.RED;
-  if (depthKm < 300) return Cesium.Color.ORANGE;
-  return Cesium.Color.YELLOW;
+  // Mission Control: amber / lavender / violet (was red / orange / yellow)
+  if (depthKm < 70) return Cesium.Color.fromCssColorString(MC_COLORS.quakeShallow);
+  if (depthKm < 300) return Cesium.Color.fromCssColorString(MC_COLORS.quakeMid);
+  return Cesium.Color.fromCssColorString(MC_COLORS.quakeDeep);
 }
 
 /**

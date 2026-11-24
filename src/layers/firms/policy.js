@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import { FIRMS_AMBIENT_COHORT_LIMIT } from '../../data/firmsLabels.js';
 import * as Cesium from 'cesium';
 
@@ -91,7 +92,8 @@ export const CULL_LIFT_M = 12;
 /** Color stops shared by cell heat fills and detection glow sprites. */
 
 export const DETECTION_COLOR_STOPS = [
-  { name: 'red', color: Cesium.Color.RED },
-  { name: 'orange', color: Cesium.Color.ORANGE },
-  { name: 'yellow', color: Cesium.Color.YELLOW },
+  // Mission Control: amber shades (was red / orange / yellow); names kept for callers
+  { name: 'red', color: Cesium.Color.fromCssColorString(MC_COLORS.fireHigh) },
+  { name: 'orange', color: Cesium.Color.fromCssColorString(MC_COLORS.fireMid) },
+  { name: 'yellow', color: Cesium.Color.fromCssColorString(MC_COLORS.fireLow) },
 ];

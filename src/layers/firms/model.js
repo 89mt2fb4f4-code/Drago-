@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 import { formatNumber, t } from '../../i18n/index.js';
 import {
@@ -120,9 +121,10 @@ export function createModel({
   }
 
   function heatColor(value, alpha) {
-    if (value > 0.72) return Cesium.Color.RED.withAlpha(alpha);
-    if (value > 0.42) return Cesium.Color.ORANGE.withAlpha(alpha);
-    return Cesium.Color.YELLOW.withAlpha(alpha);
+    // Mission Control: amber shades (was red / orange / yellow)
+    if (value > 0.72) return Cesium.Color.fromCssColorString(MC_COLORS.fireHigh).withAlpha(alpha);
+    if (value > 0.42) return Cesium.Color.fromCssColorString(MC_COLORS.fireMid).withAlpha(alpha);
+    return Cesium.Color.fromCssColorString(MC_COLORS.fireLow).withAlpha(alpha);
   }
 
   /**

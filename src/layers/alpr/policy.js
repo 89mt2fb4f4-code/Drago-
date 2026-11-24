@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 /**
  * Community-mapped OpenStreetMap ALPR locations, via hourly US/Canada detail
  * tiles. OSM data remains ODbL, separate from the application code. These are
@@ -52,8 +53,8 @@ export const QUERY_SNAP_DEGREES = 0.05;
 export const QUERY_REUSE_MS = 10 * 60 * 1000;
 
 /** Vendor-neutral camera badge palette, with coral selection. */
-export const ALPR_COLOR = '#52d4ff';
-export const ALPR_SELECTED_COLOR = '#ff6474';
+export const ALPR_COLOR = MC_COLORS.alpr; // Mission Control (was #52d4ff)
+export const ALPR_SELECTED_COLOR = MC_COLORS.alprSelected; // Mission Control (was red #ff6474)
 export const MARKER_ICON_SIZE = 38;
 /** Badge scale by camera distance (near m, scale, far m, scale), shared by
  * native badges and overlay glyphs so both shrink alike in city-wide views. */

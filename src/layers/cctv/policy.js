@@ -1,4 +1,5 @@
 export { ACTIVE_FRAME_REFRESH_MS } from './sourcePolicy.js';
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import * as Cesium from 'cesium';
 import { CCTV_CARD_FETCH_BURST_SPACING_MS } from '../../data/cctvCards.js';
 import { CCTV_AMBIENT_CARD_MAX } from '../../data/cctvLod.js';
@@ -399,40 +400,40 @@ export const CAMERA_SEEDS = [
 // ---------------------------------------------------------------------------
 
 export const IDLE_CAMERA_COLOR =
-  Cesium.Color.fromCssColorString('#6be8ff').withAlpha(0.88);
+  Cesium.Color.fromCssColorString(MC_COLORS.camIdle).withAlpha(0.88); // Mission Control (was '#6be8ff')
 
 export const ACTIVE_CAMERA_COLOR =
-  Cesium.Color.fromCssColorString('#ffd97a').withAlpha(0.95);
+  Cesium.Color.fromCssColorString(MC_COLORS.camActive).withAlpha(0.95); // Mission Control (was '#ffd97a')
 
 export const LIVE_CAMERA_COLOR =
-  Cesium.Color.fromCssColorString('#b48cff').withAlpha(0.88);
+  Cesium.Color.fromCssColorString(MC_COLORS.camLive).withAlpha(0.88); // Mission Control (was '#b48cff')
 
 export const IDLE_COVERAGE_COLOR =
-  Cesium.Color.fromCssColorString('#2fe0ff').withAlpha(0.24);
+  Cesium.Color.fromCssColorString(MC_COLORS.camCoverage).withAlpha(0.24); // Mission Control (was '#2fe0ff')
 
 export const IDLE_COVERAGE_CENTER_MUTED =
-  Cesium.Color.fromCssColorString('#2fe0ff').withAlpha(0.2);
+  Cesium.Color.fromCssColorString(MC_COLORS.camCoverage).withAlpha(0.2); // Mission Control (was '#2fe0ff')
 
 export const IDLE_COVERAGE_EDGE_MUTED =
-  Cesium.Color.fromCssColorString('#2fe0ff').withAlpha(0.18);
+  Cesium.Color.fromCssColorString(MC_COLORS.camCoverage).withAlpha(0.18); // Mission Control (was '#2fe0ff')
 
 export const ACTIVE_COVERAGE_EDGE =
-  Cesium.Color.fromCssColorString('#8dff87').withAlpha(0.58);
+  Cesium.Color.fromCssColorString(MC_COLORS.camCoverageActive).withAlpha(0.58); // Mission Control (was '#8dff87')
 
 export const ACTIVE_COVERAGE_CENTER =
-  Cesium.Color.fromCssColorString('#d7ff8d').withAlpha(0.82);
+  Cesium.Color.fromCssColorString(MC_COLORS.camActive).withAlpha(0.82); // Mission Control (was '#d7ff8d')
 
 // H6: dimmer depth-fail materials let the active frustum wireframe read
 // through buildings while in monitor fallback mode.
 
 export const ACTIVE_COVERAGE_EDGE_DEPTHFAIL =
-  Cesium.Color.fromCssColorString('#8dff87').withAlpha(0.18);
+  Cesium.Color.fromCssColorString(MC_COLORS.camCoverageActive).withAlpha(0.18); // Mission Control (was '#8dff87')
 
 export const ACTIVE_COVERAGE_CENTER_DEPTHFAIL =
-  Cesium.Color.fromCssColorString('#d7ff8d').withAlpha(0.26);
+  Cesium.Color.fromCssColorString(MC_COLORS.camActive).withAlpha(0.26); // Mission Control (was '#d7ff8d')
 
 export const PLANE_OUTLINE_COLOR =
-  Cesium.Color.fromCssColorString('#6be8ff').withAlpha(0.55);
+  Cesium.Color.fromCssColorString(MC_COLORS.camIdle).withAlpha(0.55); // Mission Control (was '#6be8ff')
 
 /**
  * Card budget while the staggered geometry drain is running — the raised

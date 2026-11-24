@@ -75,5 +75,6 @@ maps have no voice alias), `src/data/aircraftEmergencyAnalyst.test.mjs` (2 tests
 red emergency / amber military tints; we use the palette),
 `src/data/vesselLabels.test.mjs` and `src/layers/transit/lifecycle.test.mjs`
 (1 each: old colours), `src/layers/traffic/roadModes.test.mjs` (3: Hybrid
-default; we default to TomTom-only). Any
+default; we default to TomTom-only), `src/layers/perimeters/ownership.test.mjs`
+(1: old containment colours). Any
 *other* failing test is a real problem.

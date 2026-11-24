@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import { attachCctvVideo } from './videoPlayback.js';
 import * as Cesium from 'cesium';
 import {
@@ -34,7 +35,7 @@ export function createProjection({
       priority: Number.MAX_SAFE_INTEGER - 1,
       title: String(name || cameraId || 'CAMERA'),
       details: [],
-      accent: '#6be8ff',
+      accent: MC_COLORS.camIdle, // Mission Control (was #6be8ff)
       interactive: false,
       gapPx: 6,
       verticalOnly: true,
