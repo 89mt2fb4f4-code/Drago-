@@ -72,5 +72,8 @@ test), `src/maps/controller.test.mjs` (6 imagery-comparison tests),
 `src/layers/streetLevel/providers/mapillary/provider.test.mjs` (green colour
 check), `src/voice/gevActions.test.mjs` (1 test: our `dark` and `vector`
 maps have no voice alias), `src/data/aircraftEmergencyAnalyst.test.mjs` (2 tests:
-red emergency / amber military tints; we use the palette). Any
+red emergency / amber military tints; we use the palette),
+`src/data/vesselLabels.test.mjs` and `src/layers/transit/lifecycle.test.mjs`
+(1 each: old colours), `src/layers/traffic/roadModes.test.mjs` (3: Hybrid
+default; we default to TomTom-only). Any
 *other* failing test is a real problem.

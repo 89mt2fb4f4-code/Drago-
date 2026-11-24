@@ -113,8 +113,8 @@ export const SIZE_BY_TYPE = {
  */
 
 export const FLOW_BUCKET_COLORS = {
-  // Mission Control: violet free / lavender slow / amber jam (was green / amber / red)
-  free: Cesium.Color.fromCssColorString(MC_COLORS.flowFree).withAlpha(0.75),
+  // Mission Control: lavender free / white slow / amber jam (was green / amber / red)
+  free: Cesium.Color.fromCssColorString(MC_COLORS.flowFree).withAlpha(0.9),
   slow: Cesium.Color.fromCssColorString(MC_COLORS.flowSlow).withAlpha(0.9),
   jam: Cesium.Color.fromCssColorString(MC_COLORS.flowJam).withAlpha(0.9),
 };

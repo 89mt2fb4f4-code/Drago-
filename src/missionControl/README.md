@@ -255,6 +255,17 @@ edits, each marked with a "Mission Control" comment.
      red), 10 px; rendering.js orbit lines violet, thinner, fainter;
      tracking.js followed satellite white dot + violet ring and orbit (was
      yellow); ingestion.js, catalog.js far dots 0.45× (was 0.6×)
+26. Data layer restyle, batch 2 — palette.js colours in:
+   • layers/traffic/policy.js — flow free lavender / slow white / jam amber
+     (was green / amber / red), jam line 6 px (was 9), pulse ±0.08 (was
+     ±0.2), slow line lavender 0.15; model.js, animation.js — roads without
+     flow slate 0.55 (was white); roadModes.js — with a TomTom key the
+     default is TomTom-only (was Hybrid with simulated OSM roads)
+   • layers/transit/policy.js, trails.js — mode colours from the palette
+   • layers/bikeshare/policy.js — many/some/few bikes lavender/violet/dim
+     blue (was green/orange/red); selection.js — selected station white
+   • data/vesselLabels.js — ship type colours + card accents; layers/
+     vessels/policy.js — trail soft blue (was #39ffd5)
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
@@ -267,4 +278,8 @@ edits, each marked with a "Mission Control" comment.
   own id": our `dark` and `vector` maps have no voice alias
 - src/data/aircraftEmergencyAnalyst.test.mjs — 2 tests check red emergency /
   amber military tints (we use amber alerts / blue military)
+- src/data/vesselLabels.test.mjs, src/layers/transit/lifecycle.test.mjs — 1
+  test each checks the old ship / transit colours
+- src/layers/traffic/roadModes.test.mjs — 3 tests assume Hybrid is the keyed
+  default (we default to TomTom-only)
 Re-check these when moving to a new upstream release.

@@ -26,8 +26,8 @@ export const MC_COLORS = Object.freeze({
   satIss: '#d9ccff',
   orbit: '#9b87ff', // orbit lines
   // street traffic (flow speed)
-  flowFree: '#7d6bff', // moving freely: dim violet
-  flowSlow: '#c9bcff', // slow: lavender
+  flowFree: '#b3a6ff', // moving freely: soft lavender (lighter than the violet roads)
+  flowSlow: '#ffffff', // slow: white
   flowJam: '#ffb547', // jammed: amber (alert)
   flowUnknown: '#8a93c9', // no live flow data
   // transit modes
