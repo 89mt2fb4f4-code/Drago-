@@ -1,3 +1,4 @@
+import { MC_RAMPS } from '../../missionControl/palette.js'; // Mission Control palette
 import { msg } from '../../i18n/marker.js';
 import { normalizeLongitude, sampleWind } from './model.js';
 
@@ -18,7 +19,7 @@ export const WIND_FIELDS = Object.freeze({
     units: 'm/s',
     min: 0,
     max: 30,
-    stops: ['#133a67', '#2876a3', '#66c9d1', '#c8dfac', '#f1cf79', '#ee9761'],
+    stops: MC_RAMPS.windSpeed, // Mission Control (was blue → cyan → yellow → orange)
   }),
   temperature: Object.freeze({
     label: '2 m air temperature', // i18n-ignore: internal field name; the shown label comes from index.js
@@ -27,25 +28,14 @@ export const WIND_FIELDS = Object.freeze({
     max: 50,
     // Fixed 10°C anchors keep model comparisons honest while making everyday
     // temperature gradients distinguishable from the underlying basemap.
-    stops: [
-      '#31235b',
-      '#403b92',
-      '#315fc1',
-      '#268fce',
-      '#31bdd0',
-      '#8ad4aa',
-      '#f0d255',
-      '#ee8a34',
-      '#d74638',
-      '#9f274d',
-    ],
+    stops: MC_RAMPS.temperature, // Mission Control (was navy → cyan → yellow → red)
   }),
   pressure: Object.freeze({
     label: 'Mean sea-level pressure', // i18n-ignore: internal field name; the shown label comes from index.js
     units: 'hPa',
     min: 960,
     max: 1050,
-    stops: ['#705ca0', '#6985b4', '#a5c3cd', '#d8c99a', '#dbad61'],
+    stops: MC_RAMPS.pressure, // Mission Control
   }),
 });
 

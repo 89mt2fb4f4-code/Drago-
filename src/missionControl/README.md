@@ -278,6 +278,17 @@ edits, each marked with a "Mission Control" comment.
      orange / yellow; stop names kept)
    • layers/perimeters/cards.js — containment amber → lavender → slate (was
      red / orange / yellow / green)
+28. Data layer restyle, batch 4 — palette.js colours / MC_RAMPS in:
+   • layers/weather/rendering.js — NOAA radar / lightning images softened
+     (ImageryLayer saturation 0.35, brightness 0.85; same colour order so
+     the legend still reads)
+   • layers/cyclones/labels.js, index.js — storms amber (alert), selected
+     white (was cyan / gold)
+   • layers/airQuality/model.js — risk violet → lavender → amber → warm
+     amber (was cyan / yellow / orange / red); unknown slate
+   • layers/wind/fields.js — wind speed, temperature and pressure ramps in
+     palette shades (amber only at the strong / hot end); temperature ramp
+     keeps every 5 °C step visibly different (upstream test still passes)
 
 ## Upstream tests that now fail ON PURPOSE (they encode upstream defaults)
 - src/mapStackChips.test.mjs — expects the 5 upstream sources (we add "dark")
@@ -296,4 +307,6 @@ edits, each marked with a "Mission Control" comment.
   default (we default to TomTom-only)
 - src/layers/perimeters/ownership.test.mjs — 1 test checks the old
   containment legend colours
+- src/layers/cyclones/labels.test.mjs, rendering.test.mjs — 1 test each
+  checks the old cyclone colours
 Re-check these when moving to a new upstream release.

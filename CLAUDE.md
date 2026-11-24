@@ -76,5 +76,6 @@ red emergency / amber military tints; we use the palette),
 `src/data/vesselLabels.test.mjs` and `src/layers/transit/lifecycle.test.mjs`
 (1 each: old colours), `src/layers/traffic/roadModes.test.mjs` (3: Hybrid
 default; we default to TomTom-only), `src/layers/perimeters/ownership.test.mjs`
-(1: old containment colours). Any
+(1: old containment colours), `src/layers/cyclones/labels.test.mjs` and
+`rendering.test.mjs` (1 each: old cyclone colours). Any
 *other* failing test is a real problem.

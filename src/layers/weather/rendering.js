@@ -1,3 +1,4 @@
+import { MC_WEATHER_IMAGERY } from '../../missionControl/palette.js'; // Mission Control
 import { weatherTileUrl } from './source.js';
 import { orderWeatherImagery } from './imageryOrder.js';
 import { imageryHostStatus } from './imageryHost.js';
@@ -429,6 +430,9 @@ function createGlobeRendering({
         // complete observation stays visible underneath it.
         frame.layer = collection.addImageryProvider(provider);
         frame.layer.alpha = 0;
+        // Mission Control: soften NOAA's bright colours (same order, so the legend still reads)
+        frame.layer.saturation = MC_WEATHER_IMAGERY.saturation;
+        frame.layer.brightness = MC_WEATHER_IMAGERY.brightness;
         orderWeatherImagery(collection, frame.layer, frame.priority);
         let settled = 0;
         frame.offCamera = viewer.camera?.moveEnd?.addEventListener(() => {

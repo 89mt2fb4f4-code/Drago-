@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 import {
   clearOverlaySource,
   setOverlayEntries,
@@ -18,9 +19,9 @@ export const CYCLONE_LEAD_LABEL_MAX_DISTANCE_M = 4_000_000;
 /** Ambient ceiling: every storm plus the selected storm's forecast points. */
 export const CYCLONE_OVERLAY_COHORT_LIMIT = 64;
 /** Advisory centre and forecast track; single source for points and cards. */
-export const CYCLONE_ACCENT = '#7fe6ed';
+export const CYCLONE_ACCENT = MC_COLORS.cyclone; // Mission Control: amber alert (was #7fe6ed)
 /** Selected advisory centre. */
-export const CYCLONE_SELECTED_ACCENT = '#ffe19a';
+export const CYCLONE_SELECTED_ACCENT = MC_COLORS.cycloneSelected; // Mission Control: white (was #ffe19a)
 /** Point sizes the cards keep clear of. */
 export const CYCLONE_MARKER_PX = Object.freeze({
   storm: 9,

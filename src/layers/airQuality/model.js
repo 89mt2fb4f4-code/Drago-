@@ -1,3 +1,4 @@
+import { MC_COLORS } from '../../missionControl/palette.js'; // Mission Control palette
 /**
  * @module layers/airQuality/model
  *
@@ -25,32 +26,32 @@ export const AIR_QUALITY_BANDS = Object.freeze([
     id: 'low',
     label: msg('Low'),
     risk: msg('Low health risk'),
-    color: '#4cc9f0',
+    color: MC_COLORS.airLow, // Mission Control (was #4cc9f0)
   }),
   Object.freeze({
     id: 'moderate',
     label: msg('Moderate'),
     risk: msg('Moderate health risk'),
-    color: '#ffd43b',
+    color: MC_COLORS.airModerate, // Mission Control (was #ffd43b)
   }),
   Object.freeze({
     id: 'high',
     label: msg('High'),
     risk: msg('High health risk'),
-    color: '#ff6b35',
+    color: MC_COLORS.airHigh, // Mission Control (was #ff6b35)
   }),
   Object.freeze({
     id: 'very-high',
     label: msg('Very High'),
     risk: msg('Very High health risk'),
-    color: '#c1121f',
+    color: MC_COLORS.airVeryHigh, // Mission Control (was #c1121f)
   }),
 ]);
 
 const BAND_BY_ID = new Map(AIR_QUALITY_BANDS.map((band) => [band.id, band]));
 
 /** Colour used when a station reports no usable reading. */
-export const AIR_QUALITY_UNKNOWN_COLOR = '#6b7785';
+export const AIR_QUALITY_UNKNOWN_COLOR = MC_COLORS.airUnknown; // Mission Control (was #6b7785)
 
 export const AIR_QUALITY_OVERLAY_SOURCE_ID = 'air-quality';
 export const AIR_QUALITY_OVERLAY_COHORT_LIMIT = 48;

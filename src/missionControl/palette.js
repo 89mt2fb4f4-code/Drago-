@@ -67,7 +67,26 @@ export const MC_COLORS = Object.freeze({
   perimLow: '#d9a05a',
   perimMost: '#c9bcff',
   perimDone: '#8a93c9',
+  // weather
+  cyclone: '#ffb547', // active storms are alerts
+  cycloneSelected: '#ffffff',
+  airLow: '#8f7dff',
+  airModerate: '#c9bcff',
+  airHigh: '#ffb547',
+  airVeryHigh: '#ff8f5a',
+  airUnknown: '#4f5478',
 });
+
+/** Colour ramps for wind / temperature / pressure maps (low → high). */
+export const MC_RAMPS = Object.freeze({
+  windSpeed: ['#1d1f4a', '#3b3a8f', '#6d4dff', '#9b87ff', '#c9bcff', '#ffb547'],
+  // −40 … 50 °C every 10°; spread so each 5° step stays clearly different
+  temperature: ['#1d1f4a', '#2a2b7a', '#3a3fb0', '#4a5fe0', '#5a86ff', '#9b87ff', '#e4dcff', '#ffb547', '#ff6e4a', '#e0505a'],
+  pressure: ['#3b3a8f', '#6d4dff', '#9b87ff', '#c9bcff', '#e4dcff'],
+});
+
+/** Radar / lightning pictures come pre-coloured from NOAA: soften them. */
+export const MC_WEATHER_IMAGERY = Object.freeze({ saturation: 0.35, brightness: 0.85 });
 
 /** "r, g, b" for CSS rgba() accents. */
 export const mcRgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(', ');

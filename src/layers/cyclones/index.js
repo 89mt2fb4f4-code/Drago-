@@ -11,6 +11,7 @@ import {
   coherentCycloneGeometry,
 } from './rendering.js';
 import {
+  CYCLONE_ACCENT, // Mission Control: legend uses the same accent
   CYCLONE_OVERLAY_SOURCE_ID,
   cycloneStormIdFromEntryId,
 } from './labels.js';
@@ -445,7 +446,7 @@ export function createCyclonesLayer({
           ? [
               {
                 label: t('Advisory center / forecast track'),
-                color: '#7fe6ed',
+                color: CYCLONE_ACCENT, // Mission Control (was #7fe6ed)
               },
               {
                 label: t('Center-track uncertainty cone'),
